@@ -120,8 +120,8 @@ export default function ContactPage() {
   return (
     <>
       <div className="w-11/12 mx-auto flex flex-col gap-48">
-        <Card className="h-100">
-          <CardContent className="h-full flex items-center justify-around">
+        <Card className="lg:h-100">
+          <CardContent className="h-full flex flex-col lg:flex-row items-center justify-around">
             <CircleUserRound
               size={200}
               strokeWidth={1}
@@ -171,7 +171,7 @@ export default function ContactPage() {
             <i>services</i> and <i>provide</i> the best experience possible.
           </p>
         </section>
-        <section className="grid grid-cols-3 gap-7">
+        <section className="grid md:grid-cols-2 lg:grid-cols-3 gap-7">
           {contactInfo.map((item, idx) => (
             <Card
               className="w-full h-70 duration-100 skew-5 shadow hover:translate-y-3"
@@ -191,9 +191,9 @@ export default function ContactPage() {
           ))}
         </section>
         <section>
-          <Card className="w-full h-180 border-0">
-            <CardContent className="h-full flex items-center justify-between gap-5">
-              <div className="w-full h-full p-9">
+          <Card className="w-full lg:h-180 border-0">
+            <CardContent className="h-full flex flex-col lg:flex-row items-center justify-between gap-5">
+              <div className="w-full h-full md:p-9">
                 <Map center={[25.9363, 88.8407]}>
                   <MapTileLayer />
                   <MapMarker position={[25.9363, 88.8407]}>
@@ -202,7 +202,9 @@ export default function ContactPage() {
                   <MapZoomControl className="top-auto right-5 bottom-5 left-auto" />
                 </Map>
               </div>
-              <Separator orientation="vertical" />
+              <Separator orientation="vertical" className="hidden lg:visible" />
+              <Separator className="lg:hidden" />
+
               <div className="w-full h-full p-15">
                 <h1 className="text-3xl font-semibold mb-1">Get in Touch</h1>
                 <p className="text-md text-muted-foreground mb-5">
@@ -310,7 +312,7 @@ export default function ContactPage() {
           <h1 className="text-4xl">You Can Find Us Here</h1>
           <div className="flex flex-wrap items-center justify-center gap-3 w-full">
             {socials.map((item, idx) => (
-              <Card className="w-xs h-50 not-hover:scale-95 hover:scale-105 duration-75 cursor-pointer">
+              <Card className="w-60 lg:w-xs h-50 not-hover:scale-95 hover:scale-105 duration-75 cursor-pointer">
                 <CardContent className="h-full flex gap-2 flex-col items-center justify-center">
                   <item.svg width={60} height={60} />
                   <h1 className="text-md font-semibold tracking-wide text-muted-foreground">
