@@ -2,7 +2,14 @@
 
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { CircleUserRound, PhoneCall, Send, Siren } from "lucide-react";
+import {
+  AtSign,
+  CircleUserRound,
+  MapPinHouseIcon,
+  PhoneCall,
+  Send,
+  Siren,
+} from "lucide-react";
 import * as z from "zod";
 import { useForm } from "@tanstack/react-form";
 import { toast } from "sonner";
@@ -15,19 +22,79 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-
+import {
+  Map,
+  MapMarker,
+  MapPopup,
+  MapTileLayer,
+  MapZoomControl,
+} from "@/components/ui/map";
+import {
+  Facebook,
+  Discord,
+  Reddit,
+  Instagram,
+  LinkedIn,
+} from "@ridemountainpig/svgl-react";
 const contactFormSchema = z.object({
   name: z.string().min(5, "Name must be at least 5 characters long."),
   email: z.email("Please enter a valid email address."),
   message: z.string().min(10, "Message must be at least 10 characters long."),
 });
 
+const contactInfo = [
+  {
+    type: "Phone",
+    value: "+880171253698514",
+    icon: PhoneCall,
+  },
+  {
+    icon: AtSign,
+    type: "Email",
+    value: "nostrum.store@gmail.com",
+  },
+  {
+    icon: MapPinHouseIcon,
+    name: "Store Address",
+    value: "Nilphamari, Rangpur, Bangladesh",
+  },
+];
+
+const socials = [
+  {
+    name: "Facebook",
+    link: "#",
+    svg: Facebook,
+  },
+  {
+    name: "Discord",
+    link: "#",
+    svg: Discord,
+  },
+  {
+    name: "Reddit",
+    link: "#",
+    svg: Reddit,
+  },
+  {
+    name: "Instagram",
+    link: "#",
+    svg: Instagram,
+  },
+  {
+    name: "Linkedin",
+    link: "#",
+    svg: LinkedIn,
+  },
+];
+
 export default function ContactPage() {
   const form = useForm({
     defaultValues: {
-      name: "",
-      email: "",
-      message: "",
+      name: "John Doe",
+      email: "john-doe@gmail.com",
+      message:
+        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia eos eligendi sunt voluptatibus velit a, recusandae magni laboriosam similique inventore, et placeat maiores. Hic, itaque!",
     },
     validators: {
       onSubmit: contactFormSchema,
@@ -105,109 +172,154 @@ export default function ContactPage() {
           </p>
         </section>
         <section className="grid grid-cols-3 gap-7">
-          {Array.from({ length: 3 }).map((_, idx) => (
+          {contactInfo.map((item, idx) => (
             <Card
               className="w-full h-70 duration-100 skew-5 shadow hover:translate-y-3"
               key={idx}
             >
               <CardHeader className="flex gap-5 flex-col items-center mt-9">
-                <PhoneCall size={40} strokeWidth={1} />
+                <item.icon size={40} strokeWidth={1} />
                 <Separator className="w-xs! h-1! rounded-full" />
               </CardHeader>
               <CardContent className="h-full flex flex-col items-center gap-1">
-                <h1 className="text-xl font-semibold">Headquarters </h1>
+                <h1 className="text-xl font-semibold">{item.name} </h1>
                 <p className="text-md font-medium text-muted-foreground">
-                  789 Oak St, Smalltown, TX 23456
+                  {item.value}
                 </p>
               </CardContent>
             </Card>
           ))}
         </section>
         <section>
-          <Card className="w-full h-145 border-0">
+          <Card className="w-full h-180 border-0">
             <CardContent className="h-full flex items-center justify-between gap-5">
-              <div className="w-full h-full bg-neutral-800"></div>
+              <div className="w-full h-full p-9">
+                <Map center={[25.9363, 88.8407]}>
+                  <MapTileLayer />
+                  <MapMarker position={[25.9363, 88.8407]}>
+                    <MapPopup>Our Shop</MapPopup>
+                  </MapMarker>
+                  <MapZoomControl className="top-auto right-5 bottom-5 left-auto" />
+                </Map>
+              </div>
               <Separator orientation="vertical" />
-              <div className="w-full h-full p-5">
+              <div className="w-full h-full p-15">
                 <h1 className="text-3xl font-semibold mb-1">Get in Touch</h1>
-                <p className="text-md text-muted-foreground">
+                <p className="text-md text-muted-foreground mb-5">
                   Whether you have questions, feedback, or just want to say
                   hello, we're here to listen. Reach out to us through any of
                   the following methods:
                 </p>
-                <FieldGroup>
-                  <form.Field
-                    name="name"
-                    children={(field) => {
-                      const isValid =
-                        field.state.meta.isTouched && !field.state.meta.isValid;
-                      return (
-                        <Field>
-                          <FieldLabel htmlFor={field.name}>Name</FieldLabel>
-                          <Input
-                            value={field.state.value}
-                            onChange={(e) => field.handleChange(e.target.value)}
-                            id={field.name}
-                            type="text"
-                            placeholder="John Doe"
-                          />
-                          {isValid && (
-                            <FieldError errors={field.state.meta.errors} />
-                          )}
-                        </Field>
-                      );
-                    }}
-                  />
-                  <form.Field
-                    name="email"
-                    children={(field) => {
-                      const isValid =
-                        field.state.meta.isTouched && !field.state.meta.isValid;
-                      return (
-                        <Field>
-                          <FieldLabel htmlFor={field.name}>Name</FieldLabel>
-                          <Input
-                            value={field.state.value}
-                            onChange={(e) => field.handleChange(e.target.value)}
-                            id={field.name}
-                            type="email"
-                            placeholder="john-doe@gmail.com"
-                          />
-                          {isValid && (
-                            <FieldError errors={field.state.meta.errors} />
-                          )}
-                        </Field>
-                      );
-                    }}
-                  />
-                  <form.Field
-                    name="message"
-                    children={(field) => {
-                      const isValid =
-                        field.state.meta.isTouched && !field.state.meta.isValid;
-                      return (
-                        <Field>
-                          <FieldLabel htmlFor={field.name}>Name</FieldLabel>
-                          <Textarea
-                            value={field.state.value}
-                            onChange={(e) => field.handleChange(e.target.value)}
-                            id={field.name}
-                            placeholder="Your message here..."
-                          />
-                          {isValid && (
-                            <FieldError errors={field.state.meta.errors} />
-                          )}
-                        </Field>
-                      );
-                    }}
-                  />
-                  <Button type="submit">
-                    Send Message <Send />
-                  </Button>
-                </FieldGroup>
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    form.handleSubmit(e);
+                  }}
+                >
+                  <FieldGroup>
+                    <form.Field
+                      name="name"
+                      children={(field) => {
+                        const isValid =
+                          field.state.meta.isTouched &&
+                          !field.state.meta.isValid;
+                        return (
+                          <Field>
+                            <FieldLabel htmlFor={field.name}>Name</FieldLabel>
+                            <Input
+                              value={field.state.value}
+                              onChange={(e) =>
+                                field.handleChange(e.target.value)
+                              }
+                              id={field.name}
+                              type="text"
+                              placeholder="John Doe"
+                              required
+                            />
+                            {isValid && (
+                              <FieldError errors={field.state.meta.errors} />
+                            )}
+                          </Field>
+                        );
+                      }}
+                    />
+                    <form.Field
+                      name="email"
+                      children={(field) => {
+                        const isValid =
+                          field.state.meta.isTouched &&
+                          !field.state.meta.isValid;
+                        return (
+                          <Field>
+                            <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+                            <Input
+                              value={field.state.value}
+                              onChange={(e) =>
+                                field.handleChange(e.target.value)
+                              }
+                              id={field.name}
+                              type="email"
+                              placeholder="john-doe@gmail.com"
+                              required
+                            />
+                            {isValid && (
+                              <FieldError errors={field.state.meta.errors} />
+                            )}
+                          </Field>
+                        );
+                      }}
+                    />
+                    <form.Field
+                      name="message"
+                      children={(field) => {
+                        const isValid =
+                          field.state.meta.isTouched &&
+                          !field.state.meta.isValid;
+                        return (
+                          <Field>
+                            <FieldLabel htmlFor={field.name}>
+                              Message
+                            </FieldLabel>
+                            <Textarea
+                              value={field.state.value}
+                              onChange={(e) =>
+                                field.handleChange(e.target.value)
+                              }
+                              id={field.name}
+                              rows={5}
+                              placeholder="Your message here..."
+                              required
+                            />
+                            {isValid && (
+                              <FieldError errors={field.state.meta.errors} />
+                            )}
+                          </Field>
+                        );
+                      }}
+                    />
+                    <Button type="submit">
+                      Send Message <Send />
+                    </Button>
+                  </FieldGroup>
+                </form>
               </div>
             </CardContent>
           </Card>
+        </section>
+        <section className="flex flex-col gap-7 items-center w-full">
+          <h1 className="text-4xl">You Can Find Us Here</h1>
+          <div className="flex flex-wrap items-center justify-center gap-3 w-full">
+            {socials.map((item, idx) => (
+              <Card className="w-xs h-50 not-hover:scale-95 hover:scale-105 duration-75 cursor-pointer">
+                <CardContent className="h-full flex gap-2 flex-col items-center justify-center">
+                  <item.svg width={60} height={60} />
+                  <h1 className="text-md font-semibold tracking-wide text-muted-foreground">
+                    {item.name}
+                  </h1>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </section>
       </div>
     </>
