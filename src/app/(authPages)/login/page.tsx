@@ -1,10 +1,11 @@
-export default function LoginPage(){
+import { LoginForm } from "@/components/modules/authComs/login-com";
 
- return (
-  <>
-   <div>
-      <h1>This is Login page component.</h1>
-   </div>
-  </>
-);
+export default function LoginPage() {
+  return (
+    <>
+      <div>
+        <LoginForm />
+      </div>
+    </>
+  );
 }

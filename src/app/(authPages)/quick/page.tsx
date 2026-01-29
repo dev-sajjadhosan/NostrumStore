@@ -38,7 +38,7 @@ export default function QuickAuthPage() {
   };
   return (
     <>
-      <div className="flex flex-col items-center w-2xl">
+      <div className="flex flex-col items-center justify-center w-full">
         <div className="flex flex-wrap gap-5 w-full group">
           {socials.map((item, idx) => (
             <Card

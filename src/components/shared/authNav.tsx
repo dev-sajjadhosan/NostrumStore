@@ -38,7 +38,7 @@ export default function AuthNav() {
               className="h-18 w-65"
               variant={isPath("/register") ? "default" : "ghost"}
             >
-              Sign Up <UserPlus2 />
+              Register <UserPlus2 />
             </Button>
           </Link>
         </div>
