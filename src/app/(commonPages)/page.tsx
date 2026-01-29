@@ -31,6 +31,8 @@ import review from "../../../public/review.svg";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import NewsLetter from "@/components/shared/newsletter";
+import ProductCard from "@/components/shared/productCard";
+import PaginationControl from "@/components/shared/pagination";
 
 export default function Home() {
   return (
@@ -42,8 +44,11 @@ export default function Home() {
           </CardContent>
           <CardFooter>
             <div className="flex items-center gap-1">
-              {Array.from({ length: 5 }).map(() => (
-                <span className="w-6 h-3.5 bg-neutral-700 rounded-xl"></span>
+              {Array.from({ length: 5 }).map((_, idx) => (
+                <span
+                  key={idx}
+                  className="w-6 h-3.5 bg-neutral-700 rounded-xl"
+                ></span>
               ))}
             </div>
           </CardFooter>
@@ -75,23 +80,7 @@ export default function Home() {
               </Card>
             ))}
           </div>
-          <div className="flex gap-5 items-center justify-center mt-7">
-            <TooltipButton
-              icon={ChevronLeft}
-              title="Prev"
-              variant={"secondary"}
-            />
-            <div className="flex items-center gap-1">
-              {Array.from({ length: 5 }).map((_, index) => (
-                <span className="w-7 h-3.5 bg-neutral-800 rounded-full" />
-              ))}
-            </div>
-            <TooltipButton
-              icon={ChevronRight}
-              title="Next"
-              variant={"secondary"}
-            />
-          </div>
+          <PaginationControl currentPage={1} totalPages={5} />
         </section>
         <section className="w-full">
           <div className="flex items-center justify-between mb-7">
@@ -121,58 +110,7 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-3 gap-5 w-full">
             {Array.from({ length: 8 }).map((_, idx) => (
-              <Card key={idx} className="">
-                <CardHeader className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Badge className="text-sm px-3 py-1">New</Badge>
-                    <Badge variant={"outline"} className="text-sm px-3 py-1">
-                      Out of Stock
-                    </Badge>
-                  </div>
-                  <Badge className="text-sm font-semibold tracking-wider px-3 py-1 [&_svg]:size-4! flex items-center gap-1">
-                    <Timer /> 10:10:05
-                  </Badge>
-                </CardHeader>
-                <CardContent className="flex flex-col gap-14 h-full mt-5">
-                  <Image
-                    src={"vercel.svg"}
-                    width={200}
-                    height={300}
-                    alt="categories"
-                    className="mx-auto"
-                  />
-                  <div className="flex flex-col gap-2">
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-xl font-semibold tracking-wide">
-                        Medicine Name
-                      </h3>
-                      <Badge variant={"outline"}>Napa</Badge>
-                    </div>
-                    <p className="text-sm">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Error saepe cum expedita ad corrupti magnam nemo ipsum.
-                    </p>
-                    <div className="flex items-end justify-between">
-                      <h2 className="text-4xl font-bold">$20.20</h2>
-                      <Rating rate={4} showScore />
-                    </div>
-                    <div className="flex items-center justify-between mt-5">
-                      <Button size={"lg"}>
-                        <DollarSign /> Buy Now
-                      </Button>
-                      <div className="flex items-center gap-3">
-                        <TooltipButton
-                          icon={ShoppingBasket}
-                          title="Add To Cart"
-                          variant={"default"}
-                        />
-                        <TooltipButton icon={ExternalLink} title="View More" />
-                        <TooltipButton icon={Share2} title="Share" />
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+              <ProductCard key={idx} data={{}} />
             ))}
           </div>
           <div className="flex gap-5 items-center justify-center mt-7">
@@ -298,7 +236,7 @@ export default function Home() {
             ))}
           </div>
         </section>
-      <NewsLetter/>a
+        <NewsLetter />a
       </div>
     </>
   );

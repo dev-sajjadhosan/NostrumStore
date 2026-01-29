@@ -24,6 +24,7 @@ interface TooltipButtonProps {
     | "ghost"
     | null
     | undefined;
+  disabled?: any;
 }
 
 export function TooltipButton({
@@ -34,6 +35,7 @@ export function TooltipButton({
   side = "bottom",
   align,
   variant = "ghost",
+  disabled,
 }: TooltipButtonProps) {
   return (
     <TooltipProvider>
@@ -45,6 +47,7 @@ export function TooltipButton({
             variant={variant}
             className="rounded-full"
             onClick={onClick}
+            disabled={disabled}
           >
             <Icon className="h-4 w-4" />
             <span className="sr-only">{title}</span>
