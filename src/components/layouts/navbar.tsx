@@ -31,8 +31,8 @@ const menuLinks = [
     icon: Home,
   },
   {
-    name: "Medicines",
-    link: "/medicines",
+    name: "Shop",
+    link: "/shop",
     icon: Pill,
   },
   {
@@ -56,7 +56,7 @@ export default function Navbar() {
   const user = [{ name: "John Doe" }];
   return (
     <div
-      className={`sticky top-10 mx-auto my-8 flex  items-center justify-between w-11/12 h-18  border rounded-full bg-accent/40 ${user ? "pl-9 pr-4" : "px-3"}`}
+      className={`sticky top-10 mx-auto my-8 flex  items-center justify-between w-11/12 h-18  border rounded-full bg-accent/40 z-50 ${user ? "pl-9 pr-4" : "px-3"}`}
     >
       <div className="flex items-center gap-3">
         <Image src={"vercel.svg"} alt="Nostrum Store" width={30} height={30} />

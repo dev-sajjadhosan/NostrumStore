@@ -30,6 +30,7 @@ import Image from "next/image";
 import review from "../../../public/review.svg";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import NewsLetter from "@/components/shared/newsletter";
 
 export default function Home() {
   return (
@@ -297,6 +298,7 @@ export default function Home() {
             ))}
           </div>
         </section>
+      <NewsLetter/>a
       </div>
     </>
   );
