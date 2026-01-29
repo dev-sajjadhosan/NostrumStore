@@ -53,7 +53,8 @@ const menuLinks = [
 ];
 
 export default function Navbar() {
-  const user = [{ name: "John Doe" }];
+  // const user = [{ name: "John Doe" }];
+  const user = null;
   return (
     <div
       className={`sticky top-10 mx-auto my-8 flex  items-center justify-between w-11/12 h-18  border rounded-full bg-accent/40 z-50 ${user ? "pl-9 pr-4" : "px-3"}`}
@@ -84,14 +85,16 @@ export default function Navbar() {
             <ProfileView />
           </div>
         ) : (
-          <Button
-            className="rounded-full text-xl font-semibold p-7 [&_svg]:size-8! text-muted-foreground"
-            size={"lg"}
-            variant={"secondary"}
-          >
-            Quick Up
-            <CircleArrowOutUpRight />
-          </Button>
+          <Link href={"/quick"}>
+            <Button
+              className="rounded-full text-xl font-semibold p-7 [&_svg]:size-8! text-muted-foreground"
+              size={"lg"}
+              variant={"secondary"}
+            >
+              Quick Up
+              <CircleArrowOutUpRight />
+            </Button>
+          </Link>
         )}
       </div>
     </div>
