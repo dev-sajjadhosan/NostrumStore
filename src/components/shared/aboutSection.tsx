@@ -24,18 +24,19 @@ export default function AboutSection({
 }: AboutSectionProps) {
   return (
     <div>
-      <Card className="w-full h-150 mt-48">
+      <Card className="w-full lg:h-150 mt-48">
         <CardContent
-          className={`h-full flex items-center gap-18 justify-around px-15 ${rtl ? "flex-row-reverse" : ""}`}
+          className={`h-full flex flex-col lg:flex-row items-center gap-18 justify-around px-15 ${rtl ? "flex-col-reverse lg:flex-row-reverse" : ""}`}
         >
           <Image {...image} />
-          <Separator orientation="vertical" />
+          <Separator orientation="vertical" className="hidden lg:visible" />
+          <Separator className="lg:hidden" />
           <div className="flex flex-col gap-2">
             <Badge className="text-md font-semibold px-4 [&_svg]:size-5! gap-2">
               {BadgeIcon && <BadgeIcon />} {badgeText}
             </Badge>
             <h1
-              className="text-5xl leading-12 mt-2"
+              className="text-3xl md:text-5xl md:leading-12 mt-2"
               dangerouslySetInnerHTML={{ __html: title }}
             />
             <p

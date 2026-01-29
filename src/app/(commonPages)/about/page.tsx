@@ -102,14 +102,14 @@ export default function AboutPage() {
   return (
     <>
       <div className="w-11/12 mx-auto flex flex-col gap-5">
-        <Card className="h-100">
-          <CardContent className="h-full flex items-center justify-around">
+        <Card className="lg:h-100">
+          <CardContent className="h-full flex flex-col gap-10 lg:flex-row items-center justify-around">
             <Siren
-              size={200}
+              // size={200}
               strokeWidth={1}
-              className="text-orange-700 animate-pulse"
+              className="text-orange-700 animate-pulse size-48 lg:size-64"
             />
-            <div className="flex flex-col gap-5">
+            <div className="flex flex-wrap lg:flex-col justify-center gap-5">
               <Link href={"/quick"}>
                 <div className="flex relative">
                   <Badge className="absolute -right-5" variant={"default"}>
@@ -152,13 +152,13 @@ export default function AboutPage() {
           />
         ))}
 
-        <div className="w-full flex items-center gap-10 justify-around my-48">
+        <div className="w-full flex flex-col lg:flex-row items-center gap-10 justify-around my-48">
           <div className="flex flex-col gap-3">
             <HeartPulse size={70} strokeWidth={1} />
             <h1 className="text-5xl">Your Health, Our Commitment</h1>
             <p className="text-lg"></p>
           </div>
-          <div className="flex md:flex-col gap-5 items-center w-3xl">
+          <div className="flex flex-col gap-5 items-center md:w-3xl">
             {section2.map((sec, idx) => (
               <Card key={idx} className="h-50">
                 <CardContent
@@ -207,7 +207,7 @@ export default function AboutPage() {
           <h1 className="text-3xl font-medium text-center">
             Meet Our <b>Pharmacist</b>
           </h1>
-          <div className="flex items-center gap-5">
+          <div className="flex flex-col lg:flex-row items-center gap-5">
             <div className="flex flex-col gap-3">
               <Badge className="text-sm font-semibold!">
                 Meet Our Pharmacist
@@ -221,10 +221,10 @@ export default function AboutPage() {
                 finibus in. Odio iaculis sed nec maecenas lobortis arcu.
               </p>
             </div>
-            <div className="flex items-center gap-3 w-600 overflow-scroll p-5">
+            <div className="flex items-center gap-3 lg:w-600 overflow-scroll p-5">
               {Array.from({ length: 3 }).map((_, idx) => (
                 <Card
-                  className={`h-130 shrink-0 duration-75 hover:scale-105 hover:z-30 cursor-pointer ${isClick === idx ? "w-lg sticky z-20 blur-none" : "w-50! not-hover:blur-xs text-center"}`}
+                  className={`h-90 lg:h-130 shrink-0 duration-75 hover:scale-105 hover:z-30 cursor-pointer ${isClick === idx ? "w-xs md:w-md lg:w-lg sticky z-20 blur-none" : "lg:w-50! not-hover:blur-xs text-center"}`}
                   key={idx}
                   onClick={() => setIsClick(idx)}
                 >
