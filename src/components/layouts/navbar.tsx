@@ -53,8 +53,8 @@ const menuLinks = [
 ];
 
 export default function Navbar() {
-  // const user = [{ name: "John Doe" }];
-  const user = null;
+  const user = [{ name: "John Doe" }];
+  // const user = null;
   return (
     <div
       className={`sticky top-10 mx-auto my-8 flex  items-center justify-between w-11/12 h-18  border rounded-full bg-accent/40 z-50 ${user ? "pl-9 pr-4" : "px-3"}`}

@@ -59,7 +59,7 @@ export default function QuickAuthPage() {
             </Card>
           ))}
         </div>
-        <h3 className="text-md font-semibold text-muted-foreground mt-5">
+        <h3 className="text-md font-normal text-muted-foreground mt-5 self-start">
           More Coming Soon
         </h3>
       </div>

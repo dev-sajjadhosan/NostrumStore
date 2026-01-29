@@ -13,10 +13,10 @@ export default function AuthNav() {
     <>
       <div className="w-xs">
         <div className="flex flex-wrap lg:flex-col justify-center gap-5">
-          <Link href={"/quick"}>
+          <Link href={"/quick-up"}>
             <Button
               className="h-18 w-65"
-              variant={isPath("/quick") ? "default" : "ghost"}
+              variant={isPath("/quick-up") ? "default" : "ghost"}
             >
               <Badge className="px-3 py-1 font-semibold" variant={"secondary"}>
                 New

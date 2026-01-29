@@ -110,7 +110,7 @@ export default function AboutPage() {
               className="text-orange-700 animate-pulse size-48 lg:size-64"
             />
             <div className="flex flex-wrap lg:flex-col justify-center gap-5">
-              <Link href={"/quick"}>
+              <Link href={"/quick-up"}>
                 <div className="flex relative">
                   <Badge className="absolute -right-5" variant={"default"}>
                     new
