@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/card";
 import PageBanner from "@/components/shared/page-banner";
 import {
+  ArrowUpRightFromCircle,
   Loader,
   LucideIcon,
   PackageCheck,
@@ -26,6 +27,8 @@ import {
 } from "lucide-react";
 import PaginationControl from "@/components/shared/pagination";
 import { Separator } from "@/components/ui/separator";
+import { TooltipButton } from "@/components/ui/tooltip-button";
+import Link from "next/link";
 
 interface OrdersItem {
   name: string;
@@ -124,8 +127,9 @@ export default function OrdersPage() {
                 <TableHead className="w-[100px]">Order ID</TableHead>
                 <TableHead>Date</TableHead>
                 <TableHead>Items</TableHead>
-                <TableHead className="text-center w-lg">Status</TableHead>
-                <TableHead className="text-right">Total Amount</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead >Total Amount</TableHead>
+                <TableHead >Action</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -148,8 +152,12 @@ export default function OrdersPage() {
                       {order.status}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-right">
-                    ${order.amount.toFixed(2)}
+                  <TableCell>${order.amount.toFixed(2)}</TableCell>
+                  <TableCell className="space-x-5">
+                    <TooltipButton icon={PackageX} title="Cancel Order" />
+                    <Link href={`/orders/${order.id}`}>
+                    <TooltipButton icon={ArrowUpRightFromCircle} title="View Order" variant={'default'} />
+                    </Link>
                   </TableCell>
                 </TableRow>
               ))}
