@@ -120,12 +120,6 @@ export default function CheckoutPage() {
     });
   };
 
-  useEffect(() => {
-    const methodFromUrl = searchParams.get("method");
-    if (methodFromUrl && PAYMENT_METHODS.some((m) => m.id === methodFromUrl)) {
-      setPaymentMethod(methodFromUrl);
-    }
-  }, [searchParams]);
   const form = useForm({
     defaultValues: {
       name: "",
