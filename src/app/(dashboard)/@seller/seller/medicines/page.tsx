@@ -1,11 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Plus,
-  Search,
-  Filter,
-  MoreHorizontal,
   Edit,
   Trash2,
   ArrowUpDown,
@@ -16,14 +13,11 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
+
 } from "@/components/ui/card";
 import {
   Table,
@@ -33,20 +27,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+
 import { Separator } from "@/components/ui/separator";
-import { MedicineFilters } from "@/components/modules/seller/medicine-filter";
 import { TooltipButton } from "@/components/ui/tooltip-button";
 import PaginationControl from "@/components/shared/pagination";
+import SearchFilterBar from "@/components/modules/shared/search-filter-bar";
 
-// Mock Data
 const initialMedicines = [
   {
     id: "1",
@@ -91,7 +77,6 @@ export default function SellerMedicinesPage() {
 
   return (
     <div className="p-4 md:p-8 space-y-6">
-      {/* Header Section */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">
@@ -106,7 +91,6 @@ export default function SellerMedicinesPage() {
         </Button>
       </div>
 
-      {/* Quick Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 h-40">
         <Card className="">
           <CardContent className="h-full flex items-center justify-around">
@@ -140,23 +124,10 @@ export default function SellerMedicinesPage() {
         </Card>
       </div>
 
-      {/* Filter & Search Bar */}
-      <div className="flex flex-col md:flex-row gap-4 items-center">
-        <div className="relative w-full md:max-w-sm">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-          <Input
-            placeholder="Search brand or generic name..."
-            className="pl-10"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
-        <MedicineFilters />
-      </div>
+      <SearchFilterBar />
 
-      {/* Medicine Table */}
-      <Card>
-        <CardContent className="p-0">
+      <Card className="bg-transparent border-0">
+        <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
@@ -235,8 +206,11 @@ export default function SellerMedicinesPage() {
             </TableBody>
           </Table>
           <div className="mt-9">
-
-          <PaginationControl currentPage={1} totalPages={10} options={{size: 'icon'}} />
+            <PaginationControl
+              currentPage={1}
+              totalPages={10}
+              options={{ size: "icon" }}
+            />
           </div>
         </CardContent>
       </Card>

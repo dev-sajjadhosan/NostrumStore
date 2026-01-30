@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 import {
   LayoutDashboard,
   Pill,
@@ -10,20 +10,20 @@ import {
   Store,
   Wallet,
   ShieldCheck,
-  History
-} from "lucide-react"
+  History,
+} from "lucide-react";
 
-import { NavMain } from "@/components/layouts/nav-main"
-import { NavProjects } from "@/components/layouts/nav-projects"
-import { NavUser } from "@/components/layouts/nav-user"
+import { NavMain } from "@/components/layouts/nav-main";
+import { NavProjects } from "@/components/layouts/nav-projects";
+import { NavUser } from "@/components/layouts/nav-user";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
-} from "@/components/ui/sidebar"
-import { Avatar, AvatarFallback } from "../ui/avatar"
+} from "@/components/ui/sidebar";
+import { Avatar, AvatarFallback } from "../ui/avatar";
 
 // Define the roles
 type UserRole = "seller" | "admin";
@@ -31,6 +31,11 @@ type UserRole = "seller" | "admin";
 const menuConfig = {
   seller: {
     navMain: [
+      {
+        title: "Dashboard",
+        url: "/seller/dashboard",
+        icon: LayoutDashboard,
+      },
       {
         title: "Inventory",
         url: "#",
@@ -85,7 +90,7 @@ const menuConfig = {
       { name: "Global Settings", url: "/admin/settings", icon: Settings },
     ],
   },
-}
+};
 
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
   role: UserRole; // Pass "seller" or "admin"
@@ -93,7 +98,7 @@ interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
 
 export function AppSidebar({ role, ...props }: AppSidebarProps) {
   const currentData = menuConfig[role];
-  
+
   // Example user data (this would usually come from your auth hook)
   const userData = {
     name: role === "admin" ? "Platform Admin" : "Pharmacy Owner",
@@ -125,5 +130,5 @@ export function AppSidebar({ role, ...props }: AppSidebarProps) {
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }
