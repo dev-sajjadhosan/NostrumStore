@@ -149,7 +149,7 @@ export default function GlobalInventoryPage() {
                   <TableCell>
                     <Badge
                       variant={item.type === "OTC" ? "secondary" : "outline"}
-                      className="text-[10px]"
+                      className="text-sm tracking-wider font-semibold px-5 py-1"
                     >
                       {item.type}
                     </Badge>

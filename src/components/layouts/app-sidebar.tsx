@@ -80,7 +80,7 @@ const menuConfig = {
         url: "#",
         icon: Users,
         items: [
-          { title: "Customers", url: "/admin/users/customers" },
+          { title: "All Users", url: "/admin/users" },
           { title: "All Vendors", url: "/admin/users/vendors" },
         ],
       },

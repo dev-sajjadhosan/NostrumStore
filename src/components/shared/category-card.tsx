@@ -14,32 +14,34 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "../ui/button";
-import { 
-  AlertCircle, 
-  MoreVertical, 
-  Pencil, 
-  Trash2, 
-  Pill,          
-  Stethoscope,    
-  Activity,       
-  Baby,           
-  Sparkles,       
-  Syringe         
+import {
+  AlertCircle,
+  MoreVertical,
+  Pencil,
+  Trash2,
+  Pill,
+  Stethoscope,
+  Activity,
+  Baby,
+  Sparkles,
+  Syringe,
 } from "lucide-react";
 import { Badge } from "../ui/badge";
 import Link from "next/link";
 
 const categoryIcons: Record<string, React.ReactNode> = {
-  "Antibiotics": <Pill className="size-6 text-blue-500" />,
+  Antibiotics: <Pill className="size-6 text-blue-500" />,
   "Pain Relief": <Activity className="size-6 text-red-500" />,
-  "Pediatric": <Baby className="size-6 text-pink-500" />,
-  "Skincare": <Sparkles className="size-6 text-emerald-500" />,
-  "Vaccines": <Syringe className="size-6 text-indigo-500" />,
-  "Psychotropic": <AlertCircle className="size-6 text-amber-500" />,
+  Pediatric: <Baby className="size-6 text-pink-500" />,
+  Skincare: <Sparkles className="size-6 text-emerald-500" />,
+  Vaccines: <Syringe className="size-6 text-indigo-500" />,
+  Psychotropic: <AlertCircle className="size-6 text-amber-500" />,
 };
 
 export default function CategoryCard({ category }: { category: any }) {
-  const Icon = categoryIcons[category.name] || <Stethoscope className="size-6 text-muted-foreground" />;
+  const Icon = categoryIcons[category.name] || (
+    <Stethoscope className="size-6 text-muted-foreground" />
+  );
 
   return (
     <Card
@@ -48,7 +50,6 @@ export default function CategoryCard({ category }: { category: any }) {
     >
       <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
         <div className="flex gap-3">
-          
           <Badge className="w-15 [&_svg]:size-6! bg-muted rounded-lg group-hover:bg-primary/10 transition-colors">
             {Icon}
           </Badge>
@@ -59,7 +60,7 @@ export default function CategoryCard({ category }: { category: any }) {
             </CardDescription>
           </div>
         </div>
-        
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
@@ -95,11 +96,9 @@ export default function CategoryCard({ category }: { category: any }) {
           <div className="flex items-center justify-between pt-2">
             <Badge
               variant={category.status === "Active" ? "secondary" : "outline"}
-              className={
-                category.status === "Restricted"
-                  ? "border-amber-500 text-amber-600 bg-amber-50"
-                  : ""
-              }
+              className={`text-sm tracking-wider font-semibold px-5 py-1.5 ${
+                category.status === "Restricted" ? "border-orange-700" : ""
+              }`}
             >
               {category.status === "Restricted" && (
                 <AlertCircle className="mr-1 size-3" />
@@ -107,7 +106,9 @@ export default function CategoryCard({ category }: { category: any }) {
               {category.status}
             </Badge>
 
-            <Link href={`/admin/medicines?category=${encodeURIComponent(category.name)}`}>
+            <Link
+              href={`/admin/medicines?category=${encodeURIComponent(category.name)}`}
+            >
               <Button
                 variant="link"
                 size="sm"
