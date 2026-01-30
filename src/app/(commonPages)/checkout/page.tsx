@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -17,7 +17,6 @@ import { Separator } from "@/components/ui/separator";
 import {
   CreditCard,
   Landmark,
-  Send,
   ShoppingCart,
   Truck,
   Wallet,
@@ -27,55 +26,38 @@ import { useForm } from "@tanstack/react-form";
 import { toast } from "sonner";
 import {
   Field,
-  FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
-  FieldLegend,
-  FieldSet,
 } from "@/components/ui/field";
+import Image from "next/image";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const PAYMENT_METHODS = [
   {
     id: "online-payment",
     label: "Online Payment",
     icon: Wallet,
-    description: "You will be redirected to our secure payment gateway.",
-    content: null, // No extra form fields needed
+    method: false,
   },
   {
     id: "card-payment",
     label: "Card Payment",
     icon: CreditCard,
-    description: "Safe and secure credit card payment.",
-    content: (
-      <div className="space-y-3 mt-4 animate-in fade-in zoom-in-95 duration-300">
-        <Input placeholder="Card Number" />
-        <div className="flex gap-2">
-          <Input placeholder="MM/YY" />
-          <Input placeholder="CVC" />
-        </div>
-      </div>
-    ),
+    method: false,
   },
   {
     id: "bank-payment",
     label: "Bank Transfer",
     icon: Landmark,
     description: "Transfer directly from your bank account.",
-    content: (
-      <div className="mt-4 p-3 bg-primary/5 rounded border border-primary/20 text-sm">
-        <p className="font-bold">Nostrum Store Ltd</p>
-        <p>IBAN: US12 3456 7890 0000</p>
-      </div>
-    ),
+    method: false,
   },
   {
     id: "cod",
     label: "Cash on Delivery",
     icon: Truck,
-    description: "Pay with cash upon arrival.",
-    content: null,
+    method: true,
   },
 ];
 const phoneRegex = /^01[3-9]\d{8}$/;
@@ -118,6 +100,32 @@ const billingSchema = z.object({
 });
 
 export default function CheckoutPage() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(name, value);
+      return params.toString();
+    },
+    [searchParams],
+  );
+
+  const handlePaymentChange = (value: string) => {
+    setPaymentMethod(value);
+    router.push(pathname + "/" + createQueryString("method", value), {
+      scroll: false,
+    });
+  };
+
+  useEffect(() => {
+    const methodFromUrl = searchParams.get("method");
+    if (methodFromUrl && PAYMENT_METHODS.some((m) => m.id === methodFromUrl)) {
+      setPaymentMethod(methodFromUrl);
+    }
+  }, [searchParams]);
   const form = useForm({
     defaultValues: {
       name: "",
@@ -151,12 +159,10 @@ export default function CheckoutPage() {
       }
     },
   });
-  const [paymentMethod, setPaymentMethod] = useState("online-payment");
-  const selectedMethod = PAYMENT_METHODS.find((m) => m.id === paymentMethod);
+  const [paymentMethod, setPaymentMethod] = useState("");
 
   return (
     <div className="mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-5">
-      {/* LEFT SIDE: Billing & Payment */}
       <div className="lg:col-span-2 space-y-6">
         <Card className="w-full">
           <CardHeader>
@@ -387,126 +393,51 @@ export default function CheckoutPage() {
             </form>
           </CardContent>
         </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Payment Method</CardTitle>
-            <CardDescription>Choose how you want to pay.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="mt-05 p-4">
-              {paymentMethod === "card-payment" && (
-                <div className="space-y-4 animate-in fade-in duration-300">
-                  <FieldSet className="w-full">
-                    <FieldGroup>
-                      <Field>
-                        <FieldLabel htmlFor="card_number">
-                          Card Number
-                        </FieldLabel>
-                        <Input
-                          id="card_number"
-                          type="text"
-                          placeholder="0000 111 2222 0000"
-                        />
-                      </Field>
-                      <div className="grid grid-cols-2 gap-4">
-                        <Field>
-                          <FieldLabel htmlFor="expire">Expire Date</FieldLabel>
-                          <Input id="expire" type="date" placeholder="MM/YY" />
-                        </Field>
-                        <Field>
-                          <FieldLabel htmlFor="security">
-                            Security Code
-                          </FieldLabel>
-                          <Input
-                            id="security"
-                            type="text"
-                            placeholder="*****"
-                          />
-                        </Field>
-                      </div>
-                    </FieldGroup>
-                  </FieldSet>
-                </div>
-              )}
-
-              {paymentMethod === "bank-payment" && (
-                <div className="space-y-2 animate-in slide-in-from-top-2 duration-300">
-                  <h4 className="font-semibold text-primary">
-                    Bank Account Details
-                  </h4>
-                  <p className="text-sm text-muted-foreground">
-                    Account Name: Nostrum Store Ltd.
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    IBAN: US12 3456 7890 0000
-                  </p>
-                </div>
-              )}
-
-              {paymentMethod === "online-payment" && (
-                <p className="text-sm italic animate-pulse">
-                  You will be redirected to our secure payment gateway...
-                </p>
-              )}
-
-              {paymentMethod === "cod" && (
-                <p className="text-sm text-muted-foreground">
-                  Please have the exact amount ready upon delivery.
-                </p>
-              )}
-            </div>
-          </CardContent>
-        </Card>
       </div>
-
-      {/* RIGHT SIDE: Summary */}
-      <div className="lg:col-span-1">
-        <Card className="sticky top-6">
+      <div className="lg:col-span-1 h-full">
+        <Card className="sticky top-6 h-full">
           <CardHeader>
-            <CardTitle>Order Summary</CardTitle>
+            <CardTitle className="text-3xl">Order Summary</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex justify-between text-sm">
-              <span>Subtotal</span>
-              <span>$120.00</span>
+          <CardContent className="flex flex-col justify-between gap-9 h-full">
+            <div className="flex flex-col gap-5">
+              <div className="flex justify-between text-sm">
+                <span>Subtotal</span>
+                <span>$120.00</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span>Shipping</span>
+                <span className="text-green-600 font-medium">FREE</span>
+              </div>
+              <Separator />
+              <div className="flex justify-between text-lg font-bold">
+                <span>Total</span>
+                <span>$120.00</span>
+              </div>
             </div>
-            <div className="flex justify-between text-sm">
-              <span>Shipping</span>
-              <span className="text-green-600 font-medium">FREE</span>
-            </div>
-            <Separator />
-            <div className="flex justify-between text-lg font-bold">
-              <span>Total</span>
-              <span>$120.00</span>
-            </div>
+
             <RadioGroup
-              defaultValue="online-payment"
-              onValueChange={setPaymentMethod}
+              onValueChange={handlePaymentChange}
               className="grid grid-cols-1 md:grid-cols-2 gap-4"
             >
               {PAYMENT_METHODS.map((method) => {
                 const Icon = method.icon;
-                const isSelected = paymentMethod === method.id;
 
                 return (
                   <Label
                     key={method.id}
-                    className={`flex items-center justify-between border-2 rounded-xl p-4 cursor-pointer transition-all hover:bg-accent ${
-                      isSelected
-                        ? "border-primary bg-primary/5"
-                        : "border-muted"
-                    }`}
+                    className={`flex items-center justify-between border-2 rounded-xl p-4 cursor-pointer transition-all hover:bg-accent ${!method.method ? "cursor-not-allowed" : ""}`}
                   >
                     <div className="flex items-center gap-3">
-                      <RadioGroupItem value={method.id} />
+                      <RadioGroupItem
+                        value={method.id}
+                        disabled={!method.method}
+                      />
                       <div className="grid gap-0.5">
                         <span className="font-semibold">{method.label}</span>
                       </div>
                     </div>
-                    <Icon
-                      className={`size-5 ${isSelected ? "text-primary" : "text-muted-foreground"}`}
-                    />
+                    <Icon className={`size-5`} />
                   </Label>
                 );
               })}
