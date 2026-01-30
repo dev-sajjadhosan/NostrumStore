@@ -2,19 +2,16 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import { 
-  ArrowLeft, 
-  Upload, 
-  Save, 
-  Info 
-} from "lucide-react";
-import { 
-  Card, 
-  CardContent, 
-  CardHeader, 
-  CardTitle, 
+import { ArrowLeft, Save, Info, X, Loader2 } from "lucide-react";
+import { useForm } from "@tanstack/react-form";
+import { z } from "zod";
+
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
   CardDescription,
-  CardFooter 
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,112 +24,215 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { FieldError } from "@/components/ui/field";
+import { toast } from "sonner";
+
+const categorySchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  description: z.string().min(10, "Description is too short"),
+  status: z.enum(["active", "restricted", "inactive"]),
+  slug: z.string(),
+});
+
+type CategoryForm = z.infer<typeof categorySchema>;
 
 export default function CreateCategoryPage() {
   const router = useRouter();
 
+  const form = useForm({
+    defaultValues: {
+      name: "",
+      description: "",
+      status: "active",
+      slug: "",
+    },
+    validators: {
+      onSubmit: categorySchema,
+    },
+    onSubmit: async ({ value }) => {
+      const toastID = toast.loading("Creating Category...");
+      try {
+        // api call
+        toast.success("Category Created.", { id: toastID });
+      } catch (err: any) {
+        toast.error(err, { id: toastID });
+      }
+      console.log("Submitting Data:", value);
+      await new Promise((r) => setTimeout(r, 1000));
+      router.push("/admin/categories");
+    },
+  });
+
+  const slugify = (text: string) =>
+    text
+      .toLowerCase()
+      .replace(/[^\w ]+/g, "")
+      .replace(/ +/g, "-");
+
   return (
-    <div className="p-6 max-w-4xl mx-auto space-y-6">
-      {/* Top Navigation */}
+    <div className="p-6 w-full mx-auto space-y-6">
       <div className="flex items-center gap-4">
-        <Button 
-          variant="ghost" 
-          size="icon" 
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={() => router.back()}
           className="rounded-full"
         >
           <ArrowLeft className="size-5" />
         </Button>
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Create New Category</h1>
-          <p className="text-muted-foreground italic">Add a new global classification for the medicine inventory.</p>
+          <h1 className="text-3xl font-semibold tracking-tight">
+            Create New Category
+          </h1>
+          <p className="text-muted-foreground italic text-sm">
+            Add a new global classification for the medicine inventory.
+          </p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Left Column: Form Details */}
-        <div className="md:col-span-2 space-y-6">
-          <Card className="border-muted/40 shadow-sm">
-            <CardHeader>
-              <CardTitle>Category Details</CardTitle>
-              <CardDescription>Enter the name and public description.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">Category Name</Label>
-                <Input id="name" placeholder="e.g., Pediatric Medicines, Supplements" />
-              </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="description">Public Description</Label>
-                <Textarea 
-                  id="description" 
-                  placeholder="Describe what kind of medicines belong here..." 
-                  className="min-h-[120px] resize-none"
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          form.handleSubmit();
+        }}
+      >
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="md:col-span-2 space-y-6">
+            <Card className="border-muted/40 shadow-sm">
+              <CardHeader>
+                <CardTitle>Category Details</CardTitle>
+                <CardDescription>
+                  Enter the name and public description.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <form.Field
+                  name="name"
+                  validators={{ onChange: categorySchema.shape.name }}
+                  children={(field) => (
+                    <div className="space-y-2">
+                      <Label htmlFor={field.name}>Category Name</Label>
+                      <Input
+                        id={field.name}
+                        value={field.state.value}
+                        onBlur={field.handleBlur}
+                        onChange={(e) => {
+                          field.handleChange(e.target.value);
+                          form.setFieldValue("slug", slugify(e.target.value));
+                        }}
+                        placeholder="e.g., Pediatric Medicines"
+                      />
+                      {field.state.meta.errors && (
+                        <FieldError errors={field.state.meta.errors} />
+                      )}
+                    </div>
+                  )}
                 />
-              </div>
-            </CardContent>
-          </Card>
+                <form.Field
+                  name="description"
+                  validators={{ onChange: categorySchema.shape.description }}
+                  children={(field) => (
+                    <div className="space-y-2">
+                      <Label htmlFor={field.name}>Public Description</Label>
+                      <Textarea
+                        id={field.name}
+                        value={field.state.value}
+                        onBlur={field.handleBlur}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                        placeholder="Describe what kind of medicines belong here..."
+                        className="min-h-[120px] resize-none"
+                      />
+                      {field.state.meta.errors && (
+                        <FieldError errors={field.state.meta.errors} />
+                      )}
+                    </div>
+                  )}
+                />
+              </CardContent>
 
-          <Card className="border-muted/40 shadow-sm">
-            <CardHeader>
-              <CardTitle>Management Settings</CardTitle>
-            </CardHeader>
-            <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>Initial Status</Label>
-                <Select defaultValue="active">
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select Status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="active">Active (Visible)</SelectItem>
-                    <SelectItem value="restricted">Restricted (Controlled)</SelectItem>
-                    <SelectItem value="inactive">Inactive (Hidden)</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label>Category Slug (URL)</Label>
-                <Input placeholder="pediatric-medicines" disabled className="bg-muted/50" />
-                <p className="text-[10px] text-muted-foreground flex items-center gap-1">
-                  <Info className="size-3" /> Generated automatically from name.
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+              <CardHeader className="pt-0">
+                <CardTitle>Management Settings</CardTitle>
+              </CardHeader>
+              <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <form.Field
+                  name="status"
+                  children={(field) => (
+                    <div className="space-y-2">
+                      <Label>Initial Status</Label>
+                      <Select
+                        value={field.state.value}
+                        onValueChange={(value: any) =>
+                          field.handleChange(value)
+                        }
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select Status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="active">
+                            Active (Visible)
+                          </SelectItem>
+                          <SelectItem value="restricted">Restricted</SelectItem>
+                          <SelectItem value="inactive">Inactive</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  )}
+                />
 
-        {/* Right Column: Image/Thumbnail */}
-        <div className="space-y-6">
-          <Card className="border-muted/40 shadow-sm">
-            <CardHeader>
-              <CardTitle>Icon / Thumbnail</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="border-2 border-dashed border-muted rounded-xl p-8 flex flex-col items-center justify-center gap-3 text-center cursor-pointer hover:bg-muted/30 transition-colors">
-                <div className="bg-muted p-3 rounded-full">
-                  <Upload className="size-6 text-muted-foreground" />
-                </div>
-                <div className="text-sm">
-                  <span className="font-semibold text-primary">Click to upload</span>
-                  <p className="text-xs text-muted-foreground">PNG, JPG or SVG (Max 2MB)</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+                <form.Field
+                  name="slug"
+                  children={(field) => (
+                    <div className="space-y-2">
+                      <Label>Category Slug (URL)</Label>
+                      <Input
+                        value={field.state.value}
+                        disabled
+                        className="bg-muted/50"
+                      />
+                      <p className="text-[10px] text-muted-foreground flex items-center gap-1">
+                        <Info className="size-3" /> Auto-generated based on
+                        name.
+                      </p>
+                    </div>
+                  )}
+                />
+              </CardContent>
+            </Card>
+          </div>
 
-          {/* Action Buttons */}
-          <div className="flex flex-col gap-2">
-            <Button className="w-full gap-2 py-6 text-lg font-semibold shadow-lg shadow-primary/20">
-              <Save className="size-5" /> Save Category
-            </Button>
-            <Button variant="ghost" onClick={() => router.back()} className="w-full">
+          <div className="flex flex-col justify-end space-y-4 h-full pb-2">
+            <form.Subscribe
+              selector={(state) => [state.canSubmit, state.isSubmitting]}
+              children={([canSubmit, isSubmitting]) => (
+                <Button
+                  type="submit"
+                  disabled={!canSubmit}
+                  className="w-full h-12 gap-2"
+                >
+                  {isSubmitting ? (
+                    <Loader2 className="size-4 animate-spin" />
+                  ) : (
+                    <Save className="size-5" />
+                  )}
+                  Save Category
+                </Button>
+              )}
+            />
+
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => router.back()}
+              className="w-full h-12 gap-2"
+            >
+              <X className="size-5" />
               Discard Changes
             </Button>
           </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 }
