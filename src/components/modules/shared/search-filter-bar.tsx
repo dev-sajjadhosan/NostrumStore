@@ -15,7 +15,11 @@ const statuses = ["In Stock", "Low Stock", "Out of Stock"];
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 
-export default function SearchFilterBar() {
+interface SearchFilterProps {
+  filter?: boolean;
+}
+
+export default function SearchFilterBar({ filter = true }: SearchFilterProps) {
   const [selectedCategories, setSelectedCategories] = React.useState<string[]>(
     [],
   );
@@ -38,105 +42,112 @@ export default function SearchFilterBar() {
           placeholder="Search by brand or generic name..."
           className="bg-transparent! border-0! w-full"
         />
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button variant="secondary" className="gap-2 w-full md:w-auto">
-              <Filter className="size-4" />
-              Filters
-              {(selectedCategories.length > 0 || selectedStatus.length > 0) && (
-                <span className="ml-1 rounded-full bg-primary px-1.5 py-0.5 text-[10px] text-primary-foreground">
-                  {selectedCategories.length + selectedStatus.length}
-                </span>
-              )}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-sm rounded-xl p-7" align="end">
-            <div className="flex items-start gap-10">
-              <div className="">
-                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
-                  Category
-                </p>
-                <div className="space-y-1">
-                  {categories.map((cat) => (
-                    <div
-                      key={cat}
-                      onClick={() =>
-                        toggleFilter(
-                          selectedCategories,
-                          setSelectedCategories,
-                          cat,
-                        )
-                      }
-                      className="flex items-center gap-2 px-2 py-1.5 text-sm cursor-pointer hover:bg-muted rounded-sm"
-                    >
+        {filter && (
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="secondary" className="gap-2 w-full md:w-auto">
+                <Filter className="size-4" />
+                Filters
+                {(selectedCategories.length > 0 ||
+                  selectedStatus.length > 0) && (
+                  <span className="ml-1 rounded-full bg-primary px-1.5 py-0.5 text-[10px] text-primary-foreground">
+                    {selectedCategories.length + selectedStatus.length}
+                  </span>
+                )}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-sm rounded-xl p-7" align="end">
+              <div className="flex items-start gap-10">
+                <div className="">
+                  <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
+                    Category
+                  </p>
+                  <div className="space-y-1">
+                    {categories.map((cat) => (
                       <div
-                        className={cn(
-                          "size-4 border rounded-sm flex items-center justify-center",
-                          selectedCategories.includes(cat)
-                            ? "bg-primary border-primary"
-                            : "border-input",
-                        )}
+                        key={cat}
+                        onClick={() =>
+                          toggleFilter(
+                            selectedCategories,
+                            setSelectedCategories,
+                            cat,
+                          )
+                        }
+                        className="flex items-center gap-2 px-2 py-1.5 text-sm cursor-pointer hover:bg-muted rounded-sm"
                       >
-                        {selectedCategories.includes(cat) && (
-                          <Check className="size-3 text-primary-foreground" />
-                        )}
+                        <div
+                          className={cn(
+                            "size-4 border rounded-sm flex items-center justify-center",
+                            selectedCategories.includes(cat)
+                              ? "bg-primary border-primary"
+                              : "border-input",
+                          )}
+                        >
+                          {selectedCategories.includes(cat) && (
+                            <Check className="size-3 text-primary-foreground" />
+                          )}
+                        </div>
+                        {cat}
                       </div>
-                      {cat}
-                    </div>
-                  ))}
+                    ))}
+                  </div>
+                </div>
+
+                <div className="">
+                  <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
+                    Availability
+                  </p>
+                  <div className="space-y-1">
+                    {statuses.map((status) => (
+                      <div
+                        key={status}
+                        onClick={() =>
+                          toggleFilter(
+                            selectedStatus,
+                            setSelectedStatus,
+                            status,
+                          )
+                        }
+                        className="flex items-center gap-2 px-2 py-1.5 text-sm cursor-pointer hover:bg-muted rounded-sm"
+                      >
+                        <div
+                          className={cn(
+                            "size-4 border rounded-sm flex items-center justify-center",
+                            selectedStatus.includes(status)
+                              ? "bg-primary border-primary"
+                              : "border-input",
+                          )}
+                        >
+                          {selectedStatus.includes(status) && (
+                            <Check className="size-3 text-primary-foreground" />
+                          )}
+                        </div>
+                        {status}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
 
-              <div className="">
-                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
-                  Availability
-                </p>
-                <div className="space-y-1">
-                  {statuses.map((status) => (
-                    <div
-                      key={status}
-                      onClick={() =>
-                        toggleFilter(selectedStatus, setSelectedStatus, status)
-                      }
-                      className="flex items-center gap-2 px-2 py-1.5 text-sm cursor-pointer hover:bg-muted rounded-sm"
-                    >
-                      <div
-                        className={cn(
-                          "size-4 border rounded-sm flex items-center justify-center",
-                          selectedStatus.includes(status)
-                            ? "bg-primary border-primary"
-                            : "border-input",
-                        )}
-                      >
-                        {selectedStatus.includes(status) && (
-                          <Check className="size-3 text-primary-foreground" />
-                        )}
-                      </div>
-                      {status}
-                    </div>
-                  ))}
-                </div>
+              <div className="p-2 flex gap-2 mt-5">
+                <Button
+                  variant="secondary"
+                  className="text-xs h-8 flex-1"
+                  onClick={() => {
+                    setSelectedCategories([]);
+                    setSelectedStatus([]);
+                  }}
+                >
+                  <X />
+                  Clear
+                </Button>
+                <Button className="text-xs h-8 flex-1">
+                  <Check /> Apply
+                </Button>
               </div>
-            </div>
-
-            <div className="p-2 flex gap-2 mt-5">
-              <Button
-                variant="secondary"
-                className="text-xs h-8 flex-1"
-                onClick={() => {
-                  setSelectedCategories([]);
-                  setSelectedStatus([]);
-                }}
-              >
-                <X />
-                Clear
-              </Button>
-              <Button className="text-xs h-8 flex-1">
-                <Check /> Apply
-              </Button>
-            </div>
-          </PopoverContent>
-        </Popover>
+            </PopoverContent>
+          </Popover>
+        )}
       </div>
     </>
   );

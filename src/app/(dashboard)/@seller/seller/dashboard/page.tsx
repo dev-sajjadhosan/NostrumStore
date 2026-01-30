@@ -31,7 +31,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import StatsCard from "@/components/modules/seller/status-card";
+import DStatsCard from "@/components/modules/seller/d-status-card";
 
 const revenueData = [
   { date: "2026-01-24", desktop: 1200 },
@@ -72,15 +72,15 @@ export default function SellerDashboardPage() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <StatsCard
+        <DStatsCard
           title="Total Revenue"
           value="$12,450"
           icon={DollarSign}
           trend="+12%"
         />
-        <StatsCard title="Orders" value="145" icon={ShoppingCart} trend="+8%" />
-        <StatsCard title="Items" value="432" icon={Package} trend="Stable" />
-        <StatsCard
+        <DStatsCard title="Orders" value="145" icon={ShoppingCart} trend="+8%" />
+        <DStatsCard title="Items" value="432" icon={Package} trend="Stable" />
+        <DStatsCard
           title="Low Stock"
           value="12"
           icon={AlertCircle}
