@@ -1,7 +1,6 @@
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -16,9 +15,26 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import PageBanner from "@/components/shared/page-banner";
-import { Van } from "lucide-react";
+import {
+  Loader,
+  LucideIcon,
+  PackageCheck,
+  PackageIcon,
+  PackageSearch,
+  PackageX,
+  Van,
+} from "lucide-react";
 import PaginationControl from "@/components/shared/pagination";
 import { Separator } from "@/components/ui/separator";
+
+interface OrdersItem {
+  name: string;
+  amount: number;
+  icon:
+    | LucideIcon
+    | React.ComponentType<{ className?: string; strokeWidth?: number }>
+    | string;
+}
 
 // Mock Data - In a real app, this comes from an API or Props
 const orders = [
@@ -52,19 +68,46 @@ const orders = [
   },
 ];
 
+const statusCards: OrdersItem[] = [
+  {
+    name: "Delivered",
+    amount: 100,
+    icon: PackageCheck,
+  },
+  {
+    name: "Processing",
+    amount: 10,
+    icon: PackageSearch,
+  },
+  {
+    name: "Orders",
+    amount: 15,
+    icon: PackageIcon,
+  },
+  {
+    name: "Cancelled",
+    amount: 25,
+    icon: PackageX,
+  },
+];
+
 export default function OrdersPage() {
   return (
     <div className="w-11/12 mx-auto flex flex-col gap-28">
       <PageBanner name="Orders" icon={Van} />
       <section className="grid grid-cols-4 gap-3 w-full">
-        {Array.from({ length: 4 }).map((_, idx) => (
-          <Card key={idx} className="w-full h-50 duration-100 hover:-translate-y-5">
+        {statusCards.map((item, idx) => (
+          <Card
+            key={idx}
+            className="w-full h-50 duration-100 hover:-translate-y-5 border-orange-900 bg-orange-600/50 text-neutral-900"
+          >
             <CardContent className="h-full flex items-center justify-between gap-3">
-                <Van className="size-16 text-muted-foreground" strokeWidth={1} />
-                <Separator orientation="vertical" />
+              {item.icon && <item.icon className="size-16" strokeWidth={1} />}
+
+              <Separator orientation="vertical" />
               <div className="flex flex-col gap-3">
-                <h1 className="text-2xl font-normal">Total Orders</h1>
-              <h3 className="text-5xl text-center">00</h3>
+                <h1 className="text-2xl font-normal">{item.name}</h1>
+                <h3 className="text-5xl text-center">{item.amount}</h3>
               </div>
             </CardContent>
           </Card>
