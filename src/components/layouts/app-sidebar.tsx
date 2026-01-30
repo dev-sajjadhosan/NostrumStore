@@ -38,8 +38,8 @@ const menuConfig = {
         isActive: true,
         items: [
           { title: "All Medicines", url: "/seller/medicines" },
-          { title: "Add New Medicine", url: "/seller/medicines/add" },
-          { title: "Stock Alerts", url: "/seller/inventory/alerts" },
+          { title: "Add New Medicine", url: "/seller/medicines/create" },
+          { title: "Stock Alerts", url: "/seller/inventory/stock-alerts" },
         ],
       },
       {
