@@ -1,5 +1,6 @@
 "use client";
 
+import PageBanner from "@/components/shared/page-banner";
 import PaginationControl from "@/components/shared/pagination";
 import QuantityControl from "@/components/shared/quantity-control";
 import { Button } from "@/components/ui/button";
@@ -28,7 +29,6 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
 
 export default function CartPage() {
   const unitPrice = 20.0;
@@ -45,17 +45,8 @@ export default function CartPage() {
   return (
     <>
       <div className="w-11/12 mx-auto flex flex-col  gap-28">
-        <Card className="lg:h-100">
-          <CardContent className="h-full flex flex-col gap-10 lg:flex-row items-center justify-around">
-            <ShoppingBasket
-              // size={200}
-              strokeWidth={1}
-              className="text-orange-700 animate-pulse size-48 lg:size-64"
-            />
+        <PageBanner name="Cart" icon={ShoppingBasket} />
 
-            <h1 className="text-8xl font-bold mb-4">Cart</h1>
-          </CardContent>
-        </Card>
         <section className="flex flex-col gap-9 w-full">
           <div className="flex w-full">aa</div>
           <div className="flex items-start justify-between gap-15 w-full">

@@ -83,7 +83,9 @@ export default function Navbar() {
             <Link href={"/cart"}>
               <TooltipButton icon={ShoppingCart} title="Cart" />
             </Link>
-            <TooltipButton icon={Van} title="Order" />
+            <Link href={"/orders"}>
+              <TooltipButton icon={Van} title="Orders" />
+            </Link>
             <ProfileView />
           </div>
         ) : (
