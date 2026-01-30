@@ -80,8 +80,10 @@ export default function Navbar() {
         {user ? (
           <div className="flex items-center gap-2">
             <TooltipButton icon={MapPinned} title="Location" />
-            <TooltipButton icon={ShoppingCart} title="Cart" />
-            <TooltipButton icon={Van} title="Track Order" />
+            <Link href={"/cart"}>
+              <TooltipButton icon={ShoppingCart} title="Cart" />
+            </Link>
+            <TooltipButton icon={Van} title="Order" />
             <ProfileView />
           </div>
         ) : (

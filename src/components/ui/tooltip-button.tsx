@@ -25,6 +25,7 @@ interface TooltipButtonProps {
     | null
     | undefined;
   disabled?: any;
+  size?: "icon-sm" | "icon" | "icon-lg" | null | undefined;
 }
 
 export function TooltipButton({
@@ -36,6 +37,7 @@ export function TooltipButton({
   align,
   variant = "ghost",
   disabled,
+  size = "icon-lg",
 }: TooltipButtonProps) {
   return (
     <TooltipProvider>
@@ -43,7 +45,7 @@ export function TooltipButton({
         <TooltipTrigger asChild>
           {/* We use asChild to prevent nesting a button inside a button */}
           <Button
-            size={"icon-lg"}
+            size={size}
             variant={variant}
             className="rounded-full"
             onClick={onClick}
