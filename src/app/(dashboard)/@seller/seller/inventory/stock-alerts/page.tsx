@@ -35,8 +35,6 @@ import SearchFilterBar from "@/components/modules/shared/search-filter-bar";
 import PaginationControl from "@/components/shared/pagination";
 import { RestockModal } from "@/components/modules/seller/restock-dialog";
 
-// Mock Data - In a real app, you'd fetch this from Prisma
-// where stock < threshold
 const stockAlerts = [
   {
     id: "1",
@@ -70,7 +68,6 @@ const stockAlerts = [
 export default function StockAlertPage() {
   return (
     <div className="w-full mx-auto p-5 space-y-6">
-      {/* Header Section */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Stock Alerts</h1>
@@ -91,7 +88,6 @@ export default function StockAlertPage() {
         </div>
       </div>
 
-      {/* Analytics Summary */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card className="">
           <CardHeader className="">
@@ -153,7 +149,6 @@ export default function StockAlertPage() {
         </CardHeader>
 
         <CardContent>
-          <TableHeader className="sr-only">Stock Alert Items</TableHeader>
           <Table>
             <TableHeader>
               <TableRow>
@@ -201,15 +196,15 @@ export default function StockAlertPage() {
                   </TableCell>
                   <TableCell>${item.price}</TableCell>
                   <TableCell>
-                   <RestockModal item={item}/>
+                    <RestockModal item={item} />
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
-            <div className="mt-11">
-              <PaginationControl currentPage={1} totalPages={10} />
-            </div>
+          <div className="mt-11">
+            <PaginationControl currentPage={1} totalPages={10} />
+          </div>
         </CardContent>
       </Card>
     </div>

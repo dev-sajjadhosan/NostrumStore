@@ -31,7 +31,7 @@ export default async function DashboardLayout({
   return (
     <>
       <SidebarProvider>
-        <AppSidebar  role="seller"/>
+        <AppSidebar  role="admin"/>
         <SidebarInset>
           <header className="flex h-16 shrink-0 items-center gap-2 border-b">
             <div className="flex items-center justify-between gap-2 px-3 w-full">
@@ -52,7 +52,7 @@ export default async function DashboardLayout({
               </div>
             </div>
           </header>
-          <div className="flex flex-1 flex-col gap-4 p-4">{seller}</div>
+          <div className="flex flex-1 flex-col gap-4 p-4">{admin}</div>
         </SidebarInset>
       </SidebarProvider>
     </>
