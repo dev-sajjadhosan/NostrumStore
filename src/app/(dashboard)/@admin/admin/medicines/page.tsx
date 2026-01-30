@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -40,8 +40,8 @@ import {
 import SearchFilterBar from "@/components/modules/shared/search-filter-bar";
 import AdminMedicineFilter from "@/components/modules/admin/a-filter-control";
 import PaginationControl from "@/components/shared/pagination";
+import { useSearchParams } from "next/navigation";
 
-// Mock Data representing products from multiple vendors
 const globalMedicines = [
   {
     id: "MED-101",
@@ -76,6 +76,16 @@ const globalMedicines = [
 ];
 
 export default function GlobalInventoryPage() {
+  const searchParams = useSearchParams();
+  const categoryFromUrl = searchParams.get("category");
+  const [categoryFilter, setCategoryFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all");
+  useEffect(() => {
+    if (categoryFromUrl) {
+      setCategoryFilter(categoryFromUrl);
+      console.log({ categoryFromUrl });
+    }
+  }, [categoryFromUrl]);
   return (
     <div className="p-6 space-y-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
