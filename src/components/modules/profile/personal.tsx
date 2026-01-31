@@ -98,6 +98,7 @@ export default function PersonalInformationView() {
             </Button>
             <Button size={"lg"} variant={"ghost"} className="text-destructive">
               Logout
+
               <LogOut className="size-5" />
             </Button>
           </div>
@@ -106,3 +107,7 @@ export default function PersonalInformationView() {
     </div>
   );
 }
+
+
+
+@git add .
