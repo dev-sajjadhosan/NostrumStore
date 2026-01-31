@@ -126,7 +126,7 @@ export default function ProfileDefault({
               />
               <Button
                 variant="ghost"
-                onClick={() => handleProfileRoute("logout")}
+                onClick={() => router.push("/logout")}
                 className="w-full justify-between h-12 text-destructive hover:text-destructive hover:bg-destructive/5 px-4"
               >
                 <div className="flex items-center gap-3">

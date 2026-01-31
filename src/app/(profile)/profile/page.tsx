@@ -104,8 +104,6 @@ export default function ProfilePage({
               <DevelopmentCard title="Security Page" progress={10} />
             ) : path === "billing" ? (
               <DevelopmentCard title="Billing Page" progress={10} />
-            ) : path === "logout" ? (
-              <DevelopmentCard title="Logout Page" progress={10} />
             ) : (
               <div></div>
             )}
@@ -115,5 +113,3 @@ export default function ProfilePage({
     </div>
   );
 }
-
-
