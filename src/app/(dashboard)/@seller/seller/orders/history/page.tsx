@@ -152,9 +152,8 @@ export default function OrderHistoryPage() {
 
       <Card className="bg-transparent! border-0!">
         <CardHeader className="p-4">
-          <div className="flex flex-col md:flex-row gap-4">
+          <div className="flex flex-col md:flex-row items-center gap-4">
             <SearchFilterBar filter={false} />
-
             <HistoryFilter />
           </div>
         </CardHeader>
@@ -222,7 +221,11 @@ export default function OrderHistoryPage() {
             </TableBody>
           </Table>
           <div className="mt-10">
-            <PaginationControl currentPage={1} totalPages={6} />
+            <PaginationControl
+              currentPage={1}
+              totalPages={6}
+              options={{ size: "icon" }}
+            />
           </div>
         </CardContent>
       </Card>

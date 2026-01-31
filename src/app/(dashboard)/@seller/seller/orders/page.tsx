@@ -178,7 +178,7 @@ export default function OrderManagerPage() {
             </TableBody>
           </Table>
           <div className="mt-11">
-            <PaginationControl currentPage={1} totalPages={10} />
+            <PaginationControl currentPage={1} totalPages={10} options={{size: "icon"}} />
           </div>
         </CardContent>
       </Card>
