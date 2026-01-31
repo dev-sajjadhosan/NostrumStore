@@ -11,6 +11,8 @@ import {
   Wallet,
   ShieldCheck,
   History,
+  Van,
+  Layers2,
 } from "lucide-react";
 
 import { NavMain } from "@/components/layouts/nav-main";
@@ -65,14 +67,24 @@ const menuConfig = {
   admin: {
     navMain: [
       {
+        title: "General",
+        url: "#",
+        icon: Layers2,
+        isActive: true,
+        items: [
+          { title: "Dashboard", url: "/admin" },
+          
+        ],
+      },
+      {
         title: "Platform Control",
         url: "#",
         icon: ShieldCheck,
         isActive: true,
         items: [
-          { title: "Global Inventory", url: "/admin/medicines" },
+          // { title: "Global Inventory", url: "/admin/medicines" },
           { title: "Categories", url: "/admin/categories" },
-          { title: "Seller Approvals", url: "/admin/sellers/pending" },
+          // { title: "Seller Approvals", url: "/admin/sellers/pending" },
         ],
       },
       {
@@ -81,7 +93,16 @@ const menuConfig = {
         icon: Users,
         items: [
           { title: "All Users", url: "/admin/users" },
-          { title: "All Vendors", url: "/admin/users/vendors" },
+          // { title: "All Vendors", url: "/admin/users/vendors" },
+        ],
+      },
+      {
+        title: "Orders Management",
+        url: "#",
+        icon: Van,
+        items: [
+          { title: "All Orders", url: "/admin/orders" },
+        
         ],
       },
     ],

@@ -13,7 +13,8 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { TooltipButton } from "@/components/ui/tooltip-button";
-import { Hash, Plus } from "lucide-react";
+import { Grid2X2Plus, Hash, Plus } from "lucide-react";
+import Link from "next/link";
 import { ReactNode } from "react";
 
 export default async function DashboardLayout({
@@ -31,24 +32,29 @@ export default async function DashboardLayout({
   return (
     <>
       <SidebarProvider>
-        <AppSidebar  role="admin"/>
+        <AppSidebar role="admin" />
         <SidebarInset>
           <header className="flex h-16 shrink-0 items-center gap-2 border-b">
             <div className="flex items-center justify-between gap-2 px-3 w-full">
               <SidebarTrigger />
               <Separator orientation="vertical" className="mr-2 h-4" />
               <div className="flex items-center gap-3">
-                <TooltipButton
-                  icon={Plus}
-                  title="Add Medicine"
-                  variant={"secondary"}
-                  size={"icon-sm"}
-                />
-                <TooltipButton
-                  icon={Hash}
-                  title="Add Medicine"
-                  size={"icon-sm"}
-                />
+                <Link href={"/dashboard/medicine/create"}>
+                  <TooltipButton
+                    icon={Plus}
+                    title="Add Medicine"
+                    variant={"secondary"}
+                    size={"icon-sm"}
+                  />
+                </Link>
+                <Link href={"/admin/categories/create"}>
+                  <TooltipButton
+                    icon={Grid2X2Plus}
+                    title="Add Categories"
+                    variant={"secondary"}
+                    size={"icon-sm"}
+                  />
+                </Link>
               </div>
             </div>
           </header>
