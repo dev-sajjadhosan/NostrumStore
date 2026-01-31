@@ -34,6 +34,8 @@ import {
 import PersonalInformationView from "@/components/modules/profile/personal";
 import PreferencesView from "@/components/modules/profile/preferences";
 import DevelopmentCard from "@/components/shared/developement-card";
+import InvalidCard from "@/components/shared/invalid-card";
+import SecurityView from "@/components/modules/profile/security";
 
 type UserRole = "ADMIN" | "SELLER" | "CUSTOMER";
 
@@ -101,11 +103,12 @@ export default function ProfilePage({
             ) : path === "notifications" ? (
               <DevelopmentCard title="Notifications Page" progress={10} />
             ) : path === "security" ? (
-              <DevelopmentCard title="Security Page" progress={10} />
+              // <DevelopmentCard title="Security Page" progress={10} />
+              <SecurityView/>
             ) : path === "billing" ? (
               <DevelopmentCard title="Billing Page" progress={10} />
             ) : (
-              <div></div>
+              <InvalidCard/>
             )}
           </motion.div>
         )}

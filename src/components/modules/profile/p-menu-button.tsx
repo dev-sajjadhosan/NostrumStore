@@ -1,3 +1,4 @@
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
 
@@ -5,10 +6,12 @@ export default function PMenuButton({
   icon: Icon,
   label,
   onClick,
+  dev = true,
 }: {
   icon: any;
   label: string;
   onClick: () => void;
+  dev?: boolean;
 }) {
   return (
     <Button
@@ -21,7 +24,14 @@ export default function PMenuButton({
         <span className="font-medium text-muted-foreground group-hover:text-foreground">
           {label}
         </span>
+        <Badge
+          className="px-5 text-md font-semibold text-muted-foreground"
+          variant={"secondary"}
+        >
+          Working
+        </Badge>
       </div>
+
       <ChevronRight className="size-4 text-muted-foreground group-hover:translate-x-1 transition-transform" />
     </Button>
   );

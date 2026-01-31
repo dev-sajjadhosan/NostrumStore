@@ -11,6 +11,8 @@ import {
   AtSign,
   Bell,
   CreditCard,
+  Edit2,
+  Home,
   LogOut,
   Settings,
   ShieldCheck,
@@ -19,6 +21,7 @@ import {
 import PMenuButton from "./p-menu-button";
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { TooltipButton } from "@/components/ui/tooltip-button";
 export default function ProfileDefault({
   roleConfig,
 }: {
@@ -44,17 +47,33 @@ export default function ProfileDefault({
         className="space-y-5 w-11/12 mx-auto"
       >
         <div className="flex flex-col items-center text-center space-y-4 pt-10 pb-6 border-b">
-          <div className="relative">
-            <Avatar className="w-40 h-40 border-4 border-background shadow-xl">
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>MSH</AvatarFallback>
-            </Avatar>
-            <Badge
-              variant={"default"}
-              className={`absolute bottom-0 right-0 px-3 py-1 shadow-accent ${roleConfig.color}`}
-            >
-              {roleConfig.badge}
-            </Badge>
+          <div className="flex justify-between w-full">
+            <div />
+            <div className="relative">
+              <Avatar className="w-40 h-40 border-4 border-background shadow-xl">
+                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarFallback>MSH</AvatarFallback>
+              </Avatar>
+              <Badge
+                variant={"default"}
+                className={`absolute bottom-0 right-0 px-3 py-1 shadow-accent ${roleConfig.color}`}
+              >
+                {roleConfig.badge}
+              </Badge>
+            </div>
+            <div className="flex items-start gap-5">
+              <TooltipButton
+                icon={Edit2}
+                title="Profile Edit"
+                variant={"secondary"}
+                onClick={() => router.push("/profile/update")}
+              />
+              <TooltipButton
+                icon={Home}
+                title="Go Home"
+                onClick={() => router.push("/")}
+              />
+            </div>
           </div>
 
           <div className="space-y-1">

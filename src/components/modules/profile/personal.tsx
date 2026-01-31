@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   User,
   Mail,
@@ -26,8 +26,43 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Back from "../shared/back";
+import * as z from "zod";
+import { useForm } from "@tanstack/react-form";
+import { useRouter, useSearchParams } from "next/navigation";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
+import { Textarea } from "@/components/ui/textarea";
+
+const profileSchema = z.object({
+  name: z.string().min(2, "Name is too short"),
+  email: z.string().email("Invalid email address"),
+  bio: z.string().max(300, "Bio must be under 300 characters"),
+});
 
 export default function PersonalInformationView() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [isUpdate, setIsUpdate] = useState(false);
+
+  const form = useForm({
+    defaultValues: {
+      name: "Mohammad Sajjad Hosan",
+      email: "devsajjadhosan@gmail.com",
+      bio: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores nihil quasi architecto dolor minus voluptatem optio quia...",
+    },
+    validators: {
+      onSubmit: profileSchema,
+    },
+    onSubmit: async ({ value }) => {
+      console.log("Saving data:", value);
+      // Simulate API call
+      // handleClose();
+    },
+  });
   return (
     <div className="space-y-6 mx-auto">
       <div className="flex items-center justify-between">
@@ -71,40 +106,132 @@ export default function PersonalInformationView() {
               </div>
             </div>
 
-            <div className="flex flex-col gap-2 w-full">
-              <Badge className="text-md px-5 py-1 font-semibold">
-                Customer
-              </Badge>
-              <h1 className="text-4xl">Mohammad Sajjad Hosan</h1>
-              <h3 className="text-xl tracking-wide text-muted-foreground">
-                devsajjadhosan@gmail.com
-              </h3>
-              <p className="mt-5 text-sm tracking-wide">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores
-                nihil quasi architecto dolor minus voluptatem optio quia, ex
-                culpa earum labore consequuntur eos ducimus, incidunt sequi
-                corrupti laudantium cumque. At, laudantium nostrum! Unde dicta
-                temporibus excepturi molestias quia id veritatis et accusamus
-                iure architecto consectetur necessitatibus, debitis praesentium
-                sapiente. Consectetur?
-              </p>
-            </div>
+            {isUpdate ? (
+              <form
+                className="w-2xl"
+                id="update-profile"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  form.handleSubmit(e);
+                }}
+              >
+                <FieldGroup>
+                  <form.Field
+                    name="name"
+                    children={(field) => {
+                      const isValid =
+                        field.state.meta.isTouched && !field.state.meta.isValid;
+                      return (
+                        <Field>
+                          <FieldLabel htmlFor={field.name}>
+                            Full Name
+                          </FieldLabel>
+                          <Input
+                            value={field.state.value}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                            id={field.name}
+                            type="text"
+                            placeholder="John Doe"
+                          />
+                          {isValid && (
+                            <FieldError errors={field.state.meta.errors} />
+                          )}
+                        </Field>
+                      );
+                    }}
+                  />
+                  <form.Field
+                    name="email"
+                    children={(field) => {
+                      const isValid =
+                        field.state.meta.isTouched && !field.state.meta.isValid;
+                      return (
+                        <Field>
+                          <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+                          <Input
+                            value={field.state.value}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                            id={field.name}
+                            type="email"
+                            placeholder="johndoe@example.com"
+                          />{" "}
+                          {isValid && (
+                            <FieldError errors={field.state.meta.errors} />
+                          )}
+                        </Field>
+                      );
+                    }}
+                  />
+
+                  <form.Field
+                    name="bio"
+                    children={(field) => {
+                      const isValid =
+                        field.state.meta.isTouched && !field.state.meta.isValid;
+                      return (
+                        <Field>
+                          <FieldLabel htmlFor={field.name}>Bio</FieldLabel>
+                          <Textarea
+                            value={field.state.value}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                            id={field.name}
+                            placeholder="bio"
+                            rows={3}
+                          />
+                          {isValid && (
+                            <FieldError errors={field.state.meta.errors} />
+                          )}
+                        </Field>
+                      );
+                    }}
+                  />
+                </FieldGroup>
+              </form>
+            ) : (
+              <div className="flex flex-col gap-2 w-full">
+                <Badge className="text-md px-5 py-1 font-semibold">
+                  Customer
+                </Badge>
+                <h1 className="text-4xl">Mohammad Sajjad Hosan</h1>
+                <h3 className="text-xl tracking-wide text-muted-foreground">
+                  devsajjadhosan@gmail.com
+                </h3>
+                <p className="mt-5 text-sm tracking-wide">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Dolores nihil quasi architecto dolor minus voluptatem optio
+                  quia, ex culpa earum labore consequuntur eos ducimus, incidunt
+                  sequi corrupti laudantium cumque. At, laudantium nostrum! Unde
+                  dicta temporibus excepturi molestias quia id veritatis et
+                  accusamus iure architecto consectetur necessitatibus, debitis
+                  praesentium sapiente. Consectetur?
+                </p>
+              </div>
+            )}
           </div>
 
           <div className="pt-4 flex items-center justify-end gap-3">
-            <Button size={"lg"}>
-              Update Profile
+            <Button size={"lg"} variant={!isUpdate ? "default" : 'secondary'} onClick={() => setIsUpdate(!isUpdate)}>
+              {isUpdate ? "Discard Update" : "Update Profile"}
               <UserRoundPen className="size-5" />
             </Button>
-            <Button size={"lg"} variant={"ghost"} className="text-destructive">
-              Logout
-              <LogOut className="size-5" />
-            </Button>
+            {isUpdate ? (
+              <Button size={"lg"} form="update-profile">
+                <Save />
+                Save Change
+              </Button>
+            ) : (
+              <Button
+                size={"lg"}
+                variant={"ghost"}
+                className="text-destructive"
+              >
+                Logout
+                <LogOut className="size-5" />
+              </Button>
+            )}
           </div>
         </CardContent>
       </Card>
     </div>
   );
 }
-
-
