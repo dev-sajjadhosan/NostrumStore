@@ -236,7 +236,7 @@ export default function AllOrdersPage() {
               </TableBody>
             </Table>
           </CardContent>
-          <CardFooter className="mt-9">
+          <CardFooter className="mt-9 justify-center">
             <PaginationControl
               currentPage={1}
               totalPages={6}

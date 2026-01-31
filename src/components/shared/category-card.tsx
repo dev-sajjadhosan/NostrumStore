@@ -88,20 +88,20 @@ export default function CategoryCard({ category }: { category: any }) {
             <span className="text-muted-foreground font-medium">
               Linked Products:
             </span>
-            <span className="font-bold text-primary bg-primary/5 px-2 py-0.5 rounded">
+            <Badge className="font-bold text-[0.9rem] px-4 py-1.5">
               {category.medicineCount}
-            </span>
+            </Badge>
           </div>
 
           <div className="flex items-center justify-between pt-2">
             <Badge
               variant={category.status === "Active" ? "secondary" : "outline"}
               className={`text-sm tracking-wider font-semibold px-5 py-1.5 ${
-                category.status === "Restricted" ? "border-orange-700" : ""
+                category.status === "Restricted" ? "border-orange-700 bg-orange-700" : ""
               }`}
             >
               {category.status === "Restricted" && (
-                <AlertCircle className="mr-1 size-3" />
+                <AlertCircle className="mr-1 size-4!" />
               )}
               {category.status}
             </Badge>

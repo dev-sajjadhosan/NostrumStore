@@ -92,7 +92,7 @@ export default function CustomersPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-5 space-y-6 w-full">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">
@@ -133,7 +133,7 @@ export default function CustomersPage() {
         />
       </div>
 
-      <Card className="border-0! bg-transparent!">
+      <Card className="border-0! bg-transparent! w-full">
         <CardHeader className="p-4 flex flex-col md:flex-row gap-4 justify-between items-center">
           <SearchFilterBar filter={false} />
           <div className="flex gap-2">

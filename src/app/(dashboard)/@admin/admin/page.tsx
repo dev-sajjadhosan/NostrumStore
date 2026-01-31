@@ -6,7 +6,6 @@ import {
   Store,
   DollarSign,
   Package,
-  TrendingUp,
   AlertCircle,
 } from "lucide-react";
 import {
@@ -23,7 +22,6 @@ import {
   CartesianGrid,
   XAxis,
   YAxis,
-  ResponsiveContainer,
 } from "recharts";
 import {
   ChartConfig,
@@ -33,7 +31,7 @@ import {
 } from "@/components/ui/chart";
 import StatsCard from "@/components/modules/admin/a-stats-card";
 
-// 1. Chart Configuration for Shadcn
+
 const chartConfig = {
   revenue: {
     label: "Revenue",
@@ -41,7 +39,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-// 2. Mock Data
+
 const chartData = [
   { month: "January", revenue: 18600 },
   { month: "February", revenue: 30500 },
@@ -55,7 +53,7 @@ const chartData = [
 export default function AdminDashboardPage() {
   return (
     <div className="p-6 space-y-6">
-      {/* Header */}
+     
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Platform Overview</h1>
         <p className="text-muted-foreground italic">
@@ -63,7 +61,7 @@ export default function AdminDashboardPage() {
         </p>
       </div>
 
-      {/* Primary Statistics Grid */}
+   
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatsCard
           title="Total Revenue"
@@ -92,9 +90,9 @@ export default function AdminDashboardPage() {
         />
       </div>
 
-      {/* Main Analytics Section */}
+   
       <div className="grid grid-cols-1 lg:grid-cols-7 gap-6">
-        {/* SHADCN CHART CARD */}
+        
         <Card className="col-span-1 lg:col-span-4 shadow-sm border-muted/40">
           <CardHeader>
             <CardTitle>Platform Growth</CardTitle>
@@ -162,7 +160,7 @@ export default function AdminDashboardPage() {
           </CardContent>
         </Card>
 
-        {/* Action Center / Critical Alerts (RHS) */}
+     
         <Card className="col-span-1 lg:col-span-3 shadow-sm border-muted/40">
           <CardHeader>
             <CardTitle>Action Center</CardTitle>

@@ -7,6 +7,7 @@ import { Avatar, AvatarBadge, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Badge } from "../ui/badge";
 import { Pill, Plus, ShoppingBasket, UserCircle2, Van } from "lucide-react";
 import { Separator } from "../ui/separator";
+import Link from "next/link";
 
 const menus = [
   {
@@ -70,10 +71,12 @@ export function ProfileView() {
         </div>
         <Separator />
         <ul className="grid grid-cols-2 gap-1">
-          {menus.map((item) => (
-            <li className="border p-4 rounded-xl font-semibold cursor-pointer flex items-center gap-2 [&_svg]:size-5 hover:bg-accent">
-              {<item.icon />} {item.name}
-            </li>
+          {menus.map((item, idx) => (
+            <Link key={idx} href={item.link}>
+              <li className="border p-4 rounded-xl font-normal cursor-pointer flex items-center gap-2 [&_svg]:size-5 hover:bg-accent">
+                {<item.icon />} {item.name}
+              </li>
+            </Link>
           ))}
         </ul>
       </PopoverContent>

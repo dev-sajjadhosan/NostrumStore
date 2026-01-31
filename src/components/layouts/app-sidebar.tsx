@@ -13,6 +13,8 @@ import {
   History,
   Van,
   Layers2,
+  Home,
+  User2,
 } from "lucide-react";
 
 import { NavMain } from "@/components/layouts/nav-main";
@@ -69,8 +71,10 @@ const menuConfig = {
       },
     ],
     projects: [
-      { name: "My Shop", url: "/seller/shop-settings", icon: Store },
-      { name: "Earnings", url: "/seller/payouts", icon: Wallet },
+      // { name: "My Shop", url: "/seller/shop-settings", icon: Store },
+      // { name: "Earnings", url: "/seller/payouts", icon: Wallet },
+      { name: "Home", url: "/", icon: Home },
+      { name: "All Medicines", url: "/shop", icon: Pill },
     ],
   },
   admin: {
@@ -110,8 +114,10 @@ const menuConfig = {
       },
     ],
     projects: [
-      { name: "System Logs", url: "/admin/logs", icon: History },
-      { name: "Global Settings", url: "/admin/settings", icon: Settings },
+      // { name: "System Logs", url: "/admin/logs", icon: History },
+      // { name: "Global Settings", url: "/admin/settings", icon: Settings },
+      { name: "Home", url: "/", icon: Home, option: false },
+      { name: "All Medicines", url: "/shop", icon: Pill, option: false },
     ],
   },
 };

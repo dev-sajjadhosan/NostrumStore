@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 import Navbar from "@/components/layouts/navbar";
 import Footer from "@/components/layouts/footer";
 import { Toaster } from "@/components/ui/sonner";
+import Transition from "@/components/providers/Transition";
 
 const jetBrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
@@ -40,15 +41,17 @@ export default function RootLayout({
       <body
         className={`${jetBrainsMono.variable} ${raleway.variable} ${righteous.variable} antialiased`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-          <Toaster richColors />
-        </ThemeProvider>
+        <Transition>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+            <Toaster richColors />
+          </ThemeProvider>
+        </Transition>
       </body>
     </html>
   );
