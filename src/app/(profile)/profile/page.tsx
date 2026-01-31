@@ -33,6 +33,7 @@ import {
 } from "next/navigation";
 import PersonalInformationView from "@/components/modules/profile/personal";
 import PreferencesView from "@/components/modules/profile/preferences";
+import DevelopmentCard from "@/components/shared/developement-card";
 
 type UserRole = "ADMIN" | "SELLER" | "CUSTOMER";
 
@@ -45,7 +46,7 @@ export default function ProfilePage({
 
   const path = useSearchParams().get("s");
   console.log(path);
-  
+
   const roleConfig = {
     ADMIN: {
       badge: "Platform Admin",
@@ -96,7 +97,15 @@ export default function ProfilePage({
             {path === "personal" ? (
               <PersonalInformationView />
             ) : path === "preferences" ? (
-              <PreferencesView />
+              <DevelopmentCard title="Preferences Page" progress={10} />
+            ) : path === "notifications" ? (
+              <DevelopmentCard title="Notifications Page" progress={10} />
+            ) : path === "security" ? (
+              <DevelopmentCard title="Security Page" progress={10} />
+            ) : path === "billing" ? (
+              <DevelopmentCard title="Billing Page" progress={10} />
+            ) : path === "logout" ? (
+              <DevelopmentCard title="Logout Page" progress={10} />
             ) : (
               <div></div>
             )}
@@ -106,3 +115,5 @@ export default function ProfilePage({
     </div>
   );
 }
+
+
