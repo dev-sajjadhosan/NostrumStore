@@ -76,7 +76,7 @@ export default function SellerMedicinesPage() {
   const [searchTerm, setSearchTerm] = useState("");
 
   return (
-    <div className="p-4 md:p-8 space-y-6">
+    <div className="p-3 lg:p-5 flex flex-col gap-9">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">
@@ -91,7 +91,7 @@ export default function SellerMedicinesPage() {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 h-40">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:h-40">
         <Card className="">
           <CardContent className="h-full flex items-center justify-around">
             <Pill size={50} strokeWidth={1} />
@@ -131,7 +131,7 @@ export default function SellerMedicinesPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[250px]">Product</TableHead>
+                <TableHead className="w-62.5">Product</TableHead>
                 <TableHead>Category</TableHead>
                 <TableHead>
                   <div className="flex items-center gap-1 cursor-pointer hover:text-foreground">

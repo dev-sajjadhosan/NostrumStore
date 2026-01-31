@@ -36,12 +36,14 @@ export default function SearchFilterBar({ filter = true }: SearchFilterProps) {
   };
   return (
     <>
-      <div className="flex items-center gap-1 py-2 border w-full rounded-full px-5">
-        <Search className="size-6 text-muted-foreground" />
-        <Input
-          placeholder="Search by brand or generic name..."
-          className="bg-transparent! border-0! w-full"
-        />
+      <div className="flex flex-col md:flex-row items-center gap-5 py-2 w-full px-5">
+        <div className="flex items-center gap-3 border w-full rounded-full px-5">
+          <Search className="size-6 text-muted-foreground" />
+          <Input
+            placeholder="Search by brand or generic name..."
+            className="bg-transparent! border-0! w-full"
+          />
+        </div>
         {filter && (
           <Popover>
             <PopoverTrigger asChild>

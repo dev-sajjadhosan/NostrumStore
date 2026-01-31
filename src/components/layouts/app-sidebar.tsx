@@ -34,10 +34,19 @@ const menuConfig = {
   seller: {
     navMain: [
       {
-        title: "Dashboard",
-        url: "/seller/dashboard",
-        icon: LayoutDashboard,
+        title: "General",
+        url: "#",
+        icon: Layers2,
+        isActive: true,
+        items: [
+          {
+            title: "Dashboard",
+            url: "/seller/dashboard",
+            // icon: LayoutDashboard,
+          },
+        ],
       },
+
       {
         title: "Inventory",
         url: "#",
@@ -71,10 +80,7 @@ const menuConfig = {
         url: "#",
         icon: Layers2,
         isActive: true,
-        items: [
-          { title: "Dashboard", url: "/admin" },
-          
-        ],
+        items: [{ title: "Dashboard", url: "/admin" }],
       },
       {
         title: "Platform Control",
@@ -100,10 +106,7 @@ const menuConfig = {
         title: "Orders Management",
         url: "#",
         icon: Van,
-        items: [
-          { title: "All Orders", url: "/admin/orders" },
-        
-        ],
+        items: [{ title: "All Orders", url: "/admin/orders" }],
       },
     ],
     projects: [
