@@ -14,11 +14,7 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -32,6 +28,7 @@ import { Separator } from "@/components/ui/separator";
 import { TooltipButton } from "@/components/ui/tooltip-button";
 import PaginationControl from "@/components/shared/pagination";
 import SearchFilterBar from "@/components/modules/shared/search-filter-bar";
+import Link from "next/link";
 
 const initialMedicines = [
   {
@@ -86,9 +83,11 @@ export default function SellerMedicinesPage() {
             Manage your product listings, stock levels, and pricing.
           </p>
         </div>
-        <Button className="gap-2">
-          <Plus className="size-4" /> Add Medicine
-        </Button>
+        <Link href={"/seller/medicines/create"}>
+          <Button className="gap-2">
+            <Plus className="size-4" /> Add Medicine
+          </Button>
+        </Link>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:h-40">

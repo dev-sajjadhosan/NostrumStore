@@ -147,16 +147,15 @@ export function RestockModal({ item }: RestockModalProps) {
               )}
             />
 
-            <div className="rounded-lg bg-muted/50 p-10 border border-dashed flex items-center justify-around">
+            <div className="rounded-lg bg-muted/50 p-15 border border-dashed flex items-center justify-around">
               <Package size={70} strokeWidth={1} />
               <div className="flex flex-col items-center gap-1">
-                <h3 className="text-3xl text-muted-foreground">
+                <h3 className="text-2xl md:text-3xl text-muted-foreground">
                   New
                   <span className="text-5xl font-semibold text-foreground px-3">
                     {item.stock + (form.state.values.additionalStock || 0)}{" "}
                     {item.unit}s
                   </span>{" "}
-                  Stock
                 </h3>
               </div>
             </div>

@@ -41,6 +41,7 @@ import {
   ImagePlus,
 } from "lucide-react";
 import { Label } from "@/components/ui/label";
+import { useRouter } from "next/navigation";
 
 const medicineSchema = z.object({
   name: z.string().trim().min(2, "Brand name is required"),
@@ -60,6 +61,7 @@ const medicineSchema = z.object({
 type MedicineFormValues = z.infer<typeof medicineSchema>;
 
 export default function AddMedicinePage() {
+  const router = useRouter();
   const [imagePreview, setImagePreview] = React.useState<string | null>(null);
   const form = useForm({
     defaultValues: {
@@ -89,7 +91,7 @@ export default function AddMedicinePage() {
   });
 
   return (
-    <div className="p-6 max-w-6xl mx-auto space-y-6">
+    <div className="p-6 w-full mx-auto space-y-8">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-normal tracking-tight">New Medicine</h1>
@@ -97,12 +99,19 @@ export default function AddMedicinePage() {
             Add a new product to your pharmacy listing.
           </p>
         </div>
-        <Button variant="outline" onClick={() => window.history.back()}>
-          <X className="mr-2 size-4" /> Discard
+        <Button variant="secondary" onClick={() => router.back()}>
+          <X className="size-4" /> Discard
         </Button>
       </div>
 
-      <div className="grid grid-cols-2 gap-10">
+      <div className="grid lg:grid-cols-2 gap-10">
+        <div className="mx-auto">
+          <Pill
+            size={200}
+            strokeWidth={1}
+            className="text-orange-500 animate-pulse"
+          />
+        </div>
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -182,9 +191,6 @@ export default function AddMedicinePage() {
             />
           </CardContent>
         </Card>
-        <div className="mx-auto">
-          <Pill size={200} strokeWidth={1} className="text-orange-500 animate-pulse" />
-        </div>
         {/* <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -274,14 +280,14 @@ export default function AddMedicinePage() {
           form.handleSubmit();
         }}
       >
-        <div className="">
+        <div className="w-full">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-2xl">
                 <Pill className="size-7" /> Product Details
               </CardTitle>
             </CardHeader>
-            <div className="flex items-center gap-10 w-full">
+            <div className="flex flex-col lg:flex-row items-center gap-10 w-full">
               <div className="w-full space-y-5">
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
