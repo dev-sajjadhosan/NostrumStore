@@ -23,6 +23,7 @@ import {
 import Link from "next/link";
 import { MenuProps } from "@/types/types";
 import { TooltipButton } from "../ui/tooltip-button";
+import { userService } from "@/services/user.service";
 
 const menuLinks = [
   {
@@ -35,11 +36,11 @@ const menuLinks = [
     link: "/shop",
     icon: Pill,
   },
-  {
-    name: "Doctors",
-    link: "/doctors",
-    icon: Stethoscope,
-  },
+  // {
+  //   name: "Doctors",
+  //   link: "/doctors",
+  //   icon: Stethoscope,
+  // },
   {
     name: "contact",
     link: "/contact",
@@ -52,9 +53,9 @@ const menuLinks = [
   },
 ];
 
-export default function Navbar() {
-  // const user = [{ name: "John Doe" }];
-  const user = null;
+export default async function Navbar() {
+  const { data } = await userService.getSession();
+  const user = data?.user || null;
   return (
     <div
       className={`sticky top-10 mx-auto my-8 flex  items-center justify-between w-11/12 h-18  border rounded-full bg-accent/40 z-50 ${user ? "pl-9 pr-4" : "px-3"}`}
@@ -79,14 +80,14 @@ export default function Navbar() {
       <div className="flex items-center gap-2">
         {user ? (
           <div className="flex items-center gap-2">
-            <TooltipButton icon={MapPinned} title="Location" />
+            {/* <TooltipButton icon={MapPinned} title="Location" /> */}
             <Link href={"/cart"}>
               <TooltipButton icon={ShoppingCart} title="Cart" />
             </Link>
             <Link href={"/orders"}>
               <TooltipButton icon={Van} title="Orders" />
             </Link>
-            <ProfileView />
+            <ProfileView user={user} />
           </div>
         ) : (
           <Link href={"/quick-up"}>

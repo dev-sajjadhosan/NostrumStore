@@ -38,13 +38,15 @@ export default function HLayout({ children }: { children: ReactNode }) {
                 <h1 className="text-lg font-semibold">
                   {isPath("/quick-up")
                     ? "Quick Up"
-                    : isPath("/login")
-                      ? "Login"
-                      : isPath("/register")
-                        ? "Register"
-                        : isPath("/register/verify")
-                          ? "Verify Account"
-                          : "Unknown"}
+                    : isPath('/auth/roles')
+                      ? "Update Your Role"
+                      : isPath("/login")
+                        ? "Login"
+                        : isPath("/register")
+                          ? "Register"
+                          : isPath("/register/verify")
+                            ? "Verify Account"
+                            : "Unknown"}
                 </h1>
               </div>
               <Link href={"/"}>
@@ -56,7 +58,7 @@ export default function HLayout({ children }: { children: ReactNode }) {
             <div className="flex gap-10 flex-col-reverse lg:flex-row items-center justify-between w-full h-full">
               <div className="lg:pl-40 w-full">{children}</div>
               <div className="h-full flex items-center justify-center border-l-2 rounded-full lg:pl-19 mt-5 lg:mt-0">
-                <AuthNav />
+                {isPath("/auth/roles") ? <div /> : <AuthNav />}
               </div>
             </div>
           </CardContent>
