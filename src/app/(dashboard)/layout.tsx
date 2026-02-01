@@ -13,6 +13,8 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { TooltipButton } from "@/components/ui/tooltip-button";
+import { Roles } from "@/constants/roles";
+import { userService } from "@/services/user.service";
 import { Grid2X2Plus, Hash, Plus } from "lucide-react";
 import Link from "next/link";
 import { ReactNode } from "react";
@@ -26,13 +28,12 @@ export default async function DashboardLayout({
   admin: ReactNode;
   seller: ReactNode;
 }) {
-  const userInfo = {
-    role: "seller",
-  };
+  const { data } = await userService.getSession();
+  const role = data?.user?.role;
   return (
     <>
       <SidebarProvider>
-        <AppSidebar role="admin" />
+        <AppSidebar user={data} />
         <SidebarInset>
           <header className="flex h-16 shrink-0 items-center gap-2 border-b">
             <div className="flex items-center justify-between gap-2 px-3 w-full">
@@ -58,7 +59,9 @@ export default async function DashboardLayout({
               </div>
             </div>
           </header>
-          <div className="flex flex-1 flex-col gap-4 p-4">{admin}</div>
+          <div className="flex flex-1 flex-col gap-4 p-4">
+            {role === Roles.ADMIN ? admin : seller}
+          </div>
         </SidebarInset>
       </SidebarProvider>
     </>

@@ -38,7 +38,6 @@ export default function QuickAuthPage() {
   const handleGoogleProvider = async () => {
     return await authClient.signIn.social({
       provider: "google",
-      // callbackURL: env.NEXT_PUBLIC_APP_URL,
       callbackURL: "/auth/roles",
     });
   };

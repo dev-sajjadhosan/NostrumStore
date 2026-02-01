@@ -2,6 +2,7 @@ import { Roles } from "@/constants/roles";
 import { userService } from "@/services/user.service";
 import { NextRequest, NextResponse } from "next/server";
 
+const VERIFY_PAGE = "register/verify";
 const ADMIN_ROOT = "/admin";
 const SELLER_ROOT = "/seller";
 const AUTH_PAGES = ["/login", "/register", "/quick-up", "/auth/roles"];
@@ -27,6 +28,16 @@ export async function proxy(request: NextRequest) {
       return NextResponse.redirect(new URL("/login", request.url));
     }
     return NextResponse.next();
+  }
+
+  if (user && !user.isEmailVerified && pathname !== VERIFY_PAGE) {
+  
+    return NextResponse.redirect(new URL(VERIFY_PAGE, request.url));
+  }
+  
+
+  if (user && user.isEmailVerified && pathname === VERIFY_PAGE) {
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   if (AUTH_PAGES.some((page) => pathname.startsWith(page))) {

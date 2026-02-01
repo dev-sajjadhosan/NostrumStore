@@ -28,12 +28,10 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback } from "../ui/avatar";
-
-// Define the roles
-type UserRole = "seller" | "admin";
+import { Roles } from "@/constants/roles";
 
 const menuConfig = {
-  seller: {
+  SELLER: {
     navMain: [
       {
         title: "General",
@@ -77,7 +75,7 @@ const menuConfig = {
       { name: "All Medicines", url: "/shop", icon: Pill },
     ],
   },
-  admin: {
+  ADMIN: {
     navMain: [
       {
         title: "General",
@@ -123,18 +121,11 @@ const menuConfig = {
 };
 
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
-  role: UserRole; // Pass "seller" or "admin"
+  user: any;
 }
 
-export function AppSidebar({ role, ...props }: AppSidebarProps) {
-  const currentData = menuConfig[role];
-
-  // Example user data (this would usually come from your auth hook)
-  const userData = {
-    name: role === "admin" ? "Platform Admin" : "Pharmacy Owner",
-    email: role === "admin" ? "admin@nostrum.com" : "seller@pharmacy.com",
-    avatar: "",
-  };
+export function AppSidebar({ user, ...props }: AppSidebarProps) {
+  const currentData = menuConfig[user?.user?.role as keyof typeof menuConfig];
 
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -145,7 +136,7 @@ export function AppSidebar({ role, ...props }: AppSidebarProps) {
         <div className="flex flex-col">
           <h1 className="text-md font-normal leading-none">Nostrum Store</h1>
           <span className="text-[10px] text-muted-foreground uppercase tracking-widest mt-1">
-            {role} Panel
+            {user?.user?.role} Panel
           </span>
         </div>
       </SidebarHeader>
@@ -156,7 +147,7 @@ export function AppSidebar({ role, ...props }: AppSidebarProps) {
       </SidebarContent>
 
       <SidebarFooter>
-        <NavUser user={userData} />
+        <NavUser user={user?.user} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

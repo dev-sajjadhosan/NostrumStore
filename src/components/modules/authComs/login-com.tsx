@@ -57,13 +57,6 @@ export function LoginForm({ ...props }: React.ComponentProps<typeof Card>) {
     },
   });
 
-  const handleGoogleLogin = async () => {
-    const data = await authClient.signIn.social({
-      provider: "google",
-      callbackURL: "http://localhost:3000",
-    });
-    console.log(data);
-  };
 
   return (
     <div className="w-full lg:w-2xl flex flex-col gap-5">

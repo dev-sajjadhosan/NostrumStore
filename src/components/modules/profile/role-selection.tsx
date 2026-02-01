@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { redirect, useRouter } from "next/navigation";
 import { LucideIcon, Store, User2, UserStar } from "lucide-react";
-import { updateUserRoleAction } from "@/actions/user-actions";
+import { updateUserRoleAction } from "@/actions/user.actions";
 
 const iconMap = {
   CUSTOMER: User2,

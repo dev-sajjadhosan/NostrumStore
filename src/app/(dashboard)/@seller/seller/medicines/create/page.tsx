@@ -39,21 +39,31 @@ import {
   Calendar,
   Trash2,
   ImagePlus,
+  Sparkles,
+  Hash,
 } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
+import { createMedicine } from "@/actions/seller.action";
 
 const medicineSchema = z.object({
   name: z.string().trim().min(2, "Brand name is required"),
   genericName: z.string().trim().min(2, "Generic name is required"),
   description: z.string().trim().min(10, "Provide a detailed description"),
   price: z.string().regex(/^\d+(\.\d{1,2})?$/, "Invalid price format"),
+  discountPrice: z
+    .string()
+    .regex(/^\d+(\.\d{1,2})?$/, "Invalid format")
+    .optional()
+    .or(z.literal("")), // New
   stock: z.number().min(0),
   strength: z.string().trim().min(1, "Strength is required"),
   categoryId: z.string().min(1, "Category is required"),
+  group: z.string().trim().min(1, "Therapeutic group is required"), // New
+  sku: z.string().trim().optional(), // New
   unitType: z.string().min(1),
   expiryDate: z.string().min(1, "Expiry date is required"),
-  tags: z.string().optional(), // We'll split this by comma on submit
+  tags: z.string().optional(),
   isPrescriptionRequired: z.boolean(),
   image: z.any().optional(),
 });
@@ -66,6 +76,7 @@ export default function AddMedicinePage() {
   const form = useForm({
     defaultValues: {
       name: "",
+      image: "",
       genericName: "",
       description: "",
       price: "",
@@ -74,22 +85,44 @@ export default function AddMedicinePage() {
       categoryId: "",
       unitType: "Pcs",
       expiryDate: "",
+      sku: "",
       tags: "",
       isPrescriptionRequired: false,
     } as MedicineFormValues,
     validators: { onSubmit: medicineSchema },
     onSubmit: async ({ value }) => {
       const toastId = toast.loading("Saving to inventory...");
-      // Convert tags string to array before sending to server
       const submissionData = {
         ...value,
+        price: parseFloat(value.price),
+        discountPrice: value.discountPrice
+          ? parseFloat(value.discountPrice)
+          : null,
         tags: value.tags ? value.tags.split(",").map((t) => t.trim()) : [],
       };
-      console.log("Final Data for Server:", submissionData);
+      const res = await createMedicine(submissionData)
+      console.log(res.data);
       toast.success("Medicine added!", { id: toastId });
     },
   });
+  const generateSKU = () => {
+    const name = form.getFieldValue("name");
+    const strength = form.getFieldValue("strength");
+    const unit = form.getFieldValue("unitType");
 
+    if (!name || !strength) {
+      toast.error("Please enter Name and Strength first");
+      return;
+    }
+
+    const cleanName = name.replace(/\s+/g, "-").toUpperCase();
+    const cleanStrength = strength.replace(/\s+/g, "").toUpperCase();
+    const randomSuffix = Math.floor(100 + Math.random() * 900); // 3 random digits
+
+    const generated = `${cleanName}-${cleanStrength}-${unit.toUpperCase()}-${randomSuffix}`;
+    form.setFieldValue("sku", generated);
+    toast.info("SKU Generated!");
+  };
   return (
     <div className="p-6 w-full mx-auto space-y-8">
       <div className="flex items-center justify-between">
@@ -168,7 +201,7 @@ export default function AddMedicinePage() {
                             const reader = new FileReader();
                             reader.onloadend = () => {
                               setImagePreview(reader.result as string);
-                              field.handleChange(file); // Store file object for server
+                              field.handleChange(file);
                             };
                             reader.readAsDataURL(file);
                           }
@@ -295,7 +328,7 @@ export default function AddMedicinePage() {
                       name="name"
                       children={(field) => (
                         <Field>
-                          <FieldLabel>Brand Name</FieldLabel>
+                          <FieldLabel>Medicine Name</FieldLabel>
                           <Input
                             value={field.state.value}
                             onChange={(e) => field.handleChange(e.target.value)}
@@ -363,7 +396,7 @@ export default function AddMedicinePage() {
                   <CardHeader>
                     <CardTitle>Pricing & Stock</CardTitle>
                   </CardHeader>
-                  <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <form.Field
                       name="price"
                       children={(field) => (
@@ -379,6 +412,19 @@ export default function AddMedicinePage() {
                       )}
                     />
                     <form.Field
+                      name="discountPrice"
+                      children={(field) => (
+                        <Field>
+                          <FieldLabel>Discount Price ($)</FieldLabel>
+                          <Input
+                            value={field.state.value}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                            placeholder="Optional"
+                          />
+                        </Field>
+                      )}
+                    />
+                    <form.Field
                       name="unitType"
                       children={(field) => (
                         <Field>
@@ -387,14 +433,35 @@ export default function AddMedicinePage() {
                             onValueChange={field.handleChange}
                             defaultValue={field.state.value}
                           >
-                            <SelectTrigger>
-                              <SelectValue />
+                            <SelectTrigger className="rounded-full">
+                              <SelectValue placeholder="Select Unit" />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="Pcs">Pcs (Single)</SelectItem>
-                              <SelectItem value="Strip">Strip</SelectItem>
-                              <SelectItem value="Box">Box</SelectItem>
-                              <SelectItem value="Bottle">Bottle</SelectItem>
+                              <SelectItem value="Pcs">
+                                Pcs (Tablet/Capsule)
+                              </SelectItem>
+                              <SelectItem value="Strip">
+                                Strip (Blister Pack)
+                              </SelectItem>
+                              <SelectItem value="Box">Box / Carton</SelectItem>
+
+                              <SelectItem value="Bottle">
+                                Bottle (Syrup/Drops)
+                              </SelectItem>
+                              <SelectItem value="Tube">
+                                Tube (Ointment/Cream)
+                              </SelectItem>
+                              <SelectItem value="Sachet">
+                                Sachet (Powder/Oral Saline)
+                              </SelectItem>
+
+                              <SelectItem value="Vial">
+                                Vial (Injection)
+                              </SelectItem>
+                              <SelectItem value="Ampoule">Ampoule</SelectItem>
+                              <SelectItem value="Inhaler">
+                                Inhaler / Respule
+                              </SelectItem>
                             </SelectContent>
                           </Select>
                         </Field>
@@ -420,24 +487,96 @@ export default function AddMedicinePage() {
               </div>
               <div className="flex flex-col gap-9 w-full">
                 <CardContent className="space-y-4">
-                  <form.Field
-                    name="categoryId"
-                    children={(field) => (
-                      <Field>
-                        <FieldLabel>Category</FieldLabel>
-                        <Select onValueChange={field.handleChange}>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select Category" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="cat-1">Analgesics</SelectItem>
-                            <SelectItem value="cat-2">Antibiotics</SelectItem>
-                            <SelectItem value="cat-3">Vitamins</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </Field>
-                    )}
-                  />
+                  <div className="flex items-center gap-5">
+                    <form.Field
+                      name="categoryId"
+                      children={(field) => (
+                        <Field>
+                          <FieldLabel>Category</FieldLabel>
+                          <Select onValueChange={field.handleChange}>
+                            <SelectTrigger className="rounded-full">
+                              <SelectValue placeholder="Select Category" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="analgesics">
+                                Analgesics (Pain Relief)
+                              </SelectItem>
+                              <SelectItem value="anti-inflammatory">
+                                Anti-inflammatory
+                              </SelectItem>
+                              <SelectItem value="antipyretics">
+                                Antipyretics (Fever)
+                              </SelectItem>
+
+                              <SelectItem value="antibiotics">
+                                Antibiotics
+                              </SelectItem>
+                              <SelectItem value="antivirals">
+                                Antivirals
+                              </SelectItem>
+                              <SelectItem value="antifungals">
+                                Antifungals
+                              </SelectItem>
+
+                              <SelectItem value="antihypertensives">
+                                Antihypertensives (BP)
+                              </SelectItem>
+                              <SelectItem value="antidiabetics">
+                                Antidiabetics
+                              </SelectItem>
+                              <SelectItem value="cardiovascular">
+                                Cardiovascular
+                              </SelectItem>
+
+                              <SelectItem value="antihistamines">
+                                Antihistamines (Allergy)
+                              </SelectItem>
+                              <SelectItem value="bronchodilators">
+                                Bronchodilators (Asthma)
+                              </SelectItem>
+
+                              <SelectItem value="antacids">
+                                Antacids & Digestion
+                              </SelectItem>
+                              <SelectItem value="laxatives">
+                                Laxatives
+                              </SelectItem>
+
+                              <SelectItem value="vitamins">
+                                Vitamins & Supplements
+                              </SelectItem>
+                              <SelectItem value="herbal">
+                                Herbal Products
+                              </SelectItem>
+
+                              <SelectItem value="dermatological">
+                                Dermatological (Skin)
+                              </SelectItem>
+                              <SelectItem value="eye-ear-drops">
+                                Eye & Ear Drops
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+                          {field.state.meta.errors && (
+                            <FieldError errors={field.state.meta.errors} />
+                          )}
+                        </Field>
+                      )}
+                    />
+                    <form.Field
+                      name="group"
+                      children={(field) => (
+                        <Field>
+                          <FieldLabel>Therapeutic Group</FieldLabel>
+                          <Input
+                            value={field.state.value}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                            placeholder="e.g. Analgesics / NSAIDs"
+                          />
+                        </Field>
+                      )}
+                    />
+                  </div>
                   <form.Field
                     name="strength"
                     children={(field) => (
@@ -468,7 +607,7 @@ export default function AddMedicinePage() {
                   />
                 </CardContent>
 
-                <CardContent className="pt-6">
+                <CardContent className="pt-6 space-y-5">
                   <form.Field
                     name="isPrescriptionRequired"
                     children={(field) => (
@@ -487,11 +626,37 @@ export default function AddMedicinePage() {
                       </div>
                     )}
                   />
+
+                  <form.Field
+                    name="sku"
+                    children={(field) => (
+                      <div className="space-y-2">
+                        <Label className="flex items-center justify-between">
+                          <span className="flex items-center gap-2">
+                            <Hash className="size-4" /> SKU
+                          </span>
+                          <Button
+                            type="button"
+                            onClick={generateSKU}
+                            variant={"ghost"}
+                            className=" text-orange-500 hover:text-orange-600 flex items-center gap-1 font-medium"
+                          >
+                            <Sparkles className="size-3" /> Auto-Generate
+                          </Button>
+                        </Label>
+                        <Input
+                          value={field.state.value}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          placeholder="Auto or Manual"
+                        />
+                      </div>
+                    )}
+                  />
                 </CardContent>
               </div>
             </div>
             <CardFooter className="flex justify-end mt-10">
-              <Button type="submit" className="text-lg" size={"lg"}>
+              <Button type="submit" className="text-md" size={"lg"}>
                 <Save className="mr-2 size-5" /> Publish Medicine
               </Button>
             </CardFooter>

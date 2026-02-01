@@ -33,3 +33,16 @@ export interface RoleConfigMap {
   SELLER: RoleData;
   CUSTOMER: RoleData;
 }
+
+export type PgOptionsRs = {
+  page: number;
+  limit: number;
+  skip: number;
+  sortBy: string;
+  sortOrder: string;
+};
+
+export interface serviceOptions {
+  cache?: RequestCache;
+  revalidate?: number;
+}

@@ -27,7 +27,7 @@ import {
   UserPlus2,
   UserRoundSearch,
 } from "lucide-react";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import * as z from "zod";
@@ -40,6 +40,7 @@ const formSchema = z.object({
 
 export function RegisterForm({ ...props }: React.ComponentProps<typeof Card>) {
   const [show, setShow] = useState(false);
+  const router = useRouter()
   const form = useForm({
     defaultValues: {
       name: "",
@@ -59,7 +60,7 @@ export function RegisterForm({ ...props }: React.ComponentProps<typeof Card>) {
           return;
         }
         if (!data?.user.emailVerified) {
-          redirect("/register/verify");
+          router.push("/register/verify");
         }
         toast.success("User Created Successfully!", { id: toastID });
       } catch (err) {
@@ -68,13 +69,6 @@ export function RegisterForm({ ...props }: React.ComponentProps<typeof Card>) {
     },
   });
 
-  const handleGoogleLogin = async () => {
-    const data = await authClient.signIn.social({
-      provider: "google",
-      callbackURL: "http://localhost:3000",
-    });
-    console.log(data);
-  };
 
   return (
     <div className="lg:w-2xl flex flex-col gap-5">

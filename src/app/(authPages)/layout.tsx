@@ -17,7 +17,7 @@ export default function HLayout({ children }: { children: ReactNode }) {
     <>
       <div className="md:p-8">
         <Card className="w-full lg:h-180 rounded-xl border-0">
-          <CardContent className="h-full flex flex-col items-center p-3">
+          <CardContent className="h-full flex flex-col items-center">
             <div className="flex items-center justify-between w-11/12">
               <div className="flex items-center gap-3">
                 <Avatar className="w-15 h-15">
@@ -38,7 +38,7 @@ export default function HLayout({ children }: { children: ReactNode }) {
                 <h1 className="text-lg font-semibold">
                   {isPath("/quick-up")
                     ? "Quick Up"
-                    : isPath('/auth/roles')
+                    : isPath("/auth/roles")
                       ? "Update Your Role"
                       : isPath("/login")
                         ? "Login"
@@ -57,8 +57,14 @@ export default function HLayout({ children }: { children: ReactNode }) {
             </div>
             <div className="flex gap-10 flex-col-reverse lg:flex-row items-center justify-between w-full h-full">
               <div className="lg:pl-40 w-full">{children}</div>
-              <div className="h-full flex items-center justify-center border-l-2 rounded-full lg:pl-19 mt-5 lg:mt-0">
-                {isPath("/auth/roles") ? <div /> : <AuthNav />}
+              <div className="h-9/12 flex items-center justify-center border-l-2 rounded-full lg:pl-19 lg:mt-0">
+                {isPath("/auth/roles") ||
+                isPath("/verify") ||
+                isPath("/verify-email") ? (
+                  <div />
+                ) : (
+                  <AuthNav />
+                )}
               </div>
             </div>
           </CardContent>
