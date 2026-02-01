@@ -19,7 +19,16 @@ import {
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
 import { useForm } from "@tanstack/react-form";
-import { Key, RotateCcwKey, UserPlus2, UserRoundSearch } from "lucide-react";
+import {
+  Eye,
+  EyeOff,
+  Key,
+  RotateCcwKey,
+  UserPlus2,
+  UserRoundSearch,
+} from "lucide-react";
+import { redirect } from "next/navigation";
+import { useState } from "react";
 import { toast } from "sonner";
 import * as z from "zod";
 
@@ -30,6 +39,7 @@ const formSchema = z.object({
 });
 
 export function RegisterForm({ ...props }: React.ComponentProps<typeof Card>) {
+  const [show, setShow] = useState(false);
   const form = useForm({
     defaultValues: {
       name: "",
@@ -45,8 +55,11 @@ export function RegisterForm({ ...props }: React.ComponentProps<typeof Card>) {
         const { data, error } = await authClient.signUp.email(value);
         console.log({ data, error });
         if (error) {
-          toast.error(error.message, { id: toastID });
+          toast.error(error.message || "Registration Failed!", { id: toastID });
           return;
+        }
+        if (!data?.user.emailVerified) {
+          redirect("/register/verify");
         }
         toast.success("User Created Successfully!", { id: toastID });
       } catch (err) {
@@ -64,8 +77,8 @@ export function RegisterForm({ ...props }: React.ComponentProps<typeof Card>) {
   };
 
   return (
-    <div className="w-2xl flex flex-col gap-5">
-      <Card {...props} className="bg-transparent! border-0">
+    <div className="lg:w-2xl flex flex-col gap-5">
+      <Card {...props} className="bg-transparent! border-0 p-0">
         <CardHeader>
           <CardTitle className="text-3xl">Create an account</CardTitle>
           <CardDescription>
@@ -80,7 +93,7 @@ export function RegisterForm({ ...props }: React.ComponentProps<typeof Card>) {
               form.handleSubmit(e);
             }}
           >
-            <FieldGroup>
+            <FieldGroup className="gap-1!">
               <form.Field
                 name="name"
                 children={(field) => {
@@ -133,13 +146,22 @@ export function RegisterForm({ ...props }: React.ComponentProps<typeof Card>) {
                   return (
                     <Field>
                       <FieldLabel htmlFor={field.name}>Password</FieldLabel>
-                      <Input
-                        value={field.state.value}
-                        onChange={(e) => field.handleChange(e.target.value)}
-                        id={field.name}
-                        type="password"
-                        placeholder="password1223"
-                      />{" "}
+                      <div className="flex items-center gap-3">
+                        <Input
+                          value={field.state.value}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          id={field.name}
+                          type={show ? "text" : "password"}
+                          placeholder="password1223"
+                        />{" "}
+                        <Button
+                          type="button"
+                          size={"icon"}
+                          onClick={() => setShow(!show)}
+                        >
+                          {show ? <EyeOff /> : <Eye />}
+                        </Button>
+                      </div>
                       {isValid && (
                         <FieldError errors={field.state.meta.errors} />
                       )}
@@ -156,7 +178,7 @@ export function RegisterForm({ ...props }: React.ComponentProps<typeof Card>) {
           </Button>
         </CardFooter>
       </Card>
-      <div className="flex items-center justify-end gap-5 mt-6">
+      <div className="flex items-center justify-end gap-5 mt-0">
         <Button
           variant={"ghost"}
           className="border w-55 h-17 px-5 py-4 text-md font-semibold rounded-full gap-3 items-center"

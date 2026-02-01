@@ -11,7 +11,7 @@ export default function AuthNav() {
 
   return (
     <>
-      <div className="w-xs">
+      <div className="w-full lg:w-xs">
         <div className="flex flex-wrap lg:flex-col justify-center gap-5">
           <Link href={"/quick-up"}>
             <Button

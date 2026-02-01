@@ -1,9 +1,12 @@
+import Image from "next/image";
+import role from '../../../../../public/role.svg'
+
 export default function RolesPage(){
 
  return (
   <>
-   <div>
-      <h1>This is Chosses your role here page component.</h1>
+   <div className="flex items-center justify-around h-full w-full">
+      <Image src={role} alt="Roles" className="w-full h-full object-contain" />
    </div>
   </>
 );

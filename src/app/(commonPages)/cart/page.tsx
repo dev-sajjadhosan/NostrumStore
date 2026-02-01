@@ -33,7 +33,6 @@ import Link from "next/link";
 export default function CartPage() {
   const unitPrice = 20.0;
 
-  // 1. Initialize state as an array of objects
   const items = [
     { id: 1, name: "Aspirin", price: 20.0, quantity: 1 },
     { id: 2, name: "Paracetamol", price: 20.0, quantity: 1 },
@@ -94,7 +93,7 @@ export default function CartPage() {
                           // }
                         />
                       </TableCell>
-                      {/* FIX: Now only shows the subtotal for THIS specific item */}
+                   
                       <TableCell className="font-bold">
                         ${(item.price * item.quantity).toFixed(2)}
                       </TableCell>
@@ -102,7 +101,7 @@ export default function CartPage() {
                   ))}
                 </TableBody>
               </Table>
-              <div className="flex items-center justify-between mt-9">
+              {/* <div className="flex items-center justify-between mt-9">
                 <PaginationControl
                   currentPage={1}
                   totalPages={5}
@@ -111,7 +110,7 @@ export default function CartPage() {
                 <p className="text-md font-semibold tracking-wide">
                   Page {1} of {5}
                 </p>
-              </div>
+              </div> */}
             </div>
             <Card className="border-0 w-2xl h-140 p-5">
               <CardHeader className="flex items-center gap-3 text-muted-foreground">

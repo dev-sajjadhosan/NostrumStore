@@ -39,11 +39,11 @@ export default function QuickAuthPage() {
   return (
     <>
       <div className="flex flex-col items-center justify-center w-full">
-        <div className="flex flex-wrap gap-5 w-full group">
+        <div className="flex flex-wrap justify-center gap-5 w-full group">
           {socials.map((item, idx) => (
             <Card
               key={idx}
-              className={`w-xs h-40 duration-300  transition-all group-hover:blur-sm hover:blur-none! hover:scale-105 ${item.dev ? "cursor-not-allowed pointer-none:" : "cursor-pointer"} `}
+              className={`w-50 md:w-xs h-40 duration-300 transition-all group-hover:blur-sm hover:blur-none! hover:scale-105 ${item.dev ? "cursor-not-allowed pointer-none:" : "cursor-pointer"} `}
               onClick={() => {
                 if (item.dev) {
                   handleProviders();
@@ -59,7 +59,7 @@ export default function QuickAuthPage() {
             </Card>
           ))}
         </div>
-        <h3 className="text-md font-normal text-muted-foreground mt-5 self-start">
+        <h3 className="text-md font-normal text-muted-foreground mt-5 text-center">
           More Coming Soon
         </h3>
       </div>

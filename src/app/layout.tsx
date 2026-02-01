@@ -6,6 +6,7 @@ import Navbar from "@/components/layouts/navbar";
 import Footer from "@/components/layouts/footer";
 import { Toaster } from "@/components/ui/sonner";
 import Transition from "@/components/providers/Transition";
+import { Suspense } from "react";
 
 const jetBrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
@@ -41,17 +42,25 @@ export default function RootLayout({
       <body
         className={`${jetBrainsMono.variable} ${raleway.variable} ${righteous.variable} antialiased`}
       >
-        <Transition>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-            <Toaster richColors />
-          </ThemeProvider>
-        </Transition>
+        <Suspense
+        // fallback={
+        //   <div className="flex items-center justify-center h-screen">
+        //     Loading...
+        //   </div>
+        // }
+        >
+          <Transition>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+              <Toaster richColors />
+            </ThemeProvider>
+          </Transition>
+        </Suspense>
       </body>
     </html>
   );

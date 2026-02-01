@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -9,23 +9,43 @@ import AuthNav from "@/components/shared/authNav";
 import { Home } from "lucide-react";
 import { Separator } from "@radix-ui/react-separator";
 import { useActivePath } from "@/hooks/use-active-path";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function HLayout({ children }: { children: ReactNode }) {
   const isPath = useActivePath();
   return (
     <>
-      <div className="p-8">
-        <Card className="w-full h-180 rounded-xl border-0">
+      <div className="md:p-8">
+        <Card className="w-full lg:h-180 rounded-xl border-0">
           <CardContent className="h-full flex flex-col items-center p-3">
             <div className="flex items-center justify-between w-11/12">
               <div className="flex items-center gap-3">
-                <Image
-                  src={"vercel.svg"}
-                  alt="Nostrum Store"
-                  width={30}
-                  height={30}
-                />
-                <h1 className="text-lg font-semibold">{isPath('/quick-up') ? "Quick Up" : isPath('/login') ? "Login" : "Register"}</h1>
+                <Avatar className="w-15 h-15">
+                  <AvatarImage src={"vercel.svg"} className="p-3" />
+                  <AvatarFallback>
+                    {isPath("/quick-up")
+                      ? "QU"
+                      : isPath("/login")
+                        ? "LG"
+                        : isPath("/register")
+                          ? "RG"
+                          : isPath("/register/verify")
+                            ? "VA"
+                            : "UN"}
+                  </AvatarFallback>
+                </Avatar>
+
+                <h1 className="text-lg font-semibold">
+                  {isPath("/quick-up")
+                    ? "Quick Up"
+                    : isPath("/login")
+                      ? "Login"
+                      : isPath("/register")
+                        ? "Register"
+                        : isPath("/register/verify")
+                          ? "Verify Account"
+                          : "Unknown"}
+                </h1>
               </div>
               <Link href={"/"}>
                 <Button>
@@ -33,10 +53,9 @@ export default function HLayout({ children }: { children: ReactNode }) {
                 </Button>
               </Link>
             </div>
-            <div className="flex gap-10 items-center justify-between w-full h-full">
-              <div className="md:pl-40">{children}</div>
-              <div className="h-full flex items-center justify-center border-l-2 rounded-full pl-19">
-                {/* <span className="border h-full"></span> */}
+            <div className="flex gap-10 flex-col-reverse lg:flex-row items-center justify-between w-full h-full">
+              <div className="lg:pl-40 w-full">{children}</div>
+              <div className="h-full flex items-center justify-center border-l-2 rounded-full lg:pl-19 mt-5 lg:mt-0">
                 <AuthNav />
               </div>
             </div>

@@ -10,6 +10,7 @@ const AUTH_PAGES = ["/login", "/register"];
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const { data } = await userService.getSession();
+  console.log('proxy data', data);
   const user = data?.user;
 
   if (!user) {

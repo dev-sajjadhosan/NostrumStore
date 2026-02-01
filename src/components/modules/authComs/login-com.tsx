@@ -20,7 +20,8 @@ import { Input } from "@/components/ui/input";
 import { Toggle } from "@/components/ui/toggle";
 import { authClient } from "@/lib/auth-client";
 import { useForm } from "@tanstack/react-form";
-import { Key, UserPlus2, UserRoundCheck } from "lucide-react";
+import { Eye, EyeOff, Key, UserPlus2, UserRoundCheck } from "lucide-react";
+import { useState } from "react";
 import { toast } from "sonner";
 import * as z from "zod";
 
@@ -30,6 +31,8 @@ const formSchema = z.object({
 });
 
 export function LoginForm({ ...props }: React.ComponentProps<typeof Card>) {
+  const [show, setShow] = useState(false);
+
   const form = useForm({
     defaultValues: {
       email: "",
@@ -63,15 +66,15 @@ export function LoginForm({ ...props }: React.ComponentProps<typeof Card>) {
   };
 
   return (
-    <div className="w-2xl flex flex-col gap-5">
-      <Card {...props} className="bg-transparent! border-0">
+    <div className="w-full lg:w-2xl flex flex-col gap-5">
+      <Card {...props} className="bg-transparent! border-0 w-full">
         <CardHeader>
           <CardTitle className="text-3xl">Login your account</CardTitle>
           <CardDescription>
             Enter your information below to log in to your account
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="w-">
           <form
             id="login-from"
             onSubmit={(e) => {
@@ -110,13 +113,22 @@ export function LoginForm({ ...props }: React.ComponentProps<typeof Card>) {
                   return (
                     <Field>
                       <FieldLabel htmlFor={field.name}>Password</FieldLabel>
-                      <Input
-                        value={field.state.value}
-                        onChange={(e) => field.handleChange(e.target.value)}
-                        id={field.name}
-                        type="password"
-                        placeholder="password1223"
-                      />{" "}
+                      <div className="flex items-center gap-3">
+                        <Input
+                          value={field.state.value}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          id={field.name}
+                          type={show ? "text" : "password"}
+                          placeholder="password1223"
+                        />{" "}
+                        <Button
+                          type="button"
+                          size={"icon"}
+                          onClick={() => setShow(!show)}
+                        >
+                          {show ? <EyeOff /> : <Eye />}
+                        </Button>
+                      </div>
                       {isValid && (
                         <FieldError errors={field.state.meta.errors} />
                       )}
@@ -128,18 +140,21 @@ export function LoginForm({ ...props }: React.ComponentProps<typeof Card>) {
           </form>
         </CardContent>
         <CardFooter className="flex items-center gap-5">
-          <Button form="login-from" type="submit">
+          <Button form="login-from" type="submit" size={'lg'}>
             <UserPlus2 /> Login
           </Button>
         </CardFooter>
       </Card>
-      <div className="flex items-center justify-between mt-12">
-        <Button className="border w-60 h-19 px-5 py-4 text-md font-semibold rounded-full flex gap-1 flex-col items-center">
+      <div className="grid grid-cols-2 gap-7 mt-12 h-18">
+        <Button
+          size={"lg"}
+          className="h-full px-5 text-md font-semibold rounded-full flex gap-1 flex-col items-center"
+        >
           <Key /> Forgot Password
         </Button>
         <Toggle
-        //   variant={"outline"}
-          className="w-60 h-20 px-5 py-4 text-md font-semibold rounded-full flex-col gap-1"
+          //   variant={"outline"}
+          className="h-full px-5 text-md font-semibold rounded-full flex-col gap-1"
         >
           <UserRoundCheck color="#ffffff" />
           Remember Me
