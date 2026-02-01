@@ -29,6 +29,7 @@ import {
 import { Badge } from "../ui/badge";
 import Link from "next/link";
 import CategoryDeleteAlert from "../modules/admin/category-delete-alert";
+import CategoryUpdateModal from "../modules/admin/category-update-dialog";
 
 const categoryIcons: Record<string, React.ReactNode> = {
   Antibiotics: <Pill className="size-6 text-blue-500" />,
@@ -73,13 +74,8 @@ export default function CategoryCard({ category }: { category: any }) {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem>
-              <Pencil className="mr-2 size-4" /> Edit Details
-            </DropdownMenuItem>
-            {/* <DropdownMenuItem
-              className="text-destructive"
-              onClick={() => handleDelete(category?.id)}
-            > */}
+            <CategoryUpdateModal category={category} />
+
             <CategoryDeleteAlert category={category} />
           </DropdownMenuContent>
         </DropdownMenu>

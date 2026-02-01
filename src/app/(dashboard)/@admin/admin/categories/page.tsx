@@ -9,55 +9,11 @@ import { AdminService } from "@/services/admin.service";
 import SearchFilterBar from "@/components/modules/shared/search-filter-bar";
 import EmptyCard from "@/components/shared/empty-card";
 
-const categoriesData = [
-  {
-    id: 1,
-    name: "Antibiotics",
-    medicineCount: 142,
-    status: "Active",
-    description: "Bacterial infection treatments",
-  },
-  {
-    id: 2,
-    name: "Pain Relief",
-    medicineCount: 89,
-    status: "Active",
-    description: "Analgesics and anti-inflammatory drugs",
-  },
-  {
-    id: 3,
-    name: "Psychotropic",
-    medicineCount: 45,
-    status: "Restricted",
-    description: "Controlled substances for mental health",
-  },
-  {
-    id: 4,
-    name: "Herbal",
-    medicineCount: 30,
-    status: "Active",
-    description: "Natural and plant-based supplements",
-  },
-  {
-    id: 5,
-    name: "Skincare",
-    medicineCount: 67,
-    status: "Active",
-    description: "Dermatological products and ointments",
-  },
-  {
-    id: 6,
-    name: "Vaccines",
-    medicineCount: 12,
-    status: "Active",
-    description: "Immunization and biologicals",
-  },
-];
-
 export default async function CategoriesPage() {
   const { data } = await AdminService.getCategories();
   const categories = data?.data;
-  console.log(categories);
+  const pagi = data?.data?.pagination
+  console.log(pagi);
   return (
     <div className="p-6 space-y-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -95,8 +51,8 @@ export default async function CategoriesPage() {
           </div>
           <div className="mt-10">
             <PaginationControl
-              currentPage={1}
-              totalPages={6}
+              currentPage={pagi?.page}
+              totalPages={pagi?.pages}
               options={{ size: "icon" }}
             />
           </div>

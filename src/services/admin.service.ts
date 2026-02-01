@@ -24,7 +24,7 @@ const getCategories = async (
         "Content-Type": "application/json",
         Cookie: cookieStore.toString(),
       },
-      cache: "no-cache",
+      cache: "no-store",
     };
 
     if (options?.cache) {
