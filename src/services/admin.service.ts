@@ -4,11 +4,13 @@ import { cookies } from "next/headers";
 
 const api_url = env.API_URL;
 
-const getMedicines = async (params?: PgOptionsRs, options?: serviceOptions) => {
+const getCategories = async (
+  params?: PgOptionsRs,
+  options?: serviceOptions,
+) => {
   try {
-    const url = new URL(`${api_url}/seller/medicines`);
+    const url = new URL(`${api_url}/categories`);
     const cookieStore = await cookies();
-
     if (params) {
       Object.entries(params).forEach(([key, value]) => {
         if (value !== undefined && value !== null && value !== "") {
@@ -33,7 +35,7 @@ const getMedicines = async (params?: PgOptionsRs, options?: serviceOptions) => {
       config.next = { revalidate: options.revalidate };
     }
 
-    config.next = { ...config.next };
+    config.next = { ...config.next, tags: ["medicines"] };
 
     const res = await fetch(url.toString(), config);
     const data = await res.json();
@@ -47,11 +49,11 @@ const getMedicines = async (params?: PgOptionsRs, options?: serviceOptions) => {
   }
 };
 
-const createMedicine = async (payload: any) => {
+const createCategory = async (payload: any) => {
   try {
     const cookieStore = await cookies();
 
-    const res = await fetch(`${env.API_URL}/seller/medicines`, {
+    const res = await fetch(`${env.API_URL}/categories`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -65,7 +67,7 @@ const createMedicine = async (payload: any) => {
     if (data.error) {
       return {
         data: null,
-        error: { message: data.error || "Medicine not created!" },
+        error: { message: data.error || "Category not created!" },
         details: data,
       };
     }
@@ -75,4 +77,31 @@ const createMedicine = async (payload: any) => {
   }
 };
 
-export const SellerServices = { getMedicines, createMedicine };
+const deleteCategory = async (id: string) => {
+  try {
+    const cookieStore = await cookies();
+
+    const res = await fetch(`${env.API_URL}/categories/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: cookieStore.toString(),
+      },
+    });
+
+    const data = await res.json();
+
+    if (data.error) {
+      return {
+        data: null,
+        error: { message: data.error || "Category not delete!" },
+        details: data,
+      };
+    }
+    return { data, error: null };
+  } catch (err) {
+    return { data: null, error: { message: "Something went long" } };
+  }
+};
+
+export const AdminService = { getCategories, createCategory, deleteCategory };

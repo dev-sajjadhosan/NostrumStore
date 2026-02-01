@@ -92,6 +92,7 @@ const menuConfig = {
         items: [
           // { title: "Global Inventory", url: "/admin/medicines" },
           { title: "Categories", url: "/admin/categories" },
+          { title: "Create Category", url: "/admin/categories/create" },
           // { title: "Seller Approvals", url: "/admin/sellers/pending" },
         ],
       },

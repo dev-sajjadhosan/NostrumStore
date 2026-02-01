@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import { Badge } from "../ui/badge";
 import Link from "next/link";
+import CategoryDeleteAlert from "../modules/admin/category-delete-alert";
 
 const categoryIcons: Record<string, React.ReactNode> = {
   Antibiotics: <Pill className="size-6 text-blue-500" />,
@@ -75,9 +76,11 @@ export default function CategoryCard({ category }: { category: any }) {
             <DropdownMenuItem>
               <Pencil className="mr-2 size-4" /> Edit Details
             </DropdownMenuItem>
-            <DropdownMenuItem className="text-destructive">
-              <Trash2 className="mr-2 size-4" /> Delete Category
-            </DropdownMenuItem>
+            {/* <DropdownMenuItem
+              className="text-destructive"
+              onClick={() => handleDelete(category?.id)}
+            > */}
+            <CategoryDeleteAlert category={category} />
           </DropdownMenuContent>
         </DropdownMenu>
       </CardHeader>
@@ -89,7 +92,7 @@ export default function CategoryCard({ category }: { category: any }) {
               Linked Products:
             </span>
             <Badge className="font-bold text-[0.9rem] px-4 py-1.5">
-              {category.medicineCount}
+              {category?.medicines?.length}
             </Badge>
           </div>
 
@@ -97,7 +100,9 @@ export default function CategoryCard({ category }: { category: any }) {
             <Badge
               variant={category.status === "Active" ? "secondary" : "outline"}
               className={`text-sm tracking-wider font-semibold px-5 py-1.5 ${
-                category.status === "Restricted" ? "border-orange-700 bg-orange-700" : ""
+                category.status === "Restricted"
+                  ? "border-orange-700 bg-orange-700"
+                  : ""
               }`}
             >
               {category.status === "Restricted" && (

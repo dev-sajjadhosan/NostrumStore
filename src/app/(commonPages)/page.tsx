@@ -34,7 +34,7 @@ import NewsLetter from "@/components/shared/newsletter";
 import ProductCard from "@/components/shared/productCard";
 import PaginationControl from "@/components/shared/pagination";
 
-export default function Home() {
+export default async function Home() {
   return (
     <>
       <div className="flex gap-2 w-11/12 h-full items-center mx-auto">

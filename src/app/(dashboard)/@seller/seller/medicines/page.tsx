@@ -32,44 +32,6 @@ import Link from "next/link";
 import { SellerServices } from "@/services/seller.service";
 import EmptyCard from "@/components/shared/empty-card";
 
-const initialMedicines = [
-  {
-    id: "1",
-    name: "Napa Extend",
-    generic: "Paracetamol",
-    price: 15,
-    stock: 120,
-    category: "Tablet",
-    status: "In Stock",
-  },
-  {
-    id: "2",
-    name: "Azithromycin",
-    generic: "Antibiotic",
-    price: 350,
-    stock: 15,
-    category: "Capsule",
-    status: "Low Stock",
-  },
-  {
-    id: "3",
-    name: "Sergel 20",
-    generic: "Esomeprazole",
-    price: 70,
-    stock: 0,
-    category: "Capsule",
-    status: "Out of Stock",
-  },
-  {
-    id: "4",
-    name: "Tofen 1mg",
-    generic: "Ketotifen",
-    price: 30,
-    stock: 85,
-    category: "Syrup",
-    status: "In Stock",
-  },
-];
 
 export default async function SellerMedicinesPage() {
   const { data } = await SellerServices.getMedicines();

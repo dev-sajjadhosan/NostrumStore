@@ -26,11 +26,12 @@ import {
 } from "@/components/ui/select";
 import { FieldError } from "@/components/ui/field";
 import { toast } from "sonner";
+import { createCategory } from "@/actions/admin.action";
 
 const categorySchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   description: z.string().min(10, "Description is too short"),
-  status: z.enum(["active", "restricted", "inactive"]),
+  status: z.enum(["ACTIVE", "RESTRICTED", "INACTIVE"]),
   slug: z.string(),
 });
 
@@ -43,7 +44,7 @@ export default function CreateCategoryPage() {
     defaultValues: {
       name: "",
       description: "",
-      status: "active",
+      status: "ACTIVE",
       slug: "",
     },
     validators: {
@@ -52,14 +53,17 @@ export default function CreateCategoryPage() {
     onSubmit: async ({ value }) => {
       const toastID = toast.loading("Creating Category...");
       try {
-        // api call
-        toast.success("Category Created.", { id: toastID });
+        const res = await createCategory(value);
+        console.log(res);
+        if (res.data) {
+          toast.success("Category Created.", { id: toastID });
+          router.push("/admin/categories");
+        } else {
+          toast.warning("Category already exist", { id: toastID });
+        }
       } catch (err: any) {
-        toast.error(err, { id: toastID });
+        toast.error("Failed to create category. Try later!", { id: toastID });
       }
-      console.log("Submitting Data:", value);
-      await new Promise((r) => setTimeout(r, 1000));
-      router.push("/admin/categories");
     },
   });
 
@@ -170,11 +174,11 @@ export default function CreateCategoryPage() {
                           <SelectValue placeholder="Select Status" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="active">
+                          <SelectItem value="ACTIVE">
                             Active (Visible)
                           </SelectItem>
-                          <SelectItem value="restricted">Restricted</SelectItem>
-                          <SelectItem value="inactive">Inactive</SelectItem>
+                          <SelectItem value="RESTRICTED">Restricted</SelectItem>
+                          <SelectItem value="INACTIVE">Inactive</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>

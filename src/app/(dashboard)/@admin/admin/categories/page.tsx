@@ -1,35 +1,13 @@
-"use client";
+import { Plus, LayoutGrid } from "lucide-react";
 
-import React, { useState } from "react";
-import {
-  Plus,
-  Pencil,
-  Trash2,
-  Search,
-  LayoutGrid,
-  MoreVertical,
-  AlertCircle,
-} from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardFooter,
-} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+
 import PaginationControl from "@/components/shared/pagination";
 import CategoryCard from "@/components/shared/category-card";
 import Link from "next/link";
+import { AdminService } from "@/services/admin.service";
+import SearchFilterBar from "@/components/modules/shared/search-filter-bar";
+import EmptyCard from "@/components/shared/empty-card";
 
 const categoriesData = [
   {
@@ -76,9 +54,10 @@ const categoriesData = [
   },
 ];
 
-export default function CategoriesPage() {
-  const [searchTerm, setSearchTerm] = useState("");
-
+export default async function CategoriesPage() {
+  const { data } = await AdminService.getCategories();
+  const categories = data?.data;
+  console.log(categories);
   return (
     <div className="p-6 space-y-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -90,7 +69,7 @@ export default function CategoriesPage() {
             Manage the global classification system for all listings.
           </p>
         </div>
-        <Link href={'categories/create'}>
+        <Link href={"categories/create"}>
           <Button className="gap-2 bg-primary">
             <Plus className="size-4" /> Create Category
           </Button>
@@ -98,33 +77,31 @@ export default function CategoriesPage() {
       </div>
 
       <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
-        <div className="relative w-full md:w-96">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-          <Input
-            placeholder="Search categories..."
-            className="pl-9"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+        <SearchFilterBar filter={false} />
+        <div className="flex items-center gap-2 text-sm text-muted-foreground w-xs">
           <LayoutGrid className="size-4" />
-          <span>Showing {categoriesData.length} Categories</span>
+          <span>Showing {categories?.data?.length || 0} Categories</span>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {categoriesData.map((category, idx) => (
-          <CategoryCard key={idx} category={category} />
-        ))}
-      </div>
-      <div className="mt-10">
-        <PaginationControl
-          currentPage={1}
-          totalPages={6}
-          options={{ size: "icon" }}
-        />
-      </div>
+      {categories?.data?.length == null || 0 ? (
+        <EmptyCard />
+      ) : (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {categories?.data?.map((category: any, idx: number) => (
+              <CategoryCard key={idx} category={category} />
+            ))}
+          </div>
+          <div className="mt-10">
+            <PaginationControl
+              currentPage={1}
+              totalPages={6}
+              options={{ size: "icon" }}
+            />
+          </div>
+        </>
+      )}
     </div>
   );
 }

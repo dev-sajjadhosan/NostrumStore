@@ -50,20 +50,16 @@ const medicineSchema = z.object({
   name: z.string().trim().min(2, "Brand name is required"),
   genericName: z.string().trim().min(2, "Generic name is required"),
   description: z.string().trim().min(10, "Provide a detailed description"),
-  price: z.string().regex(/^\d+(\.\d{1,2})?$/, "Invalid price format"),
-  discountPrice: z
-    .string()
-    .regex(/^\d+(\.\d{1,2})?$/, "Invalid format")
-    .optional()
-    .or(z.literal("")), // New
+  price: z.number().positive("Price must be greater than 0"),
+  discountPrice: z.number().nonnegative().optional().nullable(),
   stock: z.number().min(0),
   strength: z.string().trim().min(1, "Strength is required"),
   categoryId: z.string().min(1, "Category is required"),
-  group: z.string().trim().min(1, "Therapeutic group is required"), // New
-  sku: z.string().trim().optional(), // New
+  group: z.string().trim().min(1, "Therapeutic group is required"),
+  sku: z.string().trim(),
   unitType: z.string().min(1),
   expiryDate: z.string().min(1, "Expiry date is required"),
-  tags: z.string().optional(),
+  tags: z.string(),
   isPrescriptionRequired: z.boolean(),
   image: z.any().optional(),
 });
@@ -76,17 +72,19 @@ export default function AddMedicinePage() {
   const form = useForm({
     defaultValues: {
       name: "",
-      image: "",
+      image: null,
       genericName: "",
       description: "",
-      price: "",
+      price: 0,
+      discountPrice: 0,
       stock: 0,
       strength: "",
       categoryId: "",
-      unitType: "Pcs",
+      unitType: "",
       expiryDate: "",
       sku: "",
       tags: "",
+      group: "",
       isPrescriptionRequired: false,
     } as MedicineFormValues,
     validators: { onSubmit: medicineSchema },
@@ -94,14 +92,10 @@ export default function AddMedicinePage() {
       const toastId = toast.loading("Saving to inventory...");
       const submissionData = {
         ...value,
-        price: parseFloat(value.price),
-        discountPrice: value.discountPrice
-          ? parseFloat(value.discountPrice)
-          : null,
         tags: value.tags ? value.tags.split(",").map((t) => t.trim()) : [],
       };
-      const res = await createMedicine(submissionData)
-      console.log(res.data);
+      const res = await createMedicine(submissionData);
+      console.log(res);
       toast.success("Medicine added!", { id: toastId });
     },
   });
@@ -405,7 +399,9 @@ export default function AddMedicinePage() {
                           <Input
                             type="text"
                             value={field.state.value}
-                            onChange={(e) => field.handleChange(e.target.value)}
+                            onChange={(e) =>
+                              field.handleChange(parseFloat(e.target.value))
+                            }
                             placeholder="0.00"
                           />
                         </Field>
@@ -417,8 +413,10 @@ export default function AddMedicinePage() {
                         <Field>
                           <FieldLabel>Discount Price ($)</FieldLabel>
                           <Input
-                            value={field.state.value}
-                            onChange={(e) => field.handleChange(e.target.value)}
+                            value={field.state.value ?? 0}
+                            onChange={(e) =>
+                              field.handleChange(parseFloat(e.target.value))
+                            }
                             placeholder="Optional"
                           />
                         </Field>
@@ -448,7 +446,7 @@ export default function AddMedicinePage() {
                               <SelectItem value="Bottle">
                                 Bottle (Syrup/Drops)
                               </SelectItem>
-                              <SelectItem value="Tube">
+                              {/* <SelectItem value="Tube">
                                 Tube (Ointment/Cream)
                               </SelectItem>
                               <SelectItem value="Sachet">
@@ -461,7 +459,7 @@ export default function AddMedicinePage() {
                               <SelectItem value="Ampoule">Ampoule</SelectItem>
                               <SelectItem value="Inhaler">
                                 Inhaler / Respule
-                              </SelectItem>
+                              </SelectItem> */}
                             </SelectContent>
                           </Select>
                         </Field>
