@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Popover,
   PopoverContent,
@@ -5,11 +7,20 @@ import {
 } from "@/components/ui/popover";
 import { Avatar, AvatarBadge, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Badge } from "../ui/badge";
-import { Pill, Plus, ShoppingBasket, UserCircle2, Van } from "lucide-react";
+import {
+  LogOut,
+  Pill,
+  Plus,
+  ShoppingBasket,
+  UserCircle2,
+  Van,
+} from "lucide-react";
 import { Separator } from "../ui/separator";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { Roles } from "@/constants/roles";
+import { toast } from "sonner";
+import { authClient } from "@/lib/auth-client";
 
 const menus = [
   {
@@ -30,6 +41,21 @@ const menus = [
 ];
 
 export function ProfileView({ user }: { user: any }) {
+  const handleLogout = async () => {
+    const toastID = toast.loading("Logging out...");
+    try {
+      await authClient.signOut({
+        fetchOptions: {
+          onSuccess: () => {
+            toast.success("Logged out successfully", { id: toastID });
+            window.location.href = "/";
+          },
+        },
+      });
+    } catch (err) {
+      toast.error("Logout failed!", { id: toastID });
+    }
+  };
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -70,7 +96,7 @@ export function ProfileView({ user }: { user: any }) {
         <ul className="grid grid-cols-2 gap-3">
           {menus.map((item, idx) => (
             <Link key={idx} href={item.link}>
-              <Button className="w-full h-16">
+              <Button className="w-full h-13">
                 {<item.icon />} {item.name}
               </Button>
             </Link>
@@ -78,13 +104,25 @@ export function ProfileView({ user }: { user: any }) {
           {user.role === Roles.CUSTOMER ? (
             ""
           ) : (
-            <Link href={user.role === Roles.SELLER ? "/seller/dashboard" : "/admin"}>
-              <Button className="w-full h-16">
+            <Link
+              href={user.role === Roles.SELLER ? "/seller/dashboard" : "/admin"}
+            >
+              <Button className="w-full h-13">
                 <Pill /> Dashboard
               </Button>
             </Link>
           )}
         </ul>
+        <Separator />
+        <div className="flex gap-5">
+          <Button
+            onClick={handleLogout}
+            className="w-full text-orange-800"
+            size={"lg"}
+          >
+            Logout <LogOut />
+          </Button>
+        </div>
       </PopoverContent>
     </Popover>
   );

@@ -15,6 +15,8 @@ import Image from "next/image";
 import logout from "../../../../public/logout.svg";
 import logout2 from "../../../../public/logout2.svg";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { authClient } from "@/lib/auth-client";
 
 export default function LogoutPage({ onBack }: { onBack: () => void }) {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -24,8 +26,21 @@ export default function LogoutPage({ onBack }: { onBack: () => void }) {
     ease: [0.4, 0, 0.2, 1] as const,
   };
 
-  const handleLogout = () => {
-    setIsLoggingOut(true);
+  const handleLogout = async () => {
+    const toastID = toast.loading("Logging out...");
+    try {
+      await authClient.signOut({
+        fetchOptions: {
+          onSuccess: () => {
+            setIsLoggingOut(true);
+            toast.success("Logged out successfully", { id: toastID });
+            window.location.href = "/";
+          },
+        },
+      });
+    } catch (err) {
+      toast.error("Logout failed!", { id: toastID });
+    }
   };
 
   return (

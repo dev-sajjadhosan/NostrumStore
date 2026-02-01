@@ -3,7 +3,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { RoleData } from "@/types/types";
 import { motion } from "framer-motion";
@@ -19,16 +18,18 @@ import {
   User,
 } from "lucide-react";
 import PMenuButton from "./p-menu-button";
-import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { TooltipButton } from "@/components/ui/tooltip-button";
 export default function ProfileDefault({
   roleConfig,
+  data,
 }: {
   roleConfig: RoleData;
+  data: any;
 }) {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const user = data?.user;
 
   const handleProfileRoute = (path: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -51,8 +52,10 @@ export default function ProfileDefault({
             <div />
             <div className="relative">
               <Avatar className="w-40 h-40 border-4 border-background shadow-xl">
-                <AvatarImage src="https://github.com/shadcn.png" />
-                <AvatarFallback>MSH</AvatarFallback>
+                <AvatarImage
+                  src={user?.image || "https://github.com/shadcn.png"}
+                />
+                <AvatarFallback>{user?.name}</AvatarFallback>
               </Avatar>
               <Badge
                 variant={"default"}
@@ -77,17 +80,15 @@ export default function ProfileDefault({
           </div>
 
           <div className="space-y-1">
-            <h1 className="text-3xl font-bold tracking-tight">
-              Mohammad Sajjad Hosan
-            </h1>
+            <h1 className="text-3xl font-bold tracking-tight">{user?.name}</h1>
             <div className="flex items-center justify-center gap-2 text-muted-foreground">
               <AtSign className="size-4" />
-              <p className="text-lg">devsajjadhosan@gmail.com</p>
+              <p className="text-lg">{user?.email}</p>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {/* <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {roleConfig.stats.map((stat, i) => (
             <Card
               key={i}
@@ -106,7 +107,7 @@ export default function ProfileDefault({
               </CardContent>
             </Card>
           ))}
-        </div>
+        </div> */}
 
         <div className="flex flex-col lg:flex-row items-center gap-8 pt-4 h-full">
           <div className="space-y-4">

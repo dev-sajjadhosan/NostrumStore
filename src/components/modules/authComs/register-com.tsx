@@ -62,9 +62,9 @@ export function RegisterForm({ ...props }: React.ComponentProps<typeof Card>) {
         if (!data?.user.emailVerified) {
           router.push("/register/verify");
         }
-        toast.success("User Created Successfully!", { id: toastID });
+        toast.success("User Created!", { id: toastID });
       } catch (err) {
-        toast.error("Something Went Wrong!", { id: toastID });
+        toast.error("On Create Moment Something Went Wrong!", { id: toastID });
       }
     },
   });

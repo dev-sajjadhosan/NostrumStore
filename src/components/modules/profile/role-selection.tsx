@@ -25,8 +25,9 @@ export default function RolesSelection({ roles }: RolesSelectionProps) {
     const toastID = toast.loading("Setting up your account...");
     try {
       const res = await updateUserRoleAction(role);
-      toast.success("Success!", { id: toastID });
+      console.log(res);
       if (res?.data) {
+        toast.success("Success!", { id: toastID });
         return router.push("/");
       }
     } catch (error) {

@@ -43,7 +43,24 @@ const updateUserRole = async ({ role, data }: { role: string; data: any }) => {
     return { data: null, error: { message: "Something Went Wrong!" } };
   }
 };
+const updateUser = async ({ data }: { role: string; data: any }) => {
+  try {
+    const cookieStore = await cookies();
+    const res = await fetch(`${api_url}/profile/me`, {
+      method: "PATCH",
+      headers: {
+        Cookie: cookieStore.toString(),
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    return await res.json();
+  } catch (err) {
+    return { data: null, error: { message: "Something Went Wrong!" } };
+  }
+};
 export const userService = {
   getSession,
   updateUserRole,
+  updateUser
 };

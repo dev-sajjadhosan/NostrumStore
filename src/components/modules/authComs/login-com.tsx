@@ -21,6 +21,7 @@ import { Toggle } from "@/components/ui/toggle";
 import { authClient } from "@/lib/auth-client";
 import { useForm } from "@tanstack/react-form";
 import { Eye, EyeOff, Key, UserPlus2, UserRoundCheck } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import * as z from "zod";
@@ -32,6 +33,7 @@ const formSchema = z.object({
 
 export function LoginForm({ ...props }: React.ComponentProps<typeof Card>) {
   const [show, setShow] = useState(false);
+  const router = useRouter();
 
   const form = useForm({
     defaultValues: {
@@ -42,7 +44,7 @@ export function LoginForm({ ...props }: React.ComponentProps<typeof Card>) {
       onSubmit: formSchema,
     },
     onSubmit: async ({ value }) => {
-      const toastID = toast.loading("Creating User...");
+      const toastID = toast.loading("Login...");
       try {
         const { data, error } = await authClient.signIn.email(value);
         console.log({ data, error });
@@ -50,13 +52,12 @@ export function LoginForm({ ...props }: React.ComponentProps<typeof Card>) {
           toast.error(error.message, { id: toastID });
           return;
         }
-        toast.success("User Created Successfully!", { id: toastID });
+        toast.success("Login", { id: toastID });
       } catch (err) {
         toast.error("Something Went Wrong!", { id: toastID });
       }
     },
   });
-
 
   return (
     <div className="w-full lg:w-2xl flex flex-col gap-5">
@@ -133,7 +134,7 @@ export function LoginForm({ ...props }: React.ComponentProps<typeof Card>) {
           </form>
         </CardContent>
         <CardFooter className="flex items-center gap-5">
-          <Button form="login-from" type="submit" size={'lg'}>
+          <Button form="login-from" type="submit" size={"lg"}>
             <UserPlus2 /> Login
           </Button>
         </CardFooter>

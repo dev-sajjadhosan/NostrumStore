@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   User,
   Mail,
@@ -36,6 +36,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
+import { userService } from "@/services/user.service";
 
 const profileSchema = z.object({
   name: z.string().min(2, "Name is too short"),
@@ -43,16 +44,17 @@ const profileSchema = z.object({
   bio: z.string().max(300, "Bio must be under 300 characters"),
 });
 
-export default function PersonalInformationView() {
+export default function PersonalInformationView({ data }: { data: any }) {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [isUpdate, setIsUpdate] = useState(false);
+
+  const user = data?.user;
 
   const form = useForm({
     defaultValues: {
-      name: "Mohammad Sajjad Hosan",
-      email: "devsajjadhosan@gmail.com",
-      bio: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores nihil quasi architecto dolor minus voluptatem optio quia...",
+      name: "",
+      email: "",
+      bio: "",
     },
     validators: {
       onSubmit: profileSchema,
@@ -83,8 +85,10 @@ export default function PersonalInformationView() {
             <div className="flex flex-col items-center gap-6 p-4 w-2xl">
               <div className="relative group cursor-pointer">
                 <Avatar className="w-50 h-50 border-2 border-background shadow-md">
-                  <AvatarImage src="https://github.com/shadcn.png" />
-                  <AvatarFallback>MSH</AvatarFallback>
+                  <AvatarImage
+                    src={user?.image || "https://github.com/shadcn.png"}
+                  />
+                  <AvatarFallback>{user?.name}</AvatarFallback>
                 </Avatar>
                 <div className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                   <Camera className="text-white size-6" />
@@ -192,25 +196,21 @@ export default function PersonalInformationView() {
                 <Badge className="text-md px-5 py-1 font-semibold">
                   Customer
                 </Badge>
-                <h1 className="text-4xl">Mohammad Sajjad Hosan</h1>
+                <h1 className="text-4xl">{user?.name}</h1>
                 <h3 className="text-xl tracking-wide text-muted-foreground">
-                  devsajjadhosan@gmail.com
+                  {user?.email}
                 </h3>
-                <p className="mt-5 text-sm tracking-wide">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Dolores nihil quasi architecto dolor minus voluptatem optio
-                  quia, ex culpa earum labore consequuntur eos ducimus, incidunt
-                  sequi corrupti laudantium cumque. At, laudantium nostrum! Unde
-                  dicta temporibus excepturi molestias quia id veritatis et
-                  accusamus iure architecto consectetur necessitatibus, debitis
-                  praesentium sapiente. Consectetur?
-                </p>
+                <p className="mt-5 text-sm tracking-wide">null</p>
               </div>
             )}
           </div>
 
           <div className="pt-4 flex items-center justify-end gap-3">
-            <Button size={"lg"} variant={!isUpdate ? "default" : 'secondary'} onClick={() => setIsUpdate(!isUpdate)}>
+            <Button
+              size={"lg"}
+              variant={!isUpdate ? "default" : "secondary"}
+              onClick={() => setIsUpdate(!isUpdate)}
+            >
               {isUpdate ? "Discard Update" : "Update Profile"}
               <UserRoundPen className="size-5" />
             </Button>

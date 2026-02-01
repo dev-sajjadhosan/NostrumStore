@@ -1,8 +1,8 @@
 "use client";
 
-import { use } from "react"; // Import use to unwrap the params
+import { use } from "react";
 import Link from "next/link";
-import { LogIn, MailWarning, CheckCircle2, XCircle, Loader2 } from "lucide-react";
+import { LogIn, MailWarning } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
 import VerificationHandler from "@/components/modules/authComs/verification-handler";
@@ -13,13 +13,8 @@ interface VerifyPageProps {
 }
 
 export default function VerifyEmailPage({ searchParams }: VerifyPageProps) {
-  // 1. Unwrap the searchParams promise using React.use()
   const params = use(searchParams);
   const token = params.token as string;
-
-  // 2. Use a query or a dedicated function to handle the async logic
-  // For simplicity here, we'll use a basic async call inside a button or useEffect, 
-  // but let's look at the UI state first.
 
   if (!token) {
     return (
