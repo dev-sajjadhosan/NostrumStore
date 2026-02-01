@@ -14,3 +14,15 @@ export const deleteCategory = async (id: string) => {
   updateTag("medicines");
   return res;
 };
+
+export const updateCategory = async (id: string, payload: any) => {
+  const res = await AdminService.updateCategory(id, payload);
+  updateTag("medicines");
+  return res;
+};
+
+export const updateUserStatus = async (id: string, payload: string) => {
+  const res = await AdminService.updateUserStatus(id, payload);
+  updateTag("users");
+  return res;
+};

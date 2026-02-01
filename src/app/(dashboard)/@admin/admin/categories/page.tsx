@@ -8,12 +8,18 @@ import Link from "next/link";
 import { AdminService } from "@/services/admin.service";
 import SearchFilterBar from "@/components/modules/shared/search-filter-bar";
 import EmptyCard from "@/components/shared/empty-card";
+import { PgOptionsRs } from "@/types/types";
 
-export default async function CategoriesPage() {
-  const { data } = await AdminService.getCategories();
+export default async function CategoriesPage({
+  searchParams,
+}: {
+  searchParams: Promise<PgOptionsRs>;
+}) {
+  const { page, search, status } = await searchParams;
+  const { data } = await AdminService.getCategories({ page, search, status });
   const categories = data?.data;
-  const pagi = data?.data?.pagination
-  console.log(pagi);
+  const pagination = data?.data?.pagination;
+
   return (
     <div className="p-6 space-y-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -51,8 +57,8 @@ export default async function CategoriesPage() {
           </div>
           <div className="mt-10">
             <PaginationControl
-              currentPage={pagi?.page}
-              totalPages={pagi?.pages}
+              currentPage={pagination?.page}
+              totalPages={pagination?.pages}
               options={{ size: "icon" }}
             />
           </div>

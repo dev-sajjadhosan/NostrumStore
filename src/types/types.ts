@@ -13,14 +13,11 @@ export type PgOptions = {
   total: number;
 };
 
-
-
 export interface StatItem {
   label: string;
   value: string;
   icon: LucideIcon;
 }
-
 
 export interface RoleData {
   badge: string;
@@ -35,11 +32,13 @@ export interface RoleConfigMap {
 }
 
 export type PgOptionsRs = {
-  page: number;
-  limit: number;
-  skip: number;
-  sortBy: string;
-  sortOrder: string;
+  page?: string | number;
+  limit?: string | number;
+  skip?: string | number;
+  sortBy?: string;
+  sortOrder?: string;
+  status?: string;
+  search?: string;
 };
 
 export interface serviceOptions {

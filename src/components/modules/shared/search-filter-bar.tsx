@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import { Check, Filter, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -12,34 +11,77 @@ import {
 
 const categories = ["Tablet", "Capsule", "Syrup", "Injection", "Ointment"];
 const statuses = ["In Stock", "Low Stock", "Out of Stock"];
+
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 interface SearchFilterProps {
   filter?: boolean;
 }
 
 export default function SearchFilterBar({ filter = true }: SearchFilterProps) {
-  const [selectedCategories, setSelectedCategories] = React.useState<string[]>(
-    [],
-  );
-  const [selectedStatus, setSelectedStatus] = React.useState<string[]>([]);
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
-  const toggleFilter = (
-    list: string[],
-    setList: React.Dispatch<React.SetStateAction<string[]>>,
-    value: string,
-  ) => {
-    setList((prev) =>
-      prev.includes(value) ? prev.filter((i) => i !== value) : [...prev, value],
-    );
+  const query = searchParams.get("query") || "";
+
+  const selectedCategories =
+    searchParams.get("categories")?.split(",").filter(Boolean) || [];
+  const selectedStatus =
+    searchParams.get("status")?.split(",").filter(Boolean) || [];
+
+  const [localSearch, setLocalSearch] = useState(query);
+  const updateUrl = (searchTerm: string, cats: string[], stats: string[]) => {
+    const params = new URLSearchParams(searchParams);
+
+    if (searchTerm) params.set("search", searchTerm);
+    else params.delete("search");
+
+    if (cats.length > 0) params.set("categories", cats.join(","));
+    else params.delete("categories");
+
+    if (stats.length > 0) params.set("status", stats.join(","));
+    else params.delete("status");
+
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
+
+  useEffect(() => {
+    setLocalSearch(query);
+  }, [query]);
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      updateUrl(localSearch, selectedCategories, selectedStatus);
+    }
+  };
+
+  const toggleCategory = (cat: string) => {
+    const next = selectedCategories.includes(cat)
+      ? selectedCategories.filter((i) => i !== cat)
+      : [...selectedCategories, cat];
+    updateUrl(query, next, selectedStatus);
+  };
+
+  const toggleStatus = (s: string) => {
+    const next = selectedStatus.includes(s)
+      ? selectedStatus.filter((i) => i !== s)
+      : [...selectedStatus, s];
+    updateUrl(query, selectedCategories, next);
+  };
+
   return (
     <>
       <div className="flex flex-col md:flex-row items-center gap-5 py-2 w-full px-5">
         <div className="flex items-center gap-3 border w-full rounded-full px-5">
           <Search className="size-6 text-muted-foreground" />
           <Input
+            value={localSearch}
+            onChange={(e) => setLocalSearch(e.target.value)}
+            onKeyDown={handleKeyDown}
             placeholder="Search by brand or generic name..."
             className="bg-transparent! border-0! w-full"
           />
@@ -68,13 +110,7 @@ export default function SearchFilterBar({ filter = true }: SearchFilterProps) {
                     {categories.map((cat) => (
                       <div
                         key={cat}
-                        onClick={() =>
-                          toggleFilter(
-                            selectedCategories,
-                            setSelectedCategories,
-                            cat,
-                          )
-                        }
+                        onClick={() => toggleCategory(cat)}
                         className="flex items-center gap-2 px-2 py-1.5 text-sm cursor-pointer hover:bg-muted rounded-sm"
                       >
                         <div
@@ -103,13 +139,7 @@ export default function SearchFilterBar({ filter = true }: SearchFilterProps) {
                     {statuses.map((status) => (
                       <div
                         key={status}
-                        onClick={() =>
-                          toggleFilter(
-                            selectedStatus,
-                            setSelectedStatus,
-                            status,
-                          )
-                        }
+                        onClick={() => toggleStatus(status)}
                         className="flex items-center gap-2 px-2 py-1.5 text-sm cursor-pointer hover:bg-muted rounded-sm"
                       >
                         <div
@@ -132,17 +162,6 @@ export default function SearchFilterBar({ filter = true }: SearchFilterProps) {
               </div>
 
               <div className="p-2 flex gap-2 mt-5">
-                <Button
-                  variant="secondary"
-                  className="text-xs h-8 flex-1"
-                  onClick={() => {
-                    setSelectedCategories([]);
-                    setSelectedStatus([]);
-                  }}
-                >
-                  <X />
-                  Clear
-                </Button>
                 <Button className="text-xs h-8 flex-1">
                   <Check /> Apply
                 </Button>

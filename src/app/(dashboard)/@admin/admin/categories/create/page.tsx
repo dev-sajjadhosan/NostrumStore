@@ -12,6 +12,7 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
+  CardFooter,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -101,112 +102,91 @@ export default function CreateCategoryPage() {
           form.handleSubmit();
         }}
       >
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="md:col-span-2 space-y-6">
-            <Card className="border-muted/40 shadow-sm">
-              <CardHeader>
-                <CardTitle>Category Details</CardTitle>
-                <CardDescription>
-                  Enter the name and public description.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <form.Field
-                  name="name"
-                  validators={{ onChange: categorySchema.shape.name }}
-                  children={(field) => (
-                    <div className="space-y-2">
-                      <Label htmlFor={field.name}>Category Name</Label>
-                      <Input
-                        id={field.name}
-                        value={field.state.value}
-                        onBlur={field.handleBlur}
-                        onChange={(e) => {
-                          field.handleChange(e.target.value);
-                          form.setFieldValue("slug", slugify(e.target.value));
-                        }}
-                        placeholder="e.g., Pediatric Medicines"
-                      />
-                      {field.state.meta.errors && (
-                        <FieldError errors={field.state.meta.errors} />
-                      )}
-                    </div>
+        <Card className="border-0 bg-transparent! max-w-3xl mx-auto">
+          <CardContent className="space-y-4">
+            <form.Field
+              name="name"
+              validators={{ onChange: categorySchema.shape.name }}
+              children={(field) => (
+                <div className="space-y-2">
+                  <Label htmlFor={field.name}>Category Name</Label>
+                  <Input
+                    id={field.name}
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => {
+                      field.handleChange(e.target.value);
+                      form.setFieldValue("slug", slugify(e.target.value));
+                    }}
+                    placeholder="e.g., Pediatric Medicines"
+                  />
+                  {field.state.meta.errors && (
+                    <FieldError errors={field.state.meta.errors} />
                   )}
-                />
-                <form.Field
-                  name="description"
-                  validators={{ onChange: categorySchema.shape.description }}
-                  children={(field) => (
-                    <div className="space-y-2">
-                      <Label htmlFor={field.name}>Public Description</Label>
-                      <Textarea
-                        id={field.name}
-                        value={field.state.value}
-                        onBlur={field.handleBlur}
-                        onChange={(e) => field.handleChange(e.target.value)}
-                        placeholder="Describe what kind of medicines belong here..."
-                        className="min-h-[120px] resize-none"
-                      />
-                      {field.state.meta.errors && (
-                        <FieldError errors={field.state.meta.errors} />
-                      )}
-                    </div>
+                </div>
+              )}
+            />
+            <form.Field
+              name="description"
+              validators={{ onChange: categorySchema.shape.description }}
+              children={(field) => (
+                <div className="space-y-2">
+                  <Label htmlFor={field.name}>Public Description</Label>
+                  <Textarea
+                    id={field.name}
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    placeholder="Describe what kind of medicines belong here..."
+                    className="min-h-[120px] resize-none"
+                  />
+                  {field.state.meta.errors && (
+                    <FieldError errors={field.state.meta.errors} />
                   )}
-                />
-              </CardContent>
+                </div>
+              )}
+            />
 
-              <CardHeader className="pt-0">
-                <CardTitle>Management Settings</CardTitle>
-              </CardHeader>
-              <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <form.Field
-                  name="status"
-                  children={(field) => (
-                    <div className="space-y-2">
-                      <Label>Initial Status</Label>
-                      <Select
-                        value={field.state.value}
-                        onValueChange={(value: any) =>
-                          field.handleChange(value)
-                        }
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select Status" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="ACTIVE">
-                            Active (Visible)
-                          </SelectItem>
-                          <SelectItem value="RESTRICTED">Restricted</SelectItem>
-                          <SelectItem value="INACTIVE">Inactive</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  )}
-                />
+            <form.Field
+              name="status"
+              children={(field) => (
+                <div className="space-y-2">
+                  <Label>Initial Status</Label>
+                  <Select
+                    value={field.state.value}
+                    onValueChange={(value: any) => field.handleChange(value)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="ACTIVE">Active (Visible)</SelectItem>
+                      <SelectItem value="RESTRICTED">Restricted</SelectItem>
+                      <SelectItem value="INACTIVE">Inactive</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+            />
 
-                <form.Field
-                  name="slug"
-                  children={(field) => (
-                    <div className="space-y-2">
-                      <Label>Category Slug (URL)</Label>
-                      <Input
-                        value={field.state.value}
-                        disabled
-                        className="bg-muted/50"
-                      />
-                      <p className="text-[10px] text-muted-foreground flex items-center gap-1">
-                        <Info className="size-3" /> Auto-generated based on
-                        name.
-                      </p>
-                    </div>
-                  )}
-                />
-              </CardContent>
-            </Card>
-          </div>
-
-          <div className="flex flex-col justify-end space-y-4 h-full pb-2">
+            <form.Field
+              name="slug"
+              children={(field) => (
+                <div className="space-y-2">
+                  <Label>Category Slug (URL)</Label>
+                  <Input
+                    value={field.state.value}
+                    disabled
+                    className="bg-muted/50"
+                  />
+                  <p className="text-[10px] text-muted-foreground flex items-center gap-1">
+                    <Info className="size-3" /> Auto-generated based on name.
+                  </p>
+                </div>
+              )}
+            />
+          </CardContent>
+          <CardFooter className="grid grid-cols-2 gap-7 ">
             <form.Subscribe
               selector={(state) => [state.canSubmit, state.isSubmitting]}
               children={([canSubmit, isSubmitting]) => (
@@ -234,8 +214,8 @@ export default function CreateCategoryPage() {
               <X className="size-5" />
               Discard Changes
             </Button>
-          </div>
-        </div>
+          </CardFooter>
+        </Card>
       </form>
     </div>
   );

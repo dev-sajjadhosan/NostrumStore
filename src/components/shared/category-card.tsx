@@ -73,7 +73,8 @@ export default function CategoryCard({ category }: { category: any }) {
               <MoreVertical className="size-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent align="end" className="flex flex-col gap-3 p-3">
+            
             <CategoryUpdateModal category={category} />
 
             <CategoryDeleteAlert category={category} />

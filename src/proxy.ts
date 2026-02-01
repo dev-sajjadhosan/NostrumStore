@@ -18,8 +18,6 @@ export async function proxy(request: NextRequest) {
   const { data } = await userService.getSession();
   const user = data?.user;
 
-  console.log(data);
-
   if (!user) {
     const isProtected = PROTECTED_ROUTES.some((route) =>
       pathname.startsWith(route),
