@@ -1,3 +1,5 @@
+
+
 import { Plus, LayoutGrid } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -17,7 +19,7 @@ export default async function CategoriesPage({
 }) {
   const { page, search, status } = await searchParams;
   const { data } = await AdminService.getCategories({ page, search, status });
-  const categories = data?.data;
+  const categories = data?.data?.data;
   const pagination = data?.data?.pagination;
 
   return (
@@ -42,16 +44,16 @@ export default async function CategoriesPage({
         <SearchFilterBar filter={false} />
         <div className="flex items-center gap-2 text-sm text-muted-foreground w-xs">
           <LayoutGrid className="size-4" />
-          <span>Showing {categories?.data?.length || 0} Categories</span>
+          <span>Showing {categories?.length || 0} Categories</span>
         </div>
       </div>
 
-      {categories?.data?.length == null || 0 ? (
+      {categories?.length == null || 0 ? (
         <EmptyCard />
       ) : (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {categories?.data?.map((category: any, idx: number) => (
+            {categories?.map((category: any, idx: number) => (
               <CategoryCard key={idx} category={category} />
             ))}
           </div>

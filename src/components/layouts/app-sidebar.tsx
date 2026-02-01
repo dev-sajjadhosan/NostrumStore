@@ -143,8 +143,8 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
       </SidebarHeader>
 
       <SidebarContent>
-        <NavMain items={currentData.navMain} />
-        <NavProjects projects={currentData.projects} />
+        <NavMain items={currentData?.navMain} />
+        <NavProjects projects={currentData?.projects} />
       </SidebarContent>
 
       <SidebarFooter>

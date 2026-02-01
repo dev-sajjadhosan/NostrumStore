@@ -15,13 +15,15 @@ import { AdminService } from "@/services/admin.service";
 import { PgOptionsRs } from "@/types/types";
 import EmptyCard from "@/components/shared/empty-card";
 import UserTable from "@/components/modules/admin/user-table";
+import SearchFilterBar from "@/components/modules/shared/search-filter-bar";
 
 export default async function CustomersPage({
   searchParams,
 }: {
   searchParams: PgOptionsRs;
 }) {
-  const { data } = await AdminService.getUser();
+  const { search, page } = searchParams;
+  const { data } = await AdminService.getUser({search, page});
 
   return (
     <div className="p-5 space-y-6 w-full">
@@ -64,7 +66,7 @@ export default async function CustomersPage({
           icon={UserRoundCheckIcon}
         />
       </div>
-
+      <SearchFilterBar filter={false} />
       <Card className="border-0! bg-transparent! w-full">
         <CardHeader className="p-4 flex flex-col md:flex-row gap-4 justify-between items-center"></CardHeader>
         {data?.data?.data?.length === 0 ? (

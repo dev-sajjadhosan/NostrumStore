@@ -202,11 +202,54 @@ const updateUserStatus = async (id: string, payload: any) => {
   }
 };
 
+const getAllOrders = async (params?: PgOptionsRs, options?: serviceOptions) => {
+  try {
+    const url = new URL(`${api_url}/admin/orders`);
+    const cookieStore = await cookies();
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== "") {
+          url.searchParams.append(key, value as any);
+        }
+      });
+    }
+
+    const config: RequestInit = {
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: cookieStore.toString(),
+      },
+      cache: "no-store",
+    };
+
+    if (options?.cache) {
+      config.cache = options.cache;
+    }
+
+    if (options?.revalidate) {
+      config.next = { revalidate: options.revalidate };
+    }
+
+    config.next = { ...config.next, tags: ["users"] };
+
+    const res = await fetch(url.toString(), config);
+    const data = await res.json();
+
+    return { data, error: null };
+  } catch (err) {
+    return {
+      data: null,
+      error: { message: "Something went wrong on get orders." },
+    };
+  }
+};
+
 export const AdminService = {
   getCategories,
   createCategory,
   deleteCategory,
   updateCategory,
   getUser,
-  updateUserStatus
+  updateUserStatus,
+  getAllOrders,
 };
