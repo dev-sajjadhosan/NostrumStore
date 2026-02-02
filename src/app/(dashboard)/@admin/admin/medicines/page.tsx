@@ -79,7 +79,6 @@ export default function GlobalInventoryPage() {
   const searchParams = useSearchParams();
   const categoryFromUrl = searchParams.get("category");
   const [categoryFilter, setCategoryFilter] = useState("all");
-  const [statusFilter, setStatusFilter] = useState("all");
 
   useEffect(() => {
     if (categoryFromUrl) {

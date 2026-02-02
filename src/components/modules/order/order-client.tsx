@@ -32,6 +32,7 @@ import SearchFilterBar from "@/components/modules/shared/search-filter-bar";
 import PaginationControl from "@/components/shared/pagination";
 import OrderDetailsSheet from "../admin/order-details-sheet";
 import EmptyCard from "@/components/shared/empty-card";
+import OrderSearchFilter from "./order-search-filter";
 
 export default function OrderClient({ data }: { data: any }) {
   const [statusFilter, setStatusFilter] = useState("all");
@@ -51,22 +52,7 @@ export default function OrderClient({ data }: { data: any }) {
       <div>
         <Card className="border-0! bg-transparent! mt-14">
           <CardHeader className="p-4 flex flex-col md:flex-row gap-4 justify-between items-center">
-            <SearchFilterBar filter={false} />
-            <div className="flex items-center gap-3">
-              <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-40 rounded-full">
-                  <Filter className="mr-2 size-4 text-muted-foreground" />
-                  <SelectValue placeholder="Status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Orders</SelectItem>
-                  <SelectItem value="Pending">Pending</SelectItem>
-                  <SelectItem value="Processing">Processing</SelectItem>
-                  <SelectItem value="Shipped">Shipped</SelectItem>
-                  <SelectItem value="Delivered">Delivered</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+            <OrderSearchFilter/>
           </CardHeader>
 
           {orders?.length === 0 ? (

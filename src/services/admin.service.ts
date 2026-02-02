@@ -244,6 +244,60 @@ const getAllOrders = async (params?: PgOptionsRs, options?: serviceOptions) => {
   }
 };
 
+const singleMedicineData = async (id: string) => {
+  try {
+    const cookieStore = await cookies();
+
+    const res = await fetch(`${env.API_URL}/medicines/${id}`, {
+      headers: {
+        Cookie: cookieStore.toString(),
+      },
+    });
+
+    const data = await res.json();
+
+    if (data.error) {
+      return {
+        data: null,
+        error: { message: data.error || "single medicine error!" },
+        details: data,
+      };
+    }
+    return { data, error: null };
+  } catch (err) {
+    return { data: null, error: { message: "Something went long" } };
+  }
+};
+
+const updateMedicineData = async (id: string, payload: any) => {
+  try {
+    const cookieStore = await cookies();
+
+    console.log(payload);
+    const res = await fetch(`${env.API_URL}/seller/medicines/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: cookieStore.toString(),
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await res.json();
+
+    if (data.error) {
+      return {
+        data: null,
+        error: { message: data.error || "Medicine not updated!" },
+        details: data,
+      };
+    }
+    return { data, error: null };
+  } catch (err) {
+    return { data: null, error: { message: "Something went long" } };
+  }
+};
+
 export const AdminService = {
   getCategories,
   createCategory,
@@ -252,4 +306,6 @@ export const AdminService = {
   getUser,
   updateUserStatus,
   getAllOrders,
+  singleMedicineData,
+  updateMedicineData,
 };

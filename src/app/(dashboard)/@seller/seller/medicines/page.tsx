@@ -1,6 +1,3 @@
-// "use client";
-
-// import { useState } from "react";
 import {
   Plus,
   Edit,
@@ -31,10 +28,18 @@ import SearchFilterBar from "@/components/modules/shared/search-filter-bar";
 import Link from "next/link";
 import { SellerServices } from "@/services/seller.service";
 import EmptyCard from "@/components/shared/empty-card";
+import { PgOptionsRs } from "@/types/types";
 
+export default async function SellerMedicinesPage({
+  searchParams,
+}: {
+  searchParams: Promise<PgOptionsRs>;
+}) {
+  const { search, page } = await searchParams;
+  const { data } = await SellerServices.getMedicines({ search, page });
 
-export default async function SellerMedicinesPage() {
-  const { data } = await SellerServices.getMedicines();
+  const medicines = data?.data?.data;
+  const pagination = data?.data?.pagination;
 
   return (
     <div className="p-3 lg:p-5 flex flex-col gap-9">
@@ -93,7 +98,7 @@ export default async function SellerMedicinesPage() {
 
       <Card className="bg-transparent border-0">
         <CardContent>
-          {data?.length == null || 0 ? (
+          {medicines?.length == null || 0 ? (
             <EmptyCard />
           ) : (
             <>
@@ -113,12 +118,12 @@ export default async function SellerMedicinesPage() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {data?.map((med: any) => (
+                  {medicines?.map((med: any) => (
                     <TableRow key={med.id}>
                       <TableCell>
                         <div className="font-medium">{med.name}</div>
                         <div className="text-xs text-muted-foreground italic">
-                          {med.generic}
+                          {med?.generic}
                         </div>
                       </TableCell>
                       <TableCell>
@@ -126,38 +131,40 @@ export default async function SellerMedicinesPage() {
                           variant="secondary"
                           className="font-normal uppercase text-[10px]"
                         >
-                          {med.category}
+                          {med?.category?.name || "no"}
                         </Badge>
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
-                          {med.stock}
-                          {med.stock <= 15 && med.stock > 0 && (
+                          {med?.stock}
+                          {med?.stock <= 15 && med?.stock > 0 && (
                             <AlertCircle className="size-4 text-orange-500" />
                           )}
                         </div>
                       </TableCell>
-                      <TableCell>${med.price.toFixed(2)}</TableCell>
+                      <TableCell>${med?.price}</TableCell>
                       <TableCell>
                         <Badge
                           variant={
-                            med.status === "In Stock"
+                            med?.status === "In Stock"
                               ? "default"
-                              : med.status === "Low Stock"
+                              : med?.status === "Low Stock"
                                 ? "secondary"
                                 : "destructive"
                           }
                           className="whitespace-nowrap px-5 py-2 font-semibold  text-md"
                         >
-                          {med.status}
+                          {med?.status}
                         </Badge>
                       </TableCell>
                       <TableCell className="text-right space-x-3">
-                        <TooltipButton
-                          icon={Edit}
-                          title="Edit details"
-                          size={"icon"}
-                        />
+                        <Link href={`medicines/update?id=${med?.id}`}>
+                          <TooltipButton
+                            icon={Edit}
+                            title="Edit details"
+                            size={"icon"}
+                          />
+                        </Link>
 
                         <TooltipButton
                           icon={Plus}
@@ -176,8 +183,8 @@ export default async function SellerMedicinesPage() {
               </Table>
               <div className="mt-9">
                 <PaginationControl
-                  currentPage={1}
-                  totalPages={10}
+                  currentPage={pagination?.page}
+                  totalPages={pagination?.pages}
                   options={{ size: "icon" }}
                 />
               </div>

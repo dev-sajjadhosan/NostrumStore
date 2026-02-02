@@ -34,7 +34,6 @@ export default function LogoutPage({ onBack }: { onBack: () => void }) {
           onSuccess: () => {
             setIsLoggingOut(true);
             toast.success("Logged out successfully", { id: toastID });
-            window.location.href = "/";
           },
         },
       });
