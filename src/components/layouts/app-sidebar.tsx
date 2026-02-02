@@ -55,7 +55,7 @@ const menuConfig = {
         items: [
           { title: "All Medicines", url: "/seller/medicines" },
           { title: "Add New Medicine", url: "/seller/medicines/create" },
-          { title: "Stock Alerts", url: "/seller/inventory/stock-alerts" },
+          // { title: "Stock Alerts", url: "/seller/inventory/stock-alerts" },
         ],
       },
       {
@@ -64,7 +64,7 @@ const menuConfig = {
         icon: ClipboardList,
         items: [
           { title: "Manage Orders", url: "/seller/orders" },
-          { title: "Order History", url: "/seller/orders/history" },
+          // { title: "Order History", url: "/seller/orders/history" },
         ],
       },
     ],

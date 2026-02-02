@@ -33,8 +33,10 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import NewsLetter from "@/components/shared/newsletter";
 import ProductCard from "@/components/shared/productCard";
 import PaginationControl from "@/components/shared/pagination";
+import PopularCategories from "@/components/modules/customer/popular-categories";
 
 export default async function Home() {
+ 
   return (
     <>
       <div className="flex gap-2 w-11/12 h-full items-center mx-auto">
@@ -58,30 +60,7 @@ export default async function Home() {
         </Card>
       </div>
       <div className="flex flex-col gap-48 w-11/12 h-full mx-auto my-48">
-        <section className="w-full text-center">
-          <h1 className="text-3xl font-medium mb-10">Popular Categories</h1>
-          <div className="grid grid-cols-4 gap-4 w-full">
-            {Array.from({ length: 8 }).map((_, idx) => (
-              <Card
-                key={idx}
-                className="h-40 cursor-pointer duration-75 hover:bg-accent/60"
-              >
-                <CardContent className="flex flex-col gap-2 items-center justify-center h-full">
-                  <Image
-                    src={"vercel.svg"}
-                    width={40}
-                    height={40}
-                    alt="categories"
-                  />
-                  <h3 className="text-lg font-normal tracking-wider">
-                    Categories
-                  </h3>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-          <PaginationControl currentPage={1} totalPages={5} />
-        </section>
+        <PopularCategories/>
         <section className="w-full">
           <div className="flex items-center justify-between mb-7">
             <h1 className="text-3xl font-medium">Popular Medicines</h1>

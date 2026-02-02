@@ -111,7 +111,6 @@ const deleteCategory = async (id: string) => {
     const res = await fetch(`${env.API_URL}/categories/${id}`, {
       method: "DELETE",
       headers: {
-        "Content-Type": "application/json",
         Cookie: cookieStore.toString(),
       },
     });
@@ -202,6 +201,7 @@ const updateUserStatus = async (id: string, payload: any) => {
   }
 };
 
+//admin
 const getAllOrders = async (params?: PgOptionsRs, options?: serviceOptions) => {
   try {
     const url = new URL(`${api_url}/admin/orders`);
@@ -230,7 +230,7 @@ const getAllOrders = async (params?: PgOptionsRs, options?: serviceOptions) => {
       config.next = { revalidate: options.revalidate };
     }
 
-    config.next = { ...config.next, tags: ["users"] };
+    config.next = { ...config.next, tags: ["admin-orders"] };
 
     const res = await fetch(url.toString(), config);
     const data = await res.json();
@@ -273,8 +273,35 @@ const updateMedicineData = async (id: string, payload: any) => {
   try {
     const cookieStore = await cookies();
 
-    console.log(payload);
     const res = await fetch(`${env.API_URL}/seller/medicines/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: cookieStore.toString(),
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await res.json();
+
+    if (data.error) {
+      return {
+        data: null,
+        error: { message: data.error || "Medicine stock not updated!" },
+        details: data,
+      };
+    }
+    return { data, error: null };
+  } catch (err) {
+    return { data: null, error: { message: "Something went long" } };
+  }
+};
+
+const updateMedicineStock = async (id: string, payload: any) => {
+  try {
+    const cookieStore = await cookies();
+
+    const res = await fetch(`${env.API_URL}/seller/medicines/stock/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -298,6 +325,73 @@ const updateMedicineData = async (id: string, payload: any) => {
   }
 };
 
+const deleteMedicine = async (id: string) => {
+  try {
+    const cookieStore = await cookies();
+
+    const res = await fetch(`${env.API_URL}/seller/medicines/${id}`, {
+      method: "DELETE",
+      headers: {
+        Cookie: cookieStore.toString(),
+      },
+    });
+
+    const data = await res.json();
+
+    if (data.error) {
+      return {
+        data: null,
+        error: { message: data.error || "Medicine not delete!" },
+        details: data,
+      };
+    }
+    return { data, error: null };
+  } catch (err) {
+    return { data: null, error: { message: "Something went long" } };
+  }
+};
+
+const getSellerAllOrders = async (params?: PgOptionsRs, options?: serviceOptions) => {
+  try {
+    const url = new URL(`${api_url}/seller/orders`);
+    const cookieStore = await cookies();
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== "") {
+          url.searchParams.append(key, value as any);
+        }
+      });
+    }
+
+    const config: RequestInit = {
+      headers: {
+        Cookie: cookieStore.toString(),
+      },
+      cache: "no-store",
+    };
+
+    if (options?.cache) {
+      config.cache = options.cache;
+    }
+
+    if (options?.revalidate) {
+      config.next = { revalidate: options.revalidate };
+    }
+
+    config.next = { ...config.next, tags: ["seller-orders"] };
+
+    const res = await fetch(url.toString(), config);
+    const data = await res.json();
+
+    return { data, error: null };
+  } catch (err) {
+    return {
+      data: null,
+      error: { message: "Something went wrong on get orders." },
+    };
+  }
+};
+
 export const AdminService = {
   getCategories,
   createCategory,
@@ -308,4 +402,7 @@ export const AdminService = {
   getAllOrders,
   singleMedicineData,
   updateMedicineData,
+  updateMedicineStock,
+  deleteMedicine,
+  getSellerAllOrders
 };

@@ -29,6 +29,8 @@ import Link from "next/link";
 import { SellerServices } from "@/services/seller.service";
 import EmptyCard from "@/components/shared/empty-card";
 import { PgOptionsRs } from "@/types/types";
+import UpdateMedicineStock from "@/components/modules/seller/update-medicine-stock";
+import DeleteAlert from "@/components/shared/delete-alert";
 
 export default async function SellerMedicinesPage({
   searchParams,
@@ -67,7 +69,7 @@ export default async function SellerMedicinesPage({
             <div className="flex flex-col items-center">
               <h1 className="text-2xl text-muted-foreground">Total Products</h1>
               <span className="text-2xl font-semibold ">
-                {data?.length || "00"}
+                {pagination?.total || "00"}
               </span>
             </div>
           </CardContent>
@@ -88,7 +90,7 @@ export default async function SellerMedicinesPage({
             <Separator orientation="vertical" />
             <div className="flex flex-col items-center">
               <h1 className="text-2xl text-muted-foreground"> Out of Stock</h1>
-              <span className="text-2xl font-semibold ">null</span>
+              <span className="text-2xl font-semibold">null</span>
             </div>
           </CardContent>
         </Card>
@@ -166,16 +168,8 @@ export default async function SellerMedicinesPage({
                           />
                         </Link>
 
-                        <TooltipButton
-                          icon={Plus}
-                          title=" Add stock"
-                          size={"icon"}
-                        />
-                        <TooltipButton
-                          icon={Trash2}
-                          title=" Delete medicine"
-                          size={"icon"}
-                        />
+                        <UpdateMedicineStock data={med} />
+                        <DeleteAlert data={med?.id} />
                       </TableCell>
                     </TableRow>
                   ))}

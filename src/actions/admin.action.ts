@@ -46,3 +46,18 @@ export const updateMedicineData = async (id: string, payload: any) => {
   updateTag("medicines");
   return res;
 };
+
+export const updateMedicineStock = async (id: string, payload: any) => {
+  const res = await AdminService.updateMedicineStock(id, payload);
+  updateTag("medicines");
+  return res;
+};
+
+export const deleteMedicine = async (id: string) => {
+  const res = await AdminService.deleteMedicine(id);
+  updateTag("medicines");
+  return res;
+};
+
+
+

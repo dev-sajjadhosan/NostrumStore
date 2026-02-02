@@ -109,12 +109,6 @@ export default function MedicineUpdateForm({
 
         console.log(submissionData);
         const res = await updateMedicineData(currentData?.id, submissionData);
-        console.log(res);
-        if (res.error) {
-          return toast.warning("Medicine already exist", {
-            id: toastId,
-          });
-        }
         toast.success("Medicine updated!", { id: toastId });
           router.push("/seller/medicines");
         return;
