@@ -1,3 +1,6 @@
+"use client"
+
+
 import EmptyCard from "@/components/shared/empty-card";
 import PaginationControl from "@/components/shared/pagination";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -10,7 +13,7 @@ import {
 } from "@/components/ui/card";
 import { genFallBackName } from "@/helpers/fallback-name";
 
-export default async function ReviewComponent({ reviews }: { reviews: any }) {
+export default function ReviewComponent({ reviews }: { reviews: any }) {
   const data = reviews?.data?.data;
   const pagination = reviews?.data?.pagination;
   console.log(data);

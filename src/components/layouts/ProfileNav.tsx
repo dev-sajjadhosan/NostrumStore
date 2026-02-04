@@ -21,6 +21,7 @@ import { Button } from "../ui/button";
 import { Roles } from "@/constants/roles";
 import { toast } from "sonner";
 import { authClient } from "@/lib/auth-client";
+import { genFallBackName } from "@/helpers/fallback-name";
 
 const menus = [
   {
@@ -64,12 +65,12 @@ export function ProfileView({ user }: { user: any }) {
       <PopoverTrigger asChild>
         <Avatar className="w-11 h-11 ml-3 cursor-pointer">
           <AvatarImage
-            src={user.image || "https://github.com/shadcn.png"}
+            src={user?.image || "https://github.com/shadcn.png"}
             alt="@shadcn"
             className="object-cover"
             // className="grayscale"
           />
-          <AvatarFallback>{user.name}</AvatarFallback>
+          <AvatarFallback>{genFallBackName(user?.name)}</AvatarFallback>
         </Avatar>
       </PopoverTrigger>
       <PopoverContent
@@ -80,21 +81,21 @@ export function ProfileView({ user }: { user: any }) {
         <div className="flex items-center gap-5">
           <Avatar className="w-20 h-20 ml-3 ring-2 ring-primary/20">
             <AvatarImage
-              src={user.image || "https://github.com/shadcn.png"}
-              alt={user.name}
+              src={user?.image || "https://github.com/shadcn.png"}
+              alt={user?.name}
               className="object-cover"
 
               // className="grayscale"
             />
-            <AvatarFallback>{user.name}</AvatarFallback>
+            <AvatarFallback>{genFallBackName(user?.name)}</AvatarFallback>
             <AvatarBadge>
               <Plus />
             </AvatarBadge>
           </Avatar>
           <div className="flex flex-col text-left gap-1">
-            <h1 className="text-xl font-semibold mt-2">{user.name}</h1>
+            <h1 className="text-xl font-semibold mt-2">{user?.name}</h1>
             <Badge className="px-5 py-1 text-md font-semibold">
-              {user.role}
+              {user?.role}
             </Badge>
           </div>
         </div>
@@ -124,7 +125,7 @@ export function ProfileView({ user }: { user: any }) {
             ""
           ) : (
             <Link
-              href={user.role === Roles.SELLER ? "/seller/dashboard" : "/admin"}
+              href={user?.role === Roles.SELLER ? "/seller/dashboard" : "/admin"}
             >
               <Button className="w-full h-13">
                 <Pill /> Dashboard

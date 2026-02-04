@@ -23,6 +23,7 @@ import PMenuButton from "./p-menu-button";
 import { useRouter, useSearchParams } from "next/navigation";
 import { TooltipButton } from "@/components/ui/tooltip-button";
 import Link from "next/link";
+import { genFallBackName } from "@/helpers/fallback-name";
 export default function ProfileDefault({
   roleConfig,
   data,
@@ -57,7 +58,7 @@ export default function ProfileDefault({
                 className="object-cover"
                 src={user?.image || "https://github.com/shadcn.png"}
               />
-              <AvatarFallback>{user?.name}</AvatarFallback>
+              <AvatarFallback className="text-4xl">{genFallBackName(user?.name)}</AvatarFallback>
             </Avatar>
             <Badge
               variant={"default"}

@@ -8,10 +8,15 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PackageOpen } from "lucide-react";
 import Link from "next/link";
+import CreateReviewOrder from "@/components/modules/review/create-review-dialog";
 
 export default function MethodPage() {
   const pathname = usePathname().split("=")[1];
-  const [[_, user], [__, address]] = useSearchParams();
+  const params = useSearchParams();
+
+  const user = params.get("user");
+  const address = params.get("address");
+  const id = params.get("id");
 
   if (pathname !== "success") {
     return "";
@@ -29,11 +34,11 @@ export default function MethodPage() {
                 height={400}
               />
               <h3 className="text-3xl mx-auto my-5">Thank You for Parching.</h3>
-              <Link href={'/orders'}>
-              <Button>
-                <PackageOpen />
-                View Orders 
-              </Button>
+              <Link href={"/orders"}>
+                <Button>
+                  <PackageOpen />
+                  View Orders
+                </Button>
               </Link>
             </div>
             <div className="flex flex-col gap-3 text-center">
@@ -57,9 +62,10 @@ export default function MethodPage() {
                   {address}
                 </Badge>
               </div>
-              <p className="text-xl font-normal tracking-wide text-muted-foreground mt-3">
+              <p className="text-xl font-normal tracking-wide text-muted-foreground my-3">
                 Please have the exact amount ready upon delivery.
               </p>
+              <CreateReviewOrder id={id as string} />
             </div>
           </CardContent>
         </Card>

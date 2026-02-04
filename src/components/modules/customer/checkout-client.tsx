@@ -191,7 +191,7 @@ export default function CheckoutPageClient({
           phone: value.phone,
           whatsapp: value.whatsapp,
           Shipping: shippingCost,
-          Subtotal:subtotal,
+          Subtotal: subtotal,
           Tax: taxAmount,
           grandTotal: subtotal + shippingCost,
           items,
@@ -200,7 +200,7 @@ export default function CheckoutPageClient({
         const res = await createOrder(orderPayload);
         toast.success("Order placed successfully!", { id: toastID });
         router.push(
-          `/checkout/method=success?user=${user?.name}&address=${value.street_address}`,
+          `/checkout/method=success?user=${user?.name}&address=${value.street_address}&id=${res?.data?.data?.id}`,
         );
       } catch (err) {
         console.log(err);

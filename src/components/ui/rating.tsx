@@ -14,7 +14,6 @@ interface RatingProps {
 }
 
 const Rating = ({ rate, className, showScore, description }: RatingProps) => {
-  if (!rate) return;
 
   const renderStars = () => {
     const fullStars = Math.floor(rate);

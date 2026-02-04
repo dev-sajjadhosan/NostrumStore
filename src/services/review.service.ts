@@ -39,11 +39,11 @@ const getReviews = async (id: string, options?: serviceOptions) => {
     };
   }
 };
-const createReview = async ({ data }: { data: any }) => {
+const createReview = async (data: any) => {
   try {
     const cookieStore = await cookies();
-    const res = await fetch(`${api_url}/review`, {
-      method: "PATCH",
+    const res = await fetch(`${api_url}/review/order`, {
+      method: "POST",
       headers: {
         Cookie: cookieStore.toString(),
         "Content-Type": "application/json",
