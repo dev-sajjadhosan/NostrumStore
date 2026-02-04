@@ -68,23 +68,23 @@ export default function UserTable({ data }: { data: any }) {
             <TableBody>
               {users?.map((customer: any) => (
                 <TableRow
-                  key={customer.id}
+                  key={customer?.id}
                   className="hover:bg-muted/30 transition-colors"
                 >
                   <TableCell>
                     <div className="flex items-center gap-3">
                       <Avatar className="size-9 border border-muted">
-                        <AvatarImage src={customer.image} />
+                        <AvatarImage src={customer?.image} />
                         <AvatarFallback>
                           {genFallBackName(customer?.name)}
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex flex-col">
                         <span className="font-semibold text-sm">
-                          {customer.name}
+                          {customer?.name}
                         </span>
                         <span className="text-xs text-muted-foreground">
-                          {customer.email}
+                          {customer?.email}
                         </span>
                       </div>
                     </div>
@@ -92,20 +92,20 @@ export default function UserTable({ data }: { data: any }) {
                   <TableCell>
                     <Badge
                       variant={
-                        customer.status === "Active"
+                        customer?.status === "Active"
                           ? "secondary"
                           : "destructive"
                       }
                       className="text-sm tracking-wider font-semibold px-5 py-1"
                     >
-                      {customer.status}
+                      {customer?.status}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-sm font-medium">
-                    {customer.orders} orders
+                    {customer?.orders?.length}
                   </TableCell>
                   <TableCell className="text-sm font-semibold">
-                    ${customer?.totalSpent?.toFixed(2)}
+                    ${customer?.totalSpent}
                   </TableCell>
                   {/* <TableCell className="text-xs text-muted-foreground">
                     {customer?.lastOrder}

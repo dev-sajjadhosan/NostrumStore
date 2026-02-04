@@ -18,11 +18,15 @@ export default async function OrderManagerPage({
 }: {
   searchParams: Promise<PgOptionsRs>;
 }) {
-  const { page, search } = await searchParams;
-  const { data } = await SellerServices.getSellerAllOrders({ page, search });
+  const { page, search, status } = await searchParams;
+  const { data } = await SellerServices.getSellerAllOrders({
+    page,
+    search,
+    status,
+  });
 
   const orders = data?.data?.data;
-  const meta = data?.data?.meta
+  const meta = data?.data?.meta;
   const pagination = data?.data?.pagination;
 
   return (
@@ -36,7 +40,7 @@ export default async function OrderManagerPage({
             Track and process your pharmacy sales.
           </p>
         </div>
-        <Button className="w-full md:w-auto">
+        <Button className="w-full md:w-auto" disabled>
           <FileText className="mr-2 size-4" /> Export Report
         </Button>
       </div>

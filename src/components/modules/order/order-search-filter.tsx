@@ -19,19 +19,21 @@ export default function OrderSearchFilter() {
           <Select
             value={status}
             onValueChange={(val) => {
-                console.log(val);
-                setSingleFilter("status", val)}}
+              console.log(val);
+              setSingleFilter("status", val);
+            }}
           >
-            <SelectTrigger className="w-40 rounded-full" >
+            <SelectTrigger className="w-40 rounded-xl">
               <Filter className="mr-2 size-4 text-muted-foreground" />
               <SelectValue placeholder="Status" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Orders</SelectItem>
-              <SelectItem value="Pending">Pending</SelectItem>
-              <SelectItem value="Processing">Processing</SelectItem>
-              <SelectItem value="Shipped">Shipped</SelectItem>
-              <SelectItem value="Delivered">Delivered</SelectItem>
+              <SelectItem value="PENDING">Pending</SelectItem>
+              <SelectItem value="PROCESSING">Processing</SelectItem>
+              <SelectItem value="SHIPPED">Shipped</SelectItem>
+              <SelectItem value="DELIVERED">Delivered</SelectItem>
+              <SelectItem value="CANCELLED">Cancelled</SelectItem>
             </SelectContent>
           </Select>
         </div>

@@ -134,7 +134,7 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
         <Avatar className="w-10 h-10 border">
           <AvatarFallback>NS</AvatarFallback>
         </Avatar>
-        <div className="flex flex-col">
+        <div className="flex-col hidden lg:flex">
           <h1 className="text-md font-normal leading-none">Nostrum Store</h1>
           <span className="text-[10px] text-muted-foreground uppercase tracking-widest mt-1">
             {user?.user?.role} Panel

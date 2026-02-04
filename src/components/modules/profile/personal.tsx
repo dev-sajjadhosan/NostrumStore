@@ -40,6 +40,7 @@ import { toast } from "sonner";
 import { updateProfile } from "@/actions/user.actions";
 import ProfilePictureUpdateModal from "./profile-pic-update-modal";
 import { genFallBackName } from "@/helpers/fallback-name";
+import Link from "next/link";
 
 const profileSchema = z.object({
   name: z.string().min(2, "Name is too short"),
@@ -99,6 +100,7 @@ export default function PersonalInformationView({ data }: { data: any }) {
               <div className="relative group cursor-pointer">
                 <Avatar className="w-50 h-50 border-2 border-background shadow-md">
                   <AvatarImage
+                    className="object-cover"
                     src={user?.image || "https://github.com/shadcn.png"}
                   />
                   <AvatarFallback>{genFallBackName(user?.name)}</AvatarFallback>
@@ -203,7 +205,10 @@ export default function PersonalInformationView({ data }: { data: any }) {
                 <h3 className="text-xl tracking-wide text-muted-foreground">
                   {user?.email}
                 </h3>
-                <p className="mt-3 text-md tracking-wide">{data?.bio}</p>
+                <p className="mt-3 text-md tracking-wide">
+                  {data?.bio ||
+                    "Write Your Bio. Please try to write the bio with-in 300 words."}
+                </p>
               </div>
             )}
           </div>
@@ -223,14 +228,16 @@ export default function PersonalInformationView({ data }: { data: any }) {
                 Save Change
               </Button>
             ) : (
+              <Link href={'/logout'}>
               <Button
                 size={"lg"}
                 variant={"ghost"}
                 className="text-destructive"
-              >
+                >
                 Logout
                 <LogOut className="size-5" />
               </Button>
+                </Link>
             )}
           </div>
         </CardContent>

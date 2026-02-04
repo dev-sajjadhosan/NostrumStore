@@ -46,14 +46,15 @@ export default function OrderTable({
             value={status}
             onValueChange={(val) => setSingleFilter("status", val)}
           >
-            <SelectTrigger className="w-full md:w-45 rounded-full">
+            <SelectTrigger className="w-full md:w-45 rounded-xl h-13! bg-accent">
               <SelectValue placeholder="Status" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Statuses</SelectItem>
-              <SelectItem value="pending">Pending</SelectItem>
-              <SelectItem value="shipped">Shipped</SelectItem>
-              <SelectItem value="delivered">Delivered</SelectItem>
+              <SelectItem value="PENDING">Pending</SelectItem>
+              <SelectItem value="SHIPPED">Shipped</SelectItem>
+              <SelectItem value="DELIVERED">Delivered</SelectItem>
+              <SelectItem value="CANCELLED">Cancelled</SelectItem>
             </SelectContent>
           </Select>
         </CardHeader>
@@ -78,31 +79,34 @@ export default function OrderTable({
                 {data?.map((order: any) => (
                   <TableRow key={order.id}>
                     <TableCell className="font-mono font-bold text-primary">
-                      {order.id}
+                      {order?.id?.slice(0, 8)}
                     </TableCell>
                     <TableCell>
                       <div className="flex flex-col">
-                        <span className="font-medium">{order.customer?.name}</span>
+                        <span className="font-medium">
+                          {order?.customer?.name}
+                        </span>
                         <span className="text-[10px] text-muted-foreground uppercase">
-                          {order.items?.length} Items
+                          {order?.items?.length} Items
                         </span>
                       </div>
                     </TableCell>
-                    <TableCell className="text-sm">{order?.createdAt}</TableCell>
+                    <TableCell className="text-sm">
+                      {new Date(order.createdAt).toDateString()}
+                    </TableCell>
                     <TableCell>
                       <Badge variant="outline" className="font-normal">
-                        {order.payment || "null"}
+                        {order?.payment || "null"}
                       </Badge>
                     </TableCell>
                     <TableCell className="font-semibold">
-                      ${order.totalPrice}
+                      ${order?.totalPrice}
                     </TableCell>
                     <TableCell>
-                      <Badge>{order.status}</Badge>
+                      <Badge>{order?.status}</Badge>
                     </TableCell>
                     <TableCell className="text-right">
                       <OrderDetailsModal order={order} />
-                      
                     </TableCell>
                   </TableRow>
                 ))}

@@ -6,9 +6,21 @@ import { Button } from "@/components/ui/button";
 import { AdminService } from "@/services/admin.service";
 import OrderClient from "@/components/modules/order/order-client";
 import { getAdminMetadata } from "@/actions/admin.action";
+import { PgOptionsRs } from "@/types/types";
 
-export default async function AllOrdersPage() {
-  const { data } = await AdminService.getAllOrders();
+export default async function AllOrdersPage({
+  searchParams,
+}: {
+  searchParams: Promise<PgOptionsRs>;
+}) {
+  const { page, search, sortBy, sortOrder, status } = await searchParams;
+  const { data } = await AdminService.getAllOrders({
+    page,
+    search,
+    sortBy,
+    status,
+    sortOrder,
+  });
   const { data: odata } = await getAdminMetadata();
 
   const order = odata?.data?.orders;

@@ -62,10 +62,11 @@ export function ProfileView({ user }: { user: any }) {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Avatar className="w-11 h-11 ml-3 cursor-pointer ring-2 ring-orange-700">
+        <Avatar className="w-11 h-11 ml-3 cursor-pointer">
           <AvatarImage
             src={user.image || "https://github.com/shadcn.png"}
             alt="@shadcn"
+            className="object-cover"
             // className="grayscale"
           />
           <AvatarFallback>{user.name}</AvatarFallback>
@@ -81,6 +82,8 @@ export function ProfileView({ user }: { user: any }) {
             <AvatarImage
               src={user.image || "https://github.com/shadcn.png"}
               alt={user.name}
+              className="object-cover"
+
               // className="grayscale"
             />
             <AvatarFallback>{user.name}</AvatarFallback>

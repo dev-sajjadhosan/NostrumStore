@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -26,6 +26,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { updateOrderStauts } from "@/actions/seller.action";
+import { useRouter } from "next/navigation";
 
 export function OrderDetailsModal({ order }: { order: any }) {
   const [open, setOpen] = useState<boolean>(false);
@@ -38,10 +39,8 @@ export function OrderDetailsModal({ order }: { order: any }) {
         status,
       };
 
-      console.log(submissionData);
       const res = await updateOrderStauts(id, submissionData);
       toast.success("Order updated!", { id: toastId });
-      // router.push("/seller/medicines");
       return;
     } catch (err: any) {
       toast.error(err.message, { id: toastId });
@@ -59,10 +58,10 @@ export function OrderDetailsModal({ order }: { order: any }) {
           <div className="flex-1 p-6 overflow-y-auto space-y-6">
             <DialogHeader>
               <DialogTitle className="text-2xl font-mono">
-                {order.id}
+                {order?.id}
               </DialogTitle>
               <p className="text-sm text-muted-foreground">
-                Placed on {order.date}
+                Placed on {new Date(order?.createdAt).toDateString()}
               </p>
             </DialogHeader>
 
@@ -71,11 +70,7 @@ export function OrderDetailsModal({ order }: { order: any }) {
                 <p className="font-semibold flex items-center gap-2">
                   <MapPin className="size-3 text-primary" /> Delivery Address
                 </p>
-                <p className="text-muted-foreground">
-                  123 Green Road, Dhanmondi
-                  <br />
-                  Dhaka, Bangladesh
-                </p>
+                <p className="text-muted-foreground">{order?.address}</p>
               </div>
               <div className="space-y-1">
                 <p className="font-semibold flex items-center gap-2">
@@ -84,7 +79,7 @@ export function OrderDetailsModal({ order }: { order: any }) {
                 <p className="text-muted-foreground">
                   {order.customer?.name}
                   <br />
-                  +880 1712-345678
+                  {order?.customer?.phone}
                 </p>
               </div>
             </div>
@@ -184,8 +179,12 @@ export function OrderDetailsModal({ order }: { order: any }) {
                   className="w-full gap-3 h-15 mt-3"
                   variant="secondary"
                   onClick={() => handleOrderStatus(order?.id, "SHIPPED")}
-                  disabled={order?.status === "DELIVERED"}
-                  >
+                  disabled={
+                    order?.status === "DELIVERED" ||
+                    order?.status === "CANCELLED" ||
+                    order?.status === "SHIPPED"
+                  }
+                >
                   Mark as Shipped
                   <Truck className="size-5! text-purple-600" />
                 </Button>
@@ -193,7 +192,10 @@ export function OrderDetailsModal({ order }: { order: any }) {
                   className="w-full gap-3 h-15 mt-5"
                   variant="secondary"
                   onClick={() => handleOrderStatus(order?.id, "DELIVERED")}
-                  disabled={order?.status === "DELIVERED"}
+                  disabled={
+                    order?.status === "DELIVERED" ||
+                    order?.status === "CANCELLED"
+                  }
                 >
                   <CheckCircle className="size-5! text-green-600" />
                   Mark as Delivered
@@ -211,8 +213,10 @@ export function OrderDetailsModal({ order }: { order: any }) {
               </Button>
               <Button
                 className="h-15 w-full"
-                onClick={() => handleOrderStatus(order?.id, "CANCELED")}
-                disabled={order?.status === "DELIVERED"}
+                onClick={() => handleOrderStatus(order?.id, "CANCELLED")}
+                disabled={
+                  order?.status === "DELIVERED" || order?.status === "CANCELLED"
+                }
               >
                 <PackageX /> Cancel Order
               </Button>

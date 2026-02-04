@@ -11,6 +11,7 @@ import { AdminService } from "@/services/admin.service";
 import SearchFilterBar from "@/components/modules/shared/search-filter-bar";
 import EmptyCard from "@/components/shared/empty-card";
 import { PgOptionsRs } from "@/types/types";
+import { Badge } from "@/components/ui/badge";
 
 export default async function CategoriesPage({
   searchParams,
@@ -42,10 +43,10 @@ export default async function CategoriesPage({
 
       <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
         <SearchFilterBar filter={false} />
-        <div className="flex items-center gap-2 text-md text-center text-muted-foreground w-xs mx-auto">
-          <LayoutGrid className="size-4" />
-          <span>Showing {categories?.length || 0} Categories</span>
-        </div>
+        <Badge variant={'secondary'} className="flex items-center gap-2 text-md text-center w-xs h-13 rounded-xl">
+          <LayoutGrid className="size-5!" />
+          <span>{categories?.length || 0} Categories</span>
+        </Badge>
       </div>
 
       {categories?.length == 0 ? (

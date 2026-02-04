@@ -145,8 +145,8 @@ export default function OrderClient({ data }: { data: any }) {
               </CardContent>
               <CardFooter className="mt-9 justify-center">
                 <PaginationControl
-                  currentPage={1}
-                  totalPages={6}
+                  currentPage={pagination?.page}
+                  totalPages={pagination?.pages}
                   options={{ size: "icon" }}
                 />
               </CardFooter>

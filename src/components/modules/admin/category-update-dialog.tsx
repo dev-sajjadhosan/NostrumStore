@@ -29,6 +29,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { useForm } from "@tanstack/react-form";
 import { Loader2, Pen, Pencil, Save } from "lucide-react";
+import { useState } from "react";
 import { toast } from "sonner";
 import * as z from "zod";
 
@@ -39,6 +40,7 @@ const categorySchema = z.object({
 });
 
 export default function CategoryUpdateModal({ category }: { category: any }) {
+  const [open, setOpen] = useState(false);
   const form = useForm({
     defaultValues: {
       name: category?.name,
@@ -55,14 +57,15 @@ export default function CategoryUpdateModal({ category }: { category: any }) {
         console.log(res);
         if (res.data) {
           toast.success("Category Updated.", { id: toastID });
-        } 
+          setOpen(false);
+        }
       } catch (err: any) {
         toast.error("Failed to Updating category. Try later!", { id: toastID });
       }
     },
   });
   return (
-    <Dialog>
+    <Dialog onOpenChange={() => setOpen(!open)} open={open}>
       <DialogTrigger asChild>
         <Button variant={"ghost"}>
           <Pencil className="mr-2 size-4" /> Edit Category

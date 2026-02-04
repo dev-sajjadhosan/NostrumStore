@@ -42,7 +42,10 @@ export default function ProfilePictureUpdateModal({ data }: { data: any }) {
           <h1 className="text-xl font-semibold">Update Profile Picture</h1>
           <div className="flex flex-col items-center mx-auto gap-3 w-full">
             <Avatar className="w-50 h-50 border-2 border-background">
-              <AvatarImage src={picture || data?.user?.image} />
+              <AvatarImage
+                src={picture || data?.user?.image}
+                className="object-cover"
+              />
               <AvatarFallback>
                 {genFallBackName(data?.user?.name)}
               </AvatarFallback>
@@ -64,7 +67,11 @@ export default function ProfilePictureUpdateModal({ data }: { data: any }) {
                 <Button onClick={() => handleChangePicture(picture)}>
                   <ImageUp /> Upload Picture
                 </Button>
-                <Button variant="ghost" className="text-destructive">
+                <Button
+                  variant="ghost"
+                  className="text-destructive"
+                  onClick={() => handleChangePicture("")}
+                >
                   Remove <Trash2Icon />
                 </Button>
               </div>

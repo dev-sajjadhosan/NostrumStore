@@ -48,7 +48,7 @@ export default async function AdminDashboardPage() {
         <StatsCard
           title="Total Revenue"
           value={meta?.totalRevenue}
-          description="+14% from last month"
+          // description="+14% from last month"
           icon={<DollarSign className="size-5 text-green-600" />}
         />
         <StatsCard
@@ -61,7 +61,7 @@ export default async function AdminDashboardPage() {
         <StatsCard
           title="Total Customers"
           value={meta?.totalCustomer}
-          description="+180 this week"
+          description="all medicines"
           icon={<Users className="size-5 text-purple-600" />}
         />
         <StatsCard

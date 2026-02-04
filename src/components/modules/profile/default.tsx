@@ -54,6 +54,7 @@ export default function ProfileDefault({
           <div className="relative">
             <Avatar className="w-40 h-40 border-4 border-background shadow-xl">
               <AvatarImage
+                className="object-cover"
                 src={user?.image || "https://github.com/shadcn.png"}
               />
               <AvatarFallback>{user?.name}</AvatarFallback>

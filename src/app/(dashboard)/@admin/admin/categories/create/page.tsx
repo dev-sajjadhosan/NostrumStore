@@ -138,7 +138,7 @@ export default function CreateCategoryPage() {
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
                     placeholder="Describe what kind of medicines belong here..."
-                    className="min-h-[120px] resize-none"
+                    className="min-h-30 resize-none border-0"
                   />
                   {field.state.meta.errors && (
                     <FieldError errors={field.state.meta.errors} />
@@ -156,7 +156,7 @@ export default function CreateCategoryPage() {
                     value={field.state.value}
                     onValueChange={(value: any) => field.handleChange(value)}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger className="w-xs">
                       <SelectValue placeholder="Select Status" />
                     </SelectTrigger>
                     <SelectContent>
