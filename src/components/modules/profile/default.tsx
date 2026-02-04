@@ -12,6 +12,8 @@ import {
   CreditCard,
   Edit2,
   Home,
+  LayoutDashboard,
+  LayoutDashboardIcon,
   LogOut,
   Settings,
   ShieldCheck,
@@ -20,6 +22,7 @@ import {
 import PMenuButton from "./p-menu-button";
 import { useRouter, useSearchParams } from "next/navigation";
 import { TooltipButton } from "@/components/ui/tooltip-button";
+import Link from "next/link";
 export default function ProfileDefault({
   roleConfig,
   data,
@@ -48,42 +51,52 @@ export default function ProfileDefault({
         className="space-y-5 w-11/12 mx-auto"
       >
         <div className="flex flex-col items-center text-center space-y-4 pt-10 pb-6 border-b">
-          <div className="flex justify-between w-full">
-            <div />
-            <div className="relative">
-              <Avatar className="w-40 h-40 border-4 border-background shadow-xl">
-                <AvatarImage
-                  src={user?.image || "https://github.com/shadcn.png"}
-                />
-                <AvatarFallback>{user?.name}</AvatarFallback>
-              </Avatar>
-              <Badge
-                variant={"default"}
-                className={`absolute bottom-0 right-0 px-3 py-1 shadow-accent ${roleConfig.color}`}
-              >
-                {roleConfig.badge}
-              </Badge>
+          <div className="relative">
+            <Avatar className="w-40 h-40 border-4 border-background shadow-xl">
+              <AvatarImage
+                src={user?.image || "https://github.com/shadcn.png"}
+              />
+              <AvatarFallback>{user?.name}</AvatarFallback>
+            </Avatar>
+            <Badge
+              variant={"default"}
+              className={`absolute bottom-0 right-0 px-3 py-1 shadow-accent ${roleConfig.color}`}
+            >
+              {roleConfig.badge}
+            </Badge>
+          </div>
+
+          <div className="flex flex-col items-center w-full">
+            <h1 className="text-3xl font-bold tracking-tight">{user?.name}</h1>
+            <div className="flex items-center justify-center gap-2 text-muted-foreground">
+              <AtSign className="size-4" />
+              <p className="text-lg">{user?.email}</p>
             </div>
+          </div>
+          <div className="flex justify-end w-full">
             <div className="flex items-start gap-5">
-              <TooltipButton
+              {user?.role === "SELLER" ? (
+                <Link href={"/seller/dashboard"}>
+                  <TooltipButton icon={LayoutDashboard} title="Go Dashboard" />
+                </Link>
+              ) : user?.role === "ADMIN" ? (
+                <Link href={"/admin"}>
+                  <TooltipButton icon={LayoutDashboard} title="Go Dashboard" />
+                </Link>
+              ) : (
+                ""
+              )}
+              {/* <TooltipButton
                 icon={Edit2}
                 title="Profile Edit"
                 variant={"secondary"}
-                onClick={() => router.push("/profile/update")}
-              />
+                onClick={() => router.push("/profile")}
+              /> */}
               <TooltipButton
                 icon={Home}
                 title="Go Home"
                 onClick={() => router.push("/")}
               />
-            </div>
-          </div>
-
-          <div className="space-y-1">
-            <h1 className="text-3xl font-bold tracking-tight">{user?.name}</h1>
-            <div className="flex items-center justify-center gap-2 text-muted-foreground">
-              <AtSign className="size-4" />
-              <p className="text-lg">{user?.email}</p>
             </div>
           </div>
         </div>

@@ -5,18 +5,32 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "fullkit.moxcreative.com",
+        hostname: "medeasy.health",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "**.example.com",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "example.com",
+        port: "",
+        pathname: "/**",
       },
     ],
   },
-  async rewrites() {
-    return [
-      {
-        source: "/api/auth/:path*",
-        destination: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/:path*`,
-      },
-    ];
-  },
+  // async rewrites() {
+  //   return [
+  //     {
+  //       source: "/api/auth/:path*",
+  //       destination: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/:path*`,
+  //     },
+  //   ];
+  // },
 };
 
 export default nextConfig;

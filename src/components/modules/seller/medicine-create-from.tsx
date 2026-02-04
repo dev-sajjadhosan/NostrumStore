@@ -50,6 +50,7 @@ const medicineSchema = z.object({
   name: z.string().trim().min(2, "Brand name is required"),
   genericName: z.string().trim().min(2, "Generic name is required"),
   description: z.string().trim().min(10, "Provide a detailed description"),
+  overview: z.string().trim().min(10, "Provide a detailed overview"),
   price: z.number().positive("Price must be greater than 0"),
   discountPrice: z.number().nonnegative().optional().nullable(),
   stock: z.number().min(0),
@@ -61,7 +62,7 @@ const medicineSchema = z.object({
   expiryDate: z.string().min(1, "Expiry date is required"),
   tags: z.string(),
   isPrescriptionRequired: z.boolean(),
-  image: z.any().optional(),
+  image: z.url().optional(),
 });
 
 type MedicineFormValues = z.infer<typeof medicineSchema>;
@@ -76,9 +77,10 @@ export default function MedicineCategoryFrom({
   const form = useForm({
     defaultValues: {
       name: "",
-      image: null,
+      image: "",
       genericName: "",
       description: "",
+      overview: "",
       price: 0,
       discountPrice: 0,
       stock: 0,
@@ -107,7 +109,7 @@ export default function MedicineCategoryFrom({
       }
       toast.success("Medicine added!", { id: toastId });
       router.push("/seller/medicines");
-      return 
+      return;
     },
   });
   return (
@@ -133,73 +135,46 @@ export default function MedicineCategoryFrom({
             </CardDescription>
           </CardHeader>
           <CardContent className="h-full">
-            <form.Field
-              name="image"
-              children={(field) => (
-                <div className="h-full flex flex-col items-center justify-center border-2 border-dashed rounded-xl p-6 transition-colors hover:bg-muted/50">
-                  {imagePreview ? (
-                    <div className="relative w-full aspect-video overflow-hidden">
-                      <img
-                        src={imagePreview}
-                        alt="Preview"
-                        className="w-full h-full object-contain"
-                      />
-                      <Button
-                        type="button"
-                        className="absolute bottom-2 left-2 size-8 shadow-md"
-                        onClick={() => {
-                          setImagePreview(null);
-                          field.handleChange("");
-                        }}
-                      >
-                        <Trash2 className="size-5" />
-                      </Button>
-                    </div>
-                  ) : (
-                    <div className="text-center space-y-2">
-                      <div className="bg-primary/10 p-3 rounded-full w-fit mx-auto">
-                        <Upload className="size-6 text-primary" />
-                      </div>
-                      <div className="space-y-1">
-                        <p className="text-md font-medium">
-                          Click to upload or drag and drop
-                        </p>
-                        <p className="text-xs text-muted-foreground">
-                          PNG, JPG or WebP (Max 2MB)
-                        </p>
-                      </div>
-                      <Input
-                        type="file"
-                        accept="image/*"
-                        className="hidden"
-                        id="image-upload"
-                        onChange={(e) => {
-                          const file = e.target.files?.[0];
-                          if (file) {
-                            const reader = new FileReader();
-                            reader.onloadend = () => {
-                              setImagePreview(reader.result as string);
-                              field.handleChange(file);
-                            };
-                            reader.readAsDataURL(file);
-                          }
-                        }}
-                      />
-                      <Button
-                        type="button"
-                        className="mt-3 px-3"
-                        onClick={() =>
-                          document.getElementById("image-upload")?.click()
-                        }
-                      >
-                        Select File
-                        <ImagePlus />
-                      </Button>
-                    </div>
-                  )}
+            <div className="h-full flex flex-col items-center justify-center border-2 border-dashed rounded-xl p-6 transition-colors hover:bg-muted/50">
+              {imagePreview ? (
+                <div className="relative w-full aspect-video overflow-hidden">
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="w-full h-full object-contain"
+                  />
+                  <Button
+                    type="button"
+                    className="absolute bottom-2 left-2 size-8 shadow-md"
+                    onClick={() => {
+                      setImagePreview(null);
+                    }}
+                  >
+                    <Trash2 className="size-5" />
+                  </Button>
+                </div>
+              ) : (
+                <div className="text-center space-y-2">
+                  <div className="bg-primary/10 p-3 rounded-full w-fit mx-auto">
+                    <Upload className="size-6 text-primary" />
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-md font-medium">
+                      Wait to show upload link picture
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      PNG, JPG or WebP (Max 2MB)
+                    </p>
+                  </div>
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    id="image-upload"
+                  />
                 </div>
               )}
-            />
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -220,6 +195,25 @@ export default function MedicineCategoryFrom({
             <div className="flex flex-col lg:flex-row items-center gap-10 w-full">
               <div className="w-full space-y-5">
                 <CardContent className="space-y-4">
+                  <form.Field
+                    name="image"
+                    children={(field) => (
+                      <Field>
+                        <FieldLabel>Image Url Name</FieldLabel>
+                        <Input
+                          value={field.state.value}
+                          onChange={(e) => {
+                            setImagePreview(e.target.value);
+                            field.handleChange(e.target.value);
+                          }}
+                          placeholder="e.g. url"
+                        />
+                        {field.state.meta.isTouched && (
+                          <FieldError errors={field.state.meta.errors} />
+                        )}
+                      </Field>
+                    )}
+                  />
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <form.Field
                       name="name"
@@ -256,23 +250,6 @@ export default function MedicineCategoryFrom({
                   </div>
 
                   <form.Field
-                    name="description"
-                    children={(field) => (
-                      <Field>
-                        <FieldLabel>Description & Indications</FieldLabel>
-                        <Textarea
-                          className="min-h-[100px]"
-                          value={field.state.value}
-                          onChange={(e) => field.handleChange(e.target.value)}
-                        />
-                        {field.state.meta.isTouched && (
-                          <FieldError errors={field.state.meta.errors} />
-                        )}
-                      </Field>
-                    )}
-                  />
-
-                  <form.Field
                     name="tags"
                     children={(field) => (
                       <Field>
@@ -290,9 +267,6 @@ export default function MedicineCategoryFrom({
                 </CardContent>
 
                 <div className="flex flex-col gap-3">
-                  <CardHeader>
-                    <CardTitle>Pricing & Stock</CardTitle>
-                  </CardHeader>
                   <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <form.Field
                       name="price"
@@ -491,6 +465,42 @@ export default function MedicineCategoryFrom({
                   />
                 </CardContent>
               </div>
+            </div>
+            <div className="flex flex-col gap-5 w-11/12 mx-auto">
+              <form.Field
+                name="description"
+                children={(field) => (
+                  <Field>
+                    <FieldLabel>Description & Indications</FieldLabel>
+                    <Textarea
+                      className="min-h-[100px]"
+                      value={field.state.value}
+                      rows={2}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                    />
+                    {field.state.meta.isTouched && (
+                      <FieldError errors={field.state.meta.errors} />
+                    )}
+                  </Field>
+                )}
+              />
+              <form.Field
+                name="overview"
+                children={(field) => (
+                  <Field>
+                    <FieldLabel>Write Medicine Overview</FieldLabel>
+                    <Textarea
+                      className="min-h-[100px]"
+                      value={field.state.value}
+                      rows={5}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                    />
+                    {field.state.meta.isTouched && (
+                      <FieldError errors={field.state.meta.errors} />
+                    )}
+                  </Field>
+                )}
+              />
             </div>
             <CardFooter className="flex justify-end mt-10">
               <Button type="submit" className="text-md" size={"lg"}>

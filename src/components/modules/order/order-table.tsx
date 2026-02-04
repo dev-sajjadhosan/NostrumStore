@@ -24,8 +24,6 @@ import SearchFilterBar from "@/components/modules/shared/search-filter-bar";
 import PaginationControl from "@/components/shared/pagination";
 import { TooltipButton } from "@/components/ui/tooltip-button";
 import { OrderDetailsModal } from "@/components/modules/seller/orderview-dialog";
-import StatusBadge from "./orders-status-badge";
-import { PgOptionsRs } from "@/types/types";
 import { useQueryFilters } from "@/hooks/use-search-filter";
 import EmptyCard from "@/components/shared/empty-card";
 
@@ -37,6 +35,7 @@ export default function OrderTable({
   pagination: any;
 }) {
   const { status, setSingleFilter } = useQueryFilters();
+
   return (
     <>
       <Card className="bg-transparent! border-0!">
@@ -83,32 +82,27 @@ export default function OrderTable({
                     </TableCell>
                     <TableCell>
                       <div className="flex flex-col">
-                        <span className="font-medium">{order.customer}</span>
+                        <span className="font-medium">{order.customer?.name}</span>
                         <span className="text-[10px] text-muted-foreground uppercase">
-                          {order.items} Items
+                          {order.items?.length} Items
                         </span>
                       </div>
                     </TableCell>
-                    <TableCell className="text-sm">{order.date}</TableCell>
+                    <TableCell className="text-sm">{order?.createdAt}</TableCell>
                     <TableCell>
                       <Badge variant="outline" className="font-normal">
-                        {order.payment}
+                        {order.payment || "null"}
                       </Badge>
                     </TableCell>
                     <TableCell className="font-semibold">
-                      ${order.total}
+                      ${order.totalPrice}
                     </TableCell>
                     <TableCell>
-                      <StatusBadge status={order.status} />
+                      <Badge>{order.status}</Badge>
                     </TableCell>
                     <TableCell className="text-right">
                       <OrderDetailsModal order={order} />
-                      <TooltipButton
-                        icon={Eye}
-                        title="View Order"
-                        variant={"secondary"}
-                        size={"icon"}
-                      />
+                      
                     </TableCell>
                   </TableRow>
                 ))}
@@ -116,8 +110,8 @@ export default function OrderTable({
             </Table>
             <div className="mt-11">
               <PaginationControl
-                currentPage={pagination.page}
-                totalPages={pagination.pages}
+                currentPage={pagination?.page}
+                totalPages={pagination?.pages}
                 options={{ size: "icon" }}
               />
             </div>

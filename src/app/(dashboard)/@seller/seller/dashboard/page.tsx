@@ -1,46 +1,18 @@
-"use client";
+import { DollarSign, ShoppingCart, Package, AlertCircle } from "lucide-react";
 
-import React from "react";
-import {
-  TrendingUp,
-  DollarSign,
-  ShoppingCart,
-  Package,
-  AlertCircle,
-} from "lucide-react";
-import {
-  Area,
-  AreaChart,
-  Bar,
-  BarChart,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-} from "recharts";
-
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
+import { ChartConfig } from "@/components/ui/chart";
 import DStatsCard from "@/components/modules/seller/d-status-card";
+import { getSellerMetadata } from "@/actions/seller.action";
+import SellerDashboardChart from "@/components/modules/seller/seller-dashboard-chart";
 
 const revenueData = [
-  { date: "2026-01-24", desktop: 1200 },
-  { date: "2026-01-25", desktop: 1900 },
-  { date: "2026-01-26", desktop: 1500 },
-  { date: "2026-01-27", desktop: 2800 },
-  { date: "2026-01-28", desktop: 2200 },
-  { date: "2026-01-29", desktop: 3400 },
-  { date: "2026-01-30", desktop: 2900 },
+  { date: "2026-01-24", desktop: 0 },
+  { date: "2026-01-25", desktop: 0 },
+  { date: "2026-01-26", desktop: 0 },
+  { date: "2026-01-27", desktop: 0 },
+  { date: "2026-01-28", desktop: 0 },
+  { date: "2026-01-29", desktop: 0 },
+  { date: "2026-01-30", desktop: 0 },
 ];
 
 const inventoryData = [
@@ -61,7 +33,13 @@ const chartConfig = {
   ointment: { label: "Ointment", color: "hsl(var(--chart-4))" },
 } satisfies ChartConfig;
 
-export default function SellerDashboardPage() {
+export default async function SellerDashboardPage() {
+  const { data } = await getSellerMetadata();
+  const meta = data?.data?.meta;
+
+  //totalOrders: 0, totalRevenue: 0, totalMedicines: 0
+
+  console.log(data?.data);
   return (
     <div className="p-4 md:p-8 space-y-8">
       <div>
@@ -74,109 +52,35 @@ export default function SellerDashboardPage() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <DStatsCard
           title="Total Revenue"
-          value="$12,450"
+          value={meta?.totalRevenue}
           icon={DollarSign}
-          trend="+12%"
+          // trend="+12%"
         />
-        <DStatsCard title="Orders" value="145" icon={ShoppingCart} trend="+8%" />
-        <DStatsCard title="Items" value="432" icon={Package} trend="Stable" />
+        <DStatsCard
+          title="Orders"
+          value={meta?.totalOrders}
+          icon={ShoppingCart}
+          // trend="+8%"
+        />
+        <DStatsCard
+          title="Total Medicines"
+          value={meta?.totalMedicines}
+          icon={Package}
+          // trend="Stable"
+        />
         <DStatsCard
           title="Low Stock"
-          value="12"
+          value={'null'}
           icon={AlertCircle}
-          trend="Action Required"
+          // trend="Action Required"
           color="text-destructive"
         />
       </div>
-
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
-        {/* Revenue Analytics - Takes up more space, uses wide aspect ratio */}
-        <Card className="lg:col-span-4 flex flex-col">
-          <CardHeader>
-            <CardTitle>Revenue Analytics</CardTitle>
-            <CardDescription>
-              Daily sales performance for the last 7 days.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex-1 pb-0">
-            {/* Aspect-auto on mobile, aspect-video on large screens */}
-            <ChartContainer
-              config={chartConfig}
-              className="mx-auto aspect-square max-h-[300px] md:aspect-video md:max-h-[400px] w-full"
-            >
-              <AreaChart
-                data={revenueData}
-                margin={{ left: 5, right: 6, top: 10 }}
-              >
-                <CartesianGrid
-                  vertical={false}
-                  strokeDasharray="3 3"
-                  className="stroke-muted"
-                />
-                <XAxis
-                  dataKey="date"
-                  tickLine={false}
-                  axisLine={false}
-                  tickMargin={8}
-                  tickFormatter={(value) => value.slice(8, 10) + " Jan"}
-                />
-                <YAxis
-                  tickLine={false}
-                  axisLine={false}
-                  tickMargin={8}
-                  tickFormatter={(value) => `$${value}`}
-                />
-                <ChartTooltip content={<ChartTooltipContent hideLabel />} />
-                <Area
-                  dataKey="desktop"
-                  type="natural"
-                  fill="var(--color-desktop)"
-                  fillOpacity={0.4}
-                  stroke="var(--color-desktop)"
-                  strokeWidth={2}
-                />
-              </AreaChart>
-            </ChartContainer>
-          </CardContent>
-        </Card>
-
-        {/* Inventory by Category - Compact, uses square aspect ratio */}
-        <Card className="lg:col-span-3 flex flex-col">
-          <CardHeader>
-            <CardTitle>Inventory by Category</CardTitle>
-            <CardDescription>Current stock distribution.</CardDescription>
-          </CardHeader>
-          <CardContent className="flex-1 pb-0">
-            <ChartContainer
-              config={chartConfig}
-              className="mx-auto aspect-square w-full max-h-[300px] md:max-h-[400px]"
-            >
-              <BarChart
-                data={inventoryData}
-                layout="vertical"
-                margin={{ left: 0, right: 20 }}
-              >
-                <XAxis type="number" hide />
-                <YAxis
-                  dataKey="category"
-                  type="category"
-                  tickLine={false}
-                  axisLine={false}
-                  className="capitalize"
-                  width={60} // Give enough room for text labels
-                />
-                <ChartTooltip content={<ChartTooltipContent />} />
-                <Bar
-                  dataKey="stock"
-                  layout="vertical"
-                  radius={10}
-                  barSize={40}
-                />
-              </BarChart>
-            </ChartContainer>
-          </CardContent>
-        </Card>
-      </div>
+      <SellerDashboardChart
+        chartConfig={chartConfig}
+        inventoryData={inventoryData}
+        revenueData={revenueData}
+      />
     </div>
   );
 }

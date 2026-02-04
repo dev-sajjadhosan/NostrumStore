@@ -21,8 +21,6 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { CancelOrderDialog } from "@/components/layouts/exist-alert";
-import { FlagOrderDialog } from "./flag-order";
 
 export default function OrderDetailsSheet({ order, open, onOpenChange }: any) {
   if (!order) return null;
@@ -34,8 +32,11 @@ export default function OrderDetailsSheet({ order, open, onOpenChange }: any) {
   const handleCancelConfirm = () => {
     console.log("Order Cancelled:", order.id);
     setShowCancelDialog(false);
-    onOpenChange(false); // Optionally close the sheet too
+    onOpenChange(false);
   };
+
+  console.log(order);
+
   return (
     <>
       <Sheet open={open} onOpenChange={onOpenChange}>
@@ -58,7 +59,6 @@ export default function OrderDetailsSheet({ order, open, onOpenChange }: any) {
           </SheetHeader>
 
           <div className="space-y-6 mt-6">
-            {/* 1. Entity Info: Customer & Vendor */}
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label className="text-xs uppercase text-muted-foreground font-bold">
@@ -69,7 +69,7 @@ export default function OrderDetailsSheet({ order, open, onOpenChange }: any) {
                     <User className="size-4 text-primary" />
                   </div>
                   <div className="text-sm">
-                    <p className="font-semibold">{order.customer}</p>
+                    <p className="font-semibold">{order.customer?.name}</p>
                     <p className="text-xs text-muted-foreground">
                       ID: CUST-901
                     </p>
@@ -94,7 +94,6 @@ export default function OrderDetailsSheet({ order, open, onOpenChange }: any) {
 
             <Separator />
 
-            {/* 2. Prescription Section (The "Audit" Work) */}
             <Card className=" rounded-xl space-y-3">
               <CardHeader className="flex items-center justify-between">
                 <h4 className="text-sm font-bold text-blue-900 flex items-center gap-2">
@@ -115,24 +114,27 @@ export default function OrderDetailsSheet({ order, open, onOpenChange }: any) {
               </CardContent>
             </Card>
 
-            {/* 3. Items List */}
             <div className="space-y-3">
               <h4 className="text-sm font-bold underline">Items Ordered</h4>
               <div className="space-y-3">
-                {[1, 2].map((i) => (
+                {order?.items?.map((item: any, i: number) => (
                   <div
                     key={i}
                     className="flex justify-between items-center text-sm"
                   >
                     <div className="flex flex-col">
-                      <span className="font-medium">Napa Extend 665mg</span>
+                      <span className="font-medium">
+                        {item?.medicine?.name}
+                      </span>
                       <span className="text-xs text-muted-foreground italic">
-                        10 Tablets per strip
+                        {item?.medicine?.unitType}
                       </span>
                     </div>
                     <div className="text-right">
                       <p className="font-bold">x2</p>
-                      <p className="text-xs text-muted-foreground">$30.00</p>
+                      <p className="text-xs text-muted-foreground">
+                        ${item?.priceAtPurchase}
+                      </p>
                     </div>
                   </div>
                 ))}
@@ -141,24 +143,23 @@ export default function OrderDetailsSheet({ order, open, onOpenChange }: any) {
 
             <Separator />
 
-            {/* 4. Financial Breakdown */}
             <div className="bg-muted/30 p-4 rounded-lg space-y-2">
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Subtotal</span>
-                <span>$140.00</span>
+                <span>${order?.Subtotal}</span>
               </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Platform Fee (5%)</span>
-                <span className="text-green-600">+$7.00</span>
-              </div>
+              {/* <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Platform Fee (%)</span>
+                <span className="text-green-600">+$${order?.Tax}</span>
+              </div> */}
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Delivery Charge</span>
-                <span>$7.00</span>
+                <span>${order?.Shipping}</span>
               </div>
               <Separator className="my-1" />
               <div className="flex justify-between font-bold text-lg">
                 <span>Total Payable</span>
-                <span className="text-primary">${order.total}</span>
+                <span className="text-primary">${order.grandTotal}</span>
               </div>
             </div>
 

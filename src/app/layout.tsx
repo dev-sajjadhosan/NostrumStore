@@ -7,6 +7,7 @@ import Footer from "@/components/layouts/footer";
 import { Toaster } from "@/components/ui/sonner";
 import Transition from "@/components/providers/Transition";
 import { Suspense } from "react";
+import { CartProvider } from "@/context/cart-provider";
 
 const jetBrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
@@ -56,7 +57,7 @@ export default function RootLayout({
               enableSystem
               disableTransitionOnChange
             >
-              {children}
+              <CartProvider>{children}</CartProvider>
               <Toaster richColors />
             </ThemeProvider>
           </Transition>

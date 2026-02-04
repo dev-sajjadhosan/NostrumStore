@@ -36,7 +36,10 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
-import { userService } from "@/services/user.service";
+import { toast } from "sonner";
+import { updateProfile } from "@/actions/user.actions";
+import ProfilePictureUpdateModal from "./profile-pic-update-modal";
+import { genFallBackName } from "@/helpers/fallback-name";
 
 const profileSchema = z.object({
   name: z.string().min(2, "Name is too short"),
@@ -45,24 +48,35 @@ const profileSchema = z.object({
 });
 
 export default function PersonalInformationView({ data }: { data: any }) {
-  const router = useRouter();
   const [isUpdate, setIsUpdate] = useState(false);
-
   const user = data?.user;
 
   const form = useForm({
     defaultValues: {
-      name: "",
-      email: "",
-      bio: "",
+      name: user?.name,
+      email: user?.email,
+      bio: data?.bio,
     },
     validators: {
       onSubmit: profileSchema,
     },
     onSubmit: async ({ value }) => {
-      console.log("Saving data:", value);
-      // Simulate API call
-      // handleClose();
+      const toastID = toast.loading("Updating profile...");
+      try {
+        const data = {
+          bio: value?.bio,
+          user: {
+            name: value?.name,
+            email: value?.email,
+          },
+        };
+        const res = await updateProfile(data);
+        console.log(res);
+        toast.success("Profile Updated!", { id: toastID });
+        setIsUpdate(false);
+      } catch (err: any) {
+        toast.error(err?.message, { id: toastID });
+      }
     },
   });
   return (
@@ -88,24 +102,13 @@ export default function PersonalInformationView({ data }: { data: any }) {
                   <AvatarImage
                     src={user?.image || "https://github.com/shadcn.png"}
                   />
-                  <AvatarFallback>{user?.name}</AvatarFallback>
+                  <AvatarFallback>{genFallBackName(user?.name)}</AvatarFallback>
                 </Avatar>
-                <div className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                  <Camera className="text-white size-6" />
-                </div>
               </div>
-              <div>
-                <h4 className="font-semibold text-xl">Profile Picture</h4>
-                <p className="text-sm text-muted-foreground mb-6">
-                  JPG, GIF or PNG. Max size of 2MB.
-                </p>
+              <div className="flex flex-col gap-2 items-center">
+                <h4 className="font-semibold text-2xl">Profile Picture</h4>
                 <div className="flex gap-2 items-center">
-                  <Button>
-                    <ImagePlus /> Change Photo
-                  </Button>
-                  <Button variant="ghost" className="text-destructive">
-                    Remove <Trash2Icon />
-                  </Button>
+                  <ProfilePictureUpdateModal data={data} />
                 </div>
               </div>
             </div>
@@ -179,8 +182,9 @@ export default function PersonalInformationView({ data }: { data: any }) {
                             value={field.state.value}
                             onChange={(e) => field.handleChange(e.target.value)}
                             id={field.name}
-                            placeholder="bio"
+                            placeholder="Write Your bio"
                             rows={3}
+                            className="bg-background/30 border-0 resize-none p-5"
                           />
                           {isValid && (
                             <FieldError errors={field.state.meta.errors} />
@@ -194,13 +198,13 @@ export default function PersonalInformationView({ data }: { data: any }) {
             ) : (
               <div className="flex flex-col gap-2 w-full">
                 <Badge className="text-md px-5 py-1 font-semibold">
-                  Customer
+                  {user?.role}
                 </Badge>
                 <h1 className="text-4xl">{user?.name}</h1>
                 <h3 className="text-xl tracking-wide text-muted-foreground">
                   {user?.email}
                 </h3>
-                <p className="mt-5 text-sm tracking-wide">null</p>
+                <p className="mt-3 text-md tracking-wide">{data?.bio}</p>
               </div>
             )}
           </div>

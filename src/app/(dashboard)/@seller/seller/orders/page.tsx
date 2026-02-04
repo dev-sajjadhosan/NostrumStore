@@ -10,8 +10,8 @@ import {
 
 import StatusCard from "@/components/modules/seller/o-status-card";
 import OrderTable from "@/components/modules/order/order-table";
-import { AdminService } from "@/services/admin.service";
 import { PgOptionsRs } from "@/types/types";
+import { SellerServices } from "@/services/seller.service";
 
 export default async function OrderManagerPage({
   searchParams,
@@ -19,13 +19,11 @@ export default async function OrderManagerPage({
   searchParams: Promise<PgOptionsRs>;
 }) {
   const { page, search } = await searchParams;
-  const { data } = await AdminService.getSellerAllOrders({ page, search });
+  const { data } = await SellerServices.getSellerAllOrders({ page, search });
 
   const orders = data?.data?.data;
   const meta = data?.data?.meta
   const pagination = data?.data?.pagination;
-
-  console.log(meta);
 
   return (
     <div className="p-5 w-full mx-auto space-y-6">
@@ -46,7 +44,7 @@ export default async function OrderManagerPage({
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatusCard
           title="Total Orders"
-          count={orders.length}
+          count={orders?.length}
           icon={ShoppingBag}
           color="text-blue-600"
         />

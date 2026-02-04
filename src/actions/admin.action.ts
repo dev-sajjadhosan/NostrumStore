@@ -1,9 +1,14 @@
 "use server";
 
 import { AdminService } from "@/services/admin.service";
+import { userService } from "@/services/user.service";
 import { PgOptionsRs, serviceOptions } from "@/types/types";
 import { updateTag } from "next/cache";
 
+export const getAdminMetadata = async (options?: serviceOptions) => {
+  const res = await AdminService.getAdminMetadata(options);
+  return res;
+};
 export const getCategories = async (
   params?: PgOptionsRs,
   options?: serviceOptions,
@@ -59,5 +64,7 @@ export const deleteMedicine = async (id: string) => {
   return res;
 };
 
-
-
+export const singleOrderData = async (id: string) => {
+  const res = await userService.singleOrderData(id);
+  return res;
+};

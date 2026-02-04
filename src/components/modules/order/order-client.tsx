@@ -33,6 +33,7 @@ import PaginationControl from "@/components/shared/pagination";
 import OrderDetailsSheet from "../admin/order-details-sheet";
 import EmptyCard from "@/components/shared/empty-card";
 import OrderSearchFilter from "./order-search-filter";
+import OrderDeleteAlert from "@/components/shared/order-delete-order";
 
 export default function OrderClient({ data }: { data: any }) {
   const [statusFilter, setStatusFilter] = useState("all");
@@ -82,7 +83,7 @@ export default function OrderClient({ data }: { data: any }) {
                           {order.id}
                         </TableCell>
                         <TableCell className="text-sm font-medium">
-                          {order.customer}
+                          {order.customer?.name}
                         </TableCell>
                         {/* <TableCell>
                   <Badge
@@ -95,10 +96,10 @@ export default function OrderClient({ data }: { data: any }) {
                         <TableCell>
                           <div className="flex flex-col">
                             <span className="text-sm font-bold">
-                              ${order.total.toFixed(2)}
+                              ${order.totalPrice}
                             </span>
                             <span className="text-[10px] text-muted-foreground">
-                              {order.items} items
+                              {order.items?.length} items
                             </span>
                           </div>
                         </TableCell>
@@ -135,11 +136,7 @@ export default function OrderClient({ data }: { data: any }) {
                             }}
                           />
                           {/* <TooltipButton icon={Truck} title="Track Logistics" size={'icon'} /> */}
-                          <TooltipButton
-                            icon={XCircle}
-                            title="Cancel Order"
-                            size={"icon"}
-                          />
+                          {/* <OrderDeleteAlert data={order} /> */}
                         </TableCell>
                       </TableRow>
                     ))}

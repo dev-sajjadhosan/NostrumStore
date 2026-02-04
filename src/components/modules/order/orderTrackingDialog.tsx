@@ -13,7 +13,7 @@ export function OrderTrackingDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">
+        <Button variant="outline" disabled>
           <Truck className="mr-2 size-4" /> Track Order
         </Button>
       </DialogTrigger>

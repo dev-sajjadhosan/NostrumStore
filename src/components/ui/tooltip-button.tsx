@@ -6,7 +6,7 @@ import {
   TooltipProvider,
 } from "./tooltip";
 import React from "react";
-import { Button } from "./button"; // Assuming you have a Shadcn button
+import { Button } from "./button"; 
 
 interface TooltipButtonProps {
   icon: LucideIcon;
@@ -24,12 +24,14 @@ interface TooltipButtonProps {
     | "ghost"
     | null
     | undefined;
-  disabled?: any;
+  disabled?: boolean;
   size?: "icon-sm" | "icon" | "icon-lg" | null | undefined;
+
+  className?: string;
 }
 
 export function TooltipButton({
-  icon: Icon, // Rename to uppercase so it can be used as a component
+  icon: Icon, 
   title,
   onClick,
   description,
@@ -38,16 +40,16 @@ export function TooltipButton({
   variant = "ghost",
   disabled,
   size = "icon-lg",
+  className
 }: TooltipButtonProps) {
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          {/* We use asChild to prevent nesting a button inside a button */}
           <Button
             size={size}
             variant={variant}
-            className="rounded-full"
+            className={`{className} rounded-full`}
             onClick={onClick}
             disabled={disabled}
           >

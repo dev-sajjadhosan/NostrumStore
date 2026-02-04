@@ -5,10 +5,13 @@ import { Button } from "@/components/ui/button";
 
 import { AdminService } from "@/services/admin.service";
 import OrderClient from "@/components/modules/order/order-client";
+import { getAdminMetadata } from "@/actions/admin.action";
 
 export default async function AllOrdersPage() {
   const { data } = await AdminService.getAllOrders();
-  console.log(data);
+  const { data: odata } = await getAdminMetadata();
+
+  const order = odata?.data?.orders;
 
   return (
     <>
@@ -28,25 +31,25 @@ export default async function AllOrdersPage() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <StatusSummaryCard
             title="Pending"
-            count="null"
+            count={order.pendingOrder}
             icon={Clock}
             color="bg-amber-50"
           />
           <StatusSummaryCard
-            title="Processing"
-            count="null"
+            title="Cancelled"
+            count={order.cancelledOrder}
             icon={Package}
             color="bg-blue-50"
           />
           <StatusSummaryCard
             title="Shipped"
-            count="null"
+            count={order.shippedOrder}
             icon={Truck}
             color="bg-purple-50"
           />
           <StatusSummaryCard
             title="Completed"
-            count="null"
+            count={order.deliversOrder}
             icon={CheckCircle2}
             color="bg-green-50"
           />
@@ -74,5 +77,3 @@ function StatusSummaryCard({ title, count, icon: Icon, color }: any) {
     </Card>
   );
 }
-
-

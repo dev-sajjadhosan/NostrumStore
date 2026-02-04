@@ -1,29 +1,11 @@
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Rating } from "@/components/ui/rating";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { TooltipButton } from "@/components/ui/tooltip-button";
 import {
   ChevronLeft,
   ChevronRight,
-  DollarSign,
-  ExternalLink,
   Newspaper,
-  Share2,
-  ShoppingBasket,
-  Timer,
   TrafficCone,
 } from "lucide-react";
 import Image from "next/image";
@@ -31,132 +13,19 @@ import review from "../../../public/review.svg";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import NewsLetter from "@/components/shared/newsletter";
-import ProductCard from "@/components/shared/productCard";
-import PaginationControl from "@/components/shared/pagination";
-import PopularCategories from "@/components/modules/customer/popular-categories";
+import SectionCategories from "@/components/modules/customer/section-categories";
+import SectionMedicines from "@/components/modules/customer/section-medicines";
+import HeroBanner from "@/components/layouts/hero-banner";
+import OfferCards from "@/components/layouts/offer-cards";
 
 export default async function Home() {
- 
   return (
     <>
-      <div className="flex gap-2 w-11/12 h-full items-center mx-auto">
-        <Card className="w-full h-150">
-          <CardContent className="h-full flex items-center justify-center text-9xl">
-            HERO
-          </CardContent>
-          <CardFooter>
-            <div className="flex items-center gap-1">
-              {Array.from({ length: 5 }).map((_, idx) => (
-                <span
-                  key={idx}
-                  className="w-6 h-3.5 bg-neutral-700 rounded-xl"
-                ></span>
-              ))}
-            </div>
-          </CardFooter>
-        </Card>
-        <Card className="w-2xl h-150">
-          <CardContent></CardContent>
-        </Card>
-      </div>
+      <HeroBanner />
       <div className="flex flex-col gap-48 w-11/12 h-full mx-auto my-48">
-        <PopularCategories/>
-        <section className="w-full">
-          <div className="flex items-center justify-between mb-7">
-            <h1 className="text-3xl font-medium">Popular Medicines</h1>
-            <div className="flex items-center gap-3">
-              <Select>
-                <SelectTrigger className="w-45">
-                  <SelectValue placeholder="SortBy" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="name">Name</SelectItem>
-                  <SelectItem value="dark">Low</SelectItem>
-                  <SelectItem value="system">High</SelectItem>
-                  <SelectItem value="system">Created</SelectItem>
-                </SelectContent>
-              </Select>
-              <Select>
-                <SelectTrigger className="w-45">
-                  <SelectValue placeholder="SortOrder" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="name">asc</SelectItem>
-                  <SelectItem value="dark">desc</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          <div className="grid grid-cols-3 gap-5 w-full">
-            {Array.from({ length: 8 }).map((_, idx) => (
-              <ProductCard key={idx} data={{}} />
-            ))}
-          </div>
-          <div className="flex gap-5 items-center justify-center mt-7">
-            <TooltipButton
-              icon={ChevronLeft}
-              title="Prev"
-              variant={"secondary"}
-            />
-            <div className="flex items-center gap-1">
-              {Array.from({ length: 5 }).map((_, idx) => (
-                <span
-                  key={idx}
-                  className="w-7 h-3.5 bg-neutral-800 rounded-full"
-                />
-              ))}
-            </div>
-            <TooltipButton
-              icon={ChevronRight}
-              title="Next"
-              variant={"secondary"}
-            />
-          </div>
-        </section>
-        <section className="flex flex-col gap-5">
-          <div className="flex items-center justify-between">
-            <h1 className="text-3xl font-medium">Our Offers</h1>
-            <div className="flex gap-5 items-center justify-center mt-7">
-              <TooltipButton
-                icon={ChevronLeft}
-                title="Prev"
-                variant={"secondary"}
-              />
-              <div className="flex items-center gap-1">
-                {Array.from({ length: 5 }).map((_, idx) => (
-                  <span
-                    key={idx}
-                    className="w-7 h-3.5 bg-neutral-800 rounded-full"
-                  />
-                ))}
-              </div>
-              <TooltipButton
-                icon={ChevronRight}
-                title="Next"
-                variant={"secondary"}
-              />
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <Card className="w-full h-150">
-              <CardContent className="flex flex-col items-center justify-center h-full text-4xl">
-                OFFER CARD 01
-              </CardContent>
-            </Card>
-            <div className="flex flex-col w-5xl h-150 gap-3">
-              <Card className="w-full h-full">
-                <CardContent className="flex flex-col items-center justify-center h-full text-4xl">
-                  OFFER CARD 02
-                </CardContent>
-              </Card>
-              <Card className="w-full h-full">
-                <CardContent className="flex flex-col items-center justify-center h-full text-4xl">
-                  OFFER CARD 03
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </section>
+        <SectionCategories />
+        <SectionMedicines />
+        <OfferCards />
         <section className="flex flex-col gap-5">
           <h1 className="text-3xl font-semibold text-center">
             Customer Reviews
@@ -215,7 +84,7 @@ export default async function Home() {
             ))}
           </div>
         </section>
-        <NewsLetter />a
+        <NewsLetter />
       </div>
     </>
   );

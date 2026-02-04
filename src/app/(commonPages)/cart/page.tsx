@@ -1,8 +1,7 @@
 "use client";
 
+import { useMemo, useState } from "react";
 import PageBanner from "@/components/shared/page-banner";
-import PaginationControl from "@/components/shared/pagination";
-import QuantityControl from "@/components/shared/quantity-control";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -11,158 +10,233 @@ import { Separator } from "@/components/ui/separator";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
 import { TooltipButton } from "@/components/ui/tooltip-button";
+import { useCart } from "@/context/cart-provider";
 import {
   BadgeDollarSign,
-  Calculator,
+  Minus,
+  Pill,
+  Plus,
   ShoppingBasket,
   ShoppingCart,
   Tag,
   Trash2,
-  X,
+  TrashIcon,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { toast } from "sonner";
+import { Badge } from "@/components/ui/badge";
 
 export default function CartPage() {
-  const unitPrice = 20.0;
+  const { cart, removeFromCart, clearCart, updateQuantity } = useCart();
+  const [shippingCost, setShippingCost] = useState<number>(0);
 
-  const items = [
-    { id: 1, name: "Aspirin", price: 20.0, quantity: 1 },
-    { id: 2, name: "Paracetamol", price: 20.0, quantity: 1 },
-    { id: 3, name: "Vitamin C", price: 20.0, quantity: 1 },
-    { id: 4, name: "Bandages", price: 20.0, quantity: 1 },
-    { id: 5, name: "Antacid", price: 20.0, quantity: 1 },
-  ];
+  const subtotal = useMemo(() => {
+    return cart.reduce(
+      (acc: number, item: any) => acc + Number(item.price) * item.quantity,
+      0,
+    );
+  }, [cart]);
+
+  const total = subtotal + shippingCost;
+
+  if (cart.length === 0) {
+    return (
+      <Card className="w-11/12 mx-auto h-[500px] mt-10">
+        <CardContent className="flex flex-col items-center text-center justify-center gap-2 h-full">
+          <ShoppingBasket
+            size={150}
+            strokeWidth={1}
+            className="text-muted-foreground opacity-20"
+          />
+          <h1 className="text-3xl font-bold">Your cart is empty</h1>
+          <h2 className="text-lg text-muted-foreground mb-5">
+            Looks like you haven&apos;t added anything to your cart yet.
+          </h2>
+          <Link href="/shop">
+            <Button size="lg" className="rounded-full px-8">
+              Back to Shop <Pill />
+            </Button>
+          </Link>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
-    <>
-      <div className="w-11/12 mx-auto flex flex-col  gap-28">
-        <PageBanner name="Cart" icon={ShoppingBasket} />
+    <div className="w-11/12 mx-auto flex flex-col gap-16 py-10">
+      <PageBanner name="Shopping Cart" icon={ShoppingBasket} />
 
-        <section className="flex flex-col gap-9 w-full">
-          <div className="flex w-full">aa</div>
-          <div className="flex items-start justify-between gap-15 w-full">
-            <div className="w-full border p-5 rounded-xl">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="md:w-20"></TableHead>
-                    <TableHead>Product</TableHead>
-                    <TableHead>Price</TableHead>
-                    <TableHead className="md:w-xs text-center">
-                      Quantity
-                    </TableHead>
-                    <TableHead>Subtotal</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {items.map((item: any) => (
-                    <TableRow key={item.id || item}>
-                      <TableCell>
-                        <TooltipButton
-                          icon={Trash2}
-                          title="Remove"
-                          variant="secondary"
-                        />
-                      </TableCell>
-                      <TableCell className="flex gap-3 items-center">
+      <section className="flex flex-col gap-9 w-full">
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-normal">
+            Product in Cart ({cart.length})
+          </h2>
+          <Button
+            variant="outline"
+            className="text-destructive hover:bg-destructive/10"
+            onClick={() => {
+              clearCart();
+              toast.success("Cart cleared");
+            }}
+          >
+            <TrashIcon className="mr-2 size-4" />
+            Clear Cart
+          </Button>
+        </div>
+
+        <div className="flex flex-col lg:flex-row items-start justify-between gap-10 w-full">
+        
+          <div className="w-full border rounded-xl bg-card overflow-hidden">
+            <Table>
+              <TableHeader className="bg-muted/50">
+                <TableRow>
+                  <TableHead className="w-12"></TableHead>
+                  <TableHead>Product</TableHead>
+                  <TableHead>Price</TableHead>
+                  <TableHead className="text-center">Quantity</TableHead>
+                  <TableHead className="text-right">Subtotal</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {cart.map((item: any) => (
+                  <TableRow key={item.id}>
+                    <TableCell>
+                      <TooltipButton
+                        icon={Trash2}
+                        title="Remove"
+                        variant="ghost"
+                        className="text-destructive hover:bg-destructive/10"
+                        onClick={() => {
+                          removeFromCart(item.id);
+                          toast.success(`${item.name} removed`);
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell className="flex gap-4 items-center py-4">
+                      <div className="relative size-16 border rounded-lg overflow-hidden bg-muted flex-shrink-0">
                         <Image
-                          src="/vercel.svg"
+                          src={item.image || "/placeholder.png"}
                           alt={item.name}
-                          width={40}
-                          height={40}
+                          fill
+                          className="object-cover"
                         />
-                        <h1 className="font-semibold">
-                          {item.name || "Unknown"}
-                        </h1>
-                      </TableCell>
-                      <TableCell>${item.price.toFixed(2)}</TableCell>
-                      <TableCell>
-                        <QuantityControl
-                          price={item.price}
-                          initialQuantity={item.quantity}
-                          // onUpdate={({ quantity }) =>
-                          //   handleQuantityChange(item.id, quantity)
-                          // }
-                        />
-                      </TableCell>
-                   
-                      <TableCell className="font-bold">
-                        ${(item.price * item.quantity).toFixed(2)}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-              {/* <div className="flex items-center justify-between mt-9">
-                <PaginationControl
-                  currentPage={1}
-                  totalPages={5}
-                  options={{ size: "icon-sm" }}
-                />
-                <p className="text-md font-semibold tracking-wide">
-                  Page {1} of {5}
-                </p>
-              </div> */}
-            </div>
-            <Card className="border-0 w-2xl h-140 p-5">
-              <CardHeader className="flex items-center gap-3 text-muted-foreground">
-                <ShoppingCart />
-                <CardTitle className="text-2xl font-medium">
-                  Cart Totals
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="flex flex-col mt-5">
-                <div className="flex items-center justify-between gap-5">
-                  <h3 className="text-lg font-medium">SubTotal</h3>
-                  <span className="text-md font-semibold">$197.02</span>
-                </div>
-                <div className="flex flex-col gap-5 my-5">
-                  <h3 className="text-lg font-medium">Shipping</h3>
-                  <RadioGroup defaultValue="comfortable" className="w-fit">
-                    <div className="flex items-center gap-3">
-                      <RadioGroupItem value="default" id="r1" />
-                      <Label htmlFor="r1">Free Shipping</Label>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <RadioGroupItem value="comfortable" id="r2" />
-                      <Label htmlFor="r2">Flat rate</Label>
-                    </div>
-                  </RadioGroup>
-                </div>
-                <Separator />
-                <div className="flex items-center justify-between gap-5 mt-5">
-                  <h3 className="text-lg font-medium">Total</h3>
-                  <span className="font-semibold">$40.00</span>
-                </div>
-                <div className="mt-15 w-full flex flex-col gap-7">
-                  <div className="grid grid-cols-2 gap-5 w-full">
-                    <Button variant={"secondary"}>
-                      <Calculator /> Calculate
-                    </Button>
-                    <Button variant={"secondary"}>
-                      {" "}
-                      <Tag /> Use Coupon
-                    </Button>
-                  </div>
-                  <Link href={"/checkout"}>
-                    <Button>
-                      <BadgeDollarSign /> Proceed to checkout
-                    </Button>
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
+                      </div>
+                      <span className="font-medium line-clamp-2 max-w-[200px]">
+                        {item.name}
+                      </span>
+                    </TableCell>
+                    <TableCell>${Number(item.price).toFixed(2)}</TableCell>
+                    <TableCell>
+                      <div className="flex items-center justify-center gap-3 border rounded-full px-5 py-2 w-fit mx-auto bg-background">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="size-8 rounded-full"
+                          onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))}
+                        >
+                          <Minus size={14} />
+                        </Button>
+                        <span className="w-8 text-center font-semibold">
+                          {item.quantity}
+                        </span>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="size-8 rounded-full"
+                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                        >
+                          <Plus size={14} />
+                        </Button>
+                      </div>
+                    </TableCell>
+                    <TableCell className="font-bold text-right">
+                      ${(Number(item.price) * item.quantity).toFixed(2)}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           </div>
-        </section>
-      </div>
-    </>
+
+         
+          <Card className="w-full lg:w-[450px] sticky top-5 shadow-sm">
+            <CardHeader className="border-b bg-muted/20">
+              <div className="flex items-center gap-2">
+                <ShoppingCart className="size-5 text-primary" />
+                <CardTitle className="text-xl">Order Summary</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="flex flex-col pt-6 gap-6">
+              <div className="flex items-center justify-between">
+                <span className="text-muted-foreground">Subtotal</span>
+                <span className="text-lg font-semibold">${subtotal.toFixed(2)}</span>
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
+                  Shipping Method
+                </h3>
+                <RadioGroup 
+                  defaultValue="0" 
+                  className="gap-3"
+                  onValueChange={(val) => setShippingCost(Number(val))}
+                >
+                  <div className="flex items-center justify-between space-x-2 border rounded-lg p-3 cursor-pointer hover:bg-muted/50 transition-colors">
+                    <div className="flex items-center gap-2">
+                      <RadioGroupItem value="0" id="free" />
+                      <Label htmlFor="free" className="cursor-pointer">Free Shipping</Label>
+                    </div>
+                    <span className="text-sm font-medium text-green-600">$0.00</span>
+                  </div>
+                  <div className="flex items-center justify-between space-x-2 border rounded-lg p-3 cursor-pointer hover:bg-muted/50 transition-colors">
+                    <div className="flex items-center gap-2">
+                      <RadioGroupItem value="10" id="flat" />
+                      <Label htmlFor="flat" className="cursor-pointer">Flat Rate</Label>
+                    </div>
+                    <span className="text-sm font-medium">$10.00</span>
+                  </div>
+                </RadioGroup>
+              </div>
+
+              <Separator />
+
+              <div className="flex items-center justify-between">
+                <h3 className="text-xl font-bold">Total</h3>
+                <div className="text-right">
+                  <span className="text-2xl font-black text-primary">
+                    ${total.toFixed(2)}
+                  </span>
+                  <p className="text-xs text-muted-foreground">Taxes calculated at checkout</p>
+                </div>
+              </div>
+
+              <div className="space-y-5 w-full">
+                {/* <div className="flex gap-2">
+                  <Button variant="outline" className="flex-1">
+                    <Tag className="mr-2 size-4" /> Coupon
+                  </Button>
+                  <Button variant="outline" className="flex-1">
+                    Apply
+                  </Button>
+                </div> */}
+                <Link href={`/checkout?cart=true&subtotal=${subtotal}&total=${total}&shipping=${shippingCost}`}>
+                  <Button size={'lg'} className="w-full">
+                    <BadgeDollarSign />
+                    Proceed to Checkout
+                  </Button>
+                </Link>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+    </div>
   );
 }

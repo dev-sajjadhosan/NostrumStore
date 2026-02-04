@@ -42,13 +42,13 @@ export default async function CategoriesPage({
 
       <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
         <SearchFilterBar filter={false} />
-        <div className="flex items-center gap-2 text-sm text-muted-foreground w-xs">
+        <div className="flex items-center gap-2 text-md text-center text-muted-foreground w-xs mx-auto">
           <LayoutGrid className="size-4" />
           <span>Showing {categories?.length || 0} Categories</span>
         </div>
       </div>
 
-      {categories?.length == null || 0 ? (
+      {categories?.length == 0 ? (
         <EmptyCard />
       ) : (
         <>

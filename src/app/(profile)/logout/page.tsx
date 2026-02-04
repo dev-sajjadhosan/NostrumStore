@@ -70,7 +70,7 @@ export default function LogoutPage({ onBack }: { onBack: () => void }) {
               </div>
               <div className="space-y-2">
                 <h2 className="text-3xl font-semibold tracking-tight">
-                  Take care, Sajjad!{" "}
+                  Take care,{" "}
                   <Heart className="inline size-6 text-red-500 fill-red-500" />
                 </h2>
                 <p className="text-muted-foreground max-w-lg mx-auto">

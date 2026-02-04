@@ -3,7 +3,7 @@ import { userService } from "@/services/user.service";
 import { NextRequest, NextResponse } from "next/server";
 
 const ADMIN_ROOT = "/admin";
-const SELLER_ROOT = "/seller";
+const SELLER_ROOT = "/seller/dashboard";
 const AUTH_PAGES = ["/login", "/register", "/quick-up"];
 const PROTECTED_ROUTES = [
   ADMIN_ROOT,

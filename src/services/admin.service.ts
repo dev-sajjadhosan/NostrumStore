@@ -35,7 +35,7 @@ const getCategories = async (
       config.next = { revalidate: options.revalidate };
     }
 
-    config.next = { ...config.next, tags: ["medicines"] };
+    config.next = { ...config.next, tags: ["categories"] };
 
     const res = await fetch(url.toString(), config);
     const data = await res.json();
@@ -111,6 +111,7 @@ const deleteCategory = async (id: string) => {
     const res = await fetch(`${env.API_URL}/categories/${id}`, {
       method: "DELETE",
       headers: {
+        "Content-Type": "application/json",
         Cookie: cookieStore.toString(),
       },
     });
@@ -250,6 +251,7 @@ const singleMedicineData = async (id: string) => {
 
     const res = await fetch(`${env.API_URL}/medicines/${id}`, {
       headers: {
+        "Content-Type": "application/json",
         Cookie: cookieStore.toString(),
       },
     });
@@ -332,6 +334,8 @@ const deleteMedicine = async (id: string) => {
     const res = await fetch(`${env.API_URL}/seller/medicines/${id}`, {
       method: "DELETE",
       headers: {
+        "Content-Type": "application/json",
+
         Cookie: cookieStore.toString(),
       },
     });
@@ -351,20 +355,16 @@ const deleteMedicine = async (id: string) => {
   }
 };
 
-const getSellerAllOrders = async (params?: PgOptionsRs, options?: serviceOptions) => {
+
+const getAdminMetadata = async (options?: serviceOptions) => {
   try {
-    const url = new URL(`${api_url}/seller/orders`);
+    const url = new URL(`${api_url}/admin/metadata`);
     const cookieStore = await cookies();
-    if (params) {
-      Object.entries(params).forEach(([key, value]) => {
-        if (value !== undefined && value !== null && value !== "") {
-          url.searchParams.append(key, value as any);
-        }
-      });
-    }
+ 
 
     const config: RequestInit = {
       headers: {
+        "Content-Type": "application/json",
         Cookie: cookieStore.toString(),
       },
       cache: "no-store",
@@ -378,7 +378,7 @@ const getSellerAllOrders = async (params?: PgOptionsRs, options?: serviceOptions
       config.next = { revalidate: options.revalidate };
     }
 
-    config.next = { ...config.next, tags: ["seller-orders"] };
+    config.next = { ...config.next, tags: ["admin-metadata"] };
 
     const res = await fetch(url.toString(), config);
     const data = await res.json();
@@ -387,11 +387,10 @@ const getSellerAllOrders = async (params?: PgOptionsRs, options?: serviceOptions
   } catch (err) {
     return {
       data: null,
-      error: { message: "Something went wrong on get orders." },
+      error: { message: "Something went wrong on get admin metadata." },
     };
   }
 };
-
 export const AdminService = {
   getCategories,
   createCategory,
@@ -404,5 +403,5 @@ export const AdminService = {
   updateMedicineData,
   updateMedicineStock,
   deleteMedicine,
-  getSellerAllOrders
+  getAdminMetadata
 };

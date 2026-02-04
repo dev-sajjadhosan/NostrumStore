@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 interface QuantityControlProps {
   price: number;
   initialQuantity?: number;
-  // This function sends data to the parent
   onUpdate?: (data: { quantity: number; totalPrice: number }) => void;
 }
 

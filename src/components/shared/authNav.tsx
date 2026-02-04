@@ -13,7 +13,7 @@ export default function AuthNav() {
     <>
       <div className="w-full lg:w-xs">
         <div className="flex flex-wrap lg:flex-col justify-center gap-5">
-          <Link href={"/quick-up"}>
+          {/* <Link href={"/quick-up"}>
             <Button
               className="h-18 w-65"
               variant={isPath("/quick-up") ? "default" : "ghost"}
@@ -24,7 +24,7 @@ export default function AuthNav() {
               Quick
               <CircleArrowOutUpRight />
             </Button>
-          </Link>
+          </Link> */}
           <Link href={"/login"}>
             <Button
               className="h-18 w-65"

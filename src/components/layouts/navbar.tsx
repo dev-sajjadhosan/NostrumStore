@@ -1,4 +1,3 @@
-
 import Image from "next/image";
 import { Button } from "../ui/button";
 import {
@@ -6,6 +5,7 @@ import {
   Home,
   Info,
   MapPinned,
+  PackageOpen,
   Phone,
   Pill,
   ShoppingCart,
@@ -57,6 +57,9 @@ const menuLinks = [
 export default async function Navbar() {
   const { data } = await userService.getSession();
   const user = data?.user || null;
+
+  console.log("Navbar Role", user?.role);
+
   return (
     <div
       className={`sticky top-10 mx-auto my-8 flex  items-center justify-between w-11/12 h-18  border rounded-full bg-accent/40 z-50 ${user ? "pl-9 pr-4" : "px-3"}`}
@@ -82,22 +85,26 @@ export default async function Navbar() {
         {user ? (
           <div className="flex items-center gap-2">
             {/* <TooltipButton icon={MapPinned} title="Location" /> */}
-            <Link href={"/cart"}>
-              <TooltipButton icon={ShoppingCart} title="Cart" />
-            </Link>
-            <Link href={"/orders"}>
-              <TooltipButton icon={Van} title="Orders" />
-            </Link>
+            {user?.role === "CUSTOMER" && (
+              <>
+                <Link href={"/cart"}>
+                  <TooltipButton icon={ShoppingCart} title="Cart" />
+                </Link>
+                <Link href={"/orders"}>
+                  <TooltipButton icon={PackageOpen} title="Orders" />
+                </Link>
+              </>
+            )}
             <ProfileView user={user} />
           </div>
         ) : (
-          <Link href={"/quick-up"}>
+          <Link href={"/register"}>
             <Button
               className="rounded-full text-xl font-semibold p-7 [&_svg]:size-8! text-muted-foreground"
               size={"lg"}
               variant={"secondary"}
             >
-              Quick Up
+              Register Up
               <CircleArrowOutUpRight />
             </Button>
           </Link>

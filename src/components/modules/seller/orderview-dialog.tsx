@@ -24,9 +24,29 @@ import {
   PackageX,
   ArrowBigDownDash,
 } from "lucide-react";
+import { toast } from "sonner";
+import { updateOrderStauts } from "@/actions/seller.action";
 
 export function OrderDetailsModal({ order }: { order: any }) {
   const [open, setOpen] = useState<boolean>(false);
+  const handleOrderStatus = async (id: string, status: string) => {
+    const toastId = toast.loading(
+      `Updating order as ${status} to inventory...`,
+    );
+    try {
+      const submissionData = {
+        status,
+      };
+
+      console.log(submissionData);
+      const res = await updateOrderStauts(id, submissionData);
+      toast.success("Order updated!", { id: toastId });
+      // router.push("/seller/medicines");
+      return;
+    } catch (err: any) {
+      toast.error(err.message, { id: toastId });
+    }
+  };
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -62,7 +82,7 @@ export function OrderDetailsModal({ order }: { order: any }) {
                   <Phone className="size-3 text-primary" /> Contact
                 </p>
                 <p className="text-muted-foreground">
-                  {order.customer}
+                  {order.customer?.name}
                   <br />
                   +880 1712-345678
                 </p>
@@ -76,18 +96,20 @@ export function OrderDetailsModal({ order }: { order: any }) {
                 <Package className="size-4" /> Ordered Medicines
               </h4>
               <div className="space-y-3">
-                {[1, 2].map((i) => (
+                {order?.items?.map((i: any, idx: number) => (
                   <div
-                    key={i}
+                    key={idx}
                     className="flex justify-between items-center bg-muted/30 p-3 rounded-lg border border-dashed"
                   >
                     <div>
-                      <p className="font-medium text-sm">Napa Extend 665mg</p>
+                      <p className="font-medium text-sm">{i?.medicine?.name}</p>
                       <p className="text-xs text-muted-foreground">
-                        Qty: 2 • $15.50 each
+                        Qty: {i?.quantity} • ${i?.priceAtPurchase} each
                       </p>
                     </div>
-                    <p className="font-bold text-sm">$31.00</p>
+                    <p className="font-bold text-sm">
+                      ${Number(i?.priceAtPurchase) * i?.quantity}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -140,16 +162,16 @@ export function OrderDetailsModal({ order }: { order: any }) {
                 <div className="mt-2 space-y-2">
                   <div className="flex justify-between text-sm">
                     <span>Subtotal</span>
-                    <span>$1,200.00</span>
+                    <span>${order?.totalPrice}</span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span>Delivery</span>
-                    <span>$50.00</span>
+                    <span>$Free</span>
                   </div>
                   <Separator />
                   <div className="flex justify-between font-bold text-lg text-primary">
                     <span>Total</span>
-                    <span>${order.total}</span>
+                    <span>${order.totalPrice}</span>
                   </div>
                 </div>
               </div>
@@ -158,11 +180,21 @@ export function OrderDetailsModal({ order }: { order: any }) {
                 <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground ">
                   Update Progress
                 </label>
-                <Button className="w-full gap-3 h-15 mt-3" variant="secondary">
+                <Button
+                  className="w-full gap-3 h-15 mt-3"
+                  variant="secondary"
+                  onClick={() => handleOrderStatus(order?.id, "SHIPPED")}
+                  disabled={order?.status === "DELIVERED"}
+                  >
                   Mark as Shipped
                   <Truck className="size-5! text-purple-600" />
                 </Button>
-                <Button className="w-full gap-3 h-15 mt-5" variant="secondary">
+                <Button
+                  className="w-full gap-3 h-15 mt-5"
+                  variant="secondary"
+                  onClick={() => handleOrderStatus(order?.id, "DELIVERED")}
+                  disabled={order?.status === "DELIVERED"}
+                >
                   <CheckCircle className="size-5! text-green-600" />
                   Mark as Delivered
                 </Button>
@@ -177,7 +209,11 @@ export function OrderDetailsModal({ order }: { order: any }) {
               >
                 Close <ArrowBigDownDash />
               </Button>
-              <Button className="h-15 w-full">
+              <Button
+                className="h-15 w-full"
+                onClick={() => handleOrderStatus(order?.id, "CANCELED")}
+                disabled={order?.status === "DELIVERED"}
+              >
                 <PackageX /> Cancel Order
               </Button>
             </div>

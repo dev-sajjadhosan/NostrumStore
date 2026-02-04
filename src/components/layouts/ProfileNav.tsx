@@ -27,16 +27,19 @@ const menus = [
     name: "Profile",
     link: "/profile",
     icon: UserCircle2,
+    access: false,
   },
   {
     name: "Cart",
     link: "/cart",
     icon: ShoppingBasket,
+    access: "CUSTOMER",
   },
   {
     name: "Orders",
     link: "/orders",
     icon: Van,
+    access: "CUSTOMER",
   },
 ];
 
@@ -94,13 +97,26 @@ export function ProfileView({ user }: { user: any }) {
         </div>
         <Separator />
         <ul className="grid grid-cols-2 gap-3">
-          {menus.map((item, idx) => (
-            <Link key={idx} href={item.link}>
-              <Button className="w-full h-13">
-                {<item.icon />} {item.name}
-              </Button>
-            </Link>
-          ))}
+          <Link href={"/profile"}>
+            <Button className="w-full h-13">
+              <UserCircle2 /> Profile
+            </Button>
+          </Link>
+          {user?.role === "CUSTOMER" && (
+            <>
+              <Link href={"/cart"}>
+                <Button className="w-full h-13">
+                  <ShoppingBasket /> My Cart
+                </Button>
+              </Link>
+              <Link href={"/orders"}>
+                <Button className="w-full h-13">
+                  <Van /> Orders
+                </Button>
+              </Link>
+            </>
+          )}
+
           {user.role === Roles.CUSTOMER ? (
             ""
           ) : (

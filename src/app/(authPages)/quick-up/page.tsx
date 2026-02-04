@@ -36,10 +36,11 @@ const socials = [
 
 export default function QuickAuthPage() {
   const handleGoogleProvider = async () => {
-    return await authClient.signIn.social({
+    const res = await authClient.signIn.social({
       provider: "google",
       callbackURL: "/auth/roles",
     });
+    console.log(res?.data);
   };
   const handleDiscordProvider = async () => {
     return await authClient.signIn.social({
@@ -50,7 +51,7 @@ export default function QuickAuthPage() {
   const handleProviders = (name: string) => {
     if (name.toLocaleLowerCase() === "google") {
       handleGoogleProvider();
-      return 
+      return;
     } else if (name.toLocaleLowerCase() === "discord") {
       return handleDiscordProvider();
     }

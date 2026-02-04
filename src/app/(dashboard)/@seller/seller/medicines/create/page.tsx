@@ -7,6 +7,7 @@ export default async function AddMedicinePage() {
   const { data } = await getCategories({ limit: 20 });
 
   const categories = data?.data?.data;
+
   return (
     <div className="p-6 w-full mx-auto space-y-8">
       <div className="flex items-center justify-between">

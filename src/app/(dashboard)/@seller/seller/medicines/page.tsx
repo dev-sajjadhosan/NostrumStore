@@ -30,7 +30,7 @@ import { SellerServices } from "@/services/seller.service";
 import EmptyCard from "@/components/shared/empty-card";
 import { PgOptionsRs } from "@/types/types";
 import UpdateMedicineStock from "@/components/modules/seller/update-medicine-stock";
-import DeleteAlert from "@/components/shared/delete-alert";
+import DeleteAlert from "@/components/shared/medicine-delete-alert";
 
 export default async function SellerMedicinesPage({
   searchParams,

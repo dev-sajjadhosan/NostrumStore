@@ -1,13 +1,7 @@
 export const dynamic = "force-dynamic";
 
 import { AppSidebar } from "@/components/layouts/app-sidebar";
-import {
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
+
 import { Separator } from "@/components/ui/separator";
 import {
   SidebarInset,
@@ -32,6 +26,9 @@ export default async function DashboardLayout({
 }) {
   const { data } = await userService.getSession();
   const role = data?.user?.role;
+
+  console.log(role);
+
   return (
     <>
       <SidebarProvider>
