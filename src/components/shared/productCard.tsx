@@ -22,7 +22,7 @@ import { useMemo } from "react";
 
 export default function ProductCard({ data }: { data: any }) {
   const { addToCart, isCart, removeFromCart } = useCart();
-  const subtotal = data?.price
+  const subtotal = data?.price;
   return (
     <>
       <Card className="">
@@ -39,14 +39,15 @@ export default function ProductCard({ data }: { data: any }) {
             <Timer /> 10:10:05
           </Badge> */}
         </CardHeader>
-        <CardContent className="flex flex-col gap-14 h-full mt-5">
+        <CardContent className="flex flex-col justify-between gap-14 h-full mt-5">
           <Image
             src={data?.image}
-            width={200}
-            height={300}
             alt="categories"
-            className="mx-auto"
+            width={300}
+            height={"100"}
+            className="mx-auto rounded-xl"
           />
+
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between">
               <h3 className="text-xl font-semibold tracking-wide">
@@ -65,7 +66,9 @@ export default function ProductCard({ data }: { data: any }) {
               <Rating rate={1} />
             </div>
             <div className="flex items-center justify-between mt-5">
-              <Link href={`/checkout?id=${data?.id}&qty=1&subtotal=${subtotal}`}>
+              <Link
+                href={`/checkout?id=${data?.id}&qty=1&subtotal=${subtotal}`}
+              >
                 <Button size={"lg"}>
                   <DollarSign /> Buy Now
                 </Button>

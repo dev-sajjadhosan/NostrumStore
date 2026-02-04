@@ -1,15 +1,15 @@
-"use client"
+"use client";
 
 import Image from "next/image";
 import role from "../../../../../public/role.svg";
 
 import RolesSelection from "@/components/modules/profile/role-selection";
-
+import { useEffect, useState } from "react";
+import { redirect, useRouter } from "next/navigation";
 
 const roles = [
   {
     name: "customer",
-
     role: "CUSTOMER",
     access: false,
   },
@@ -26,6 +26,21 @@ const roles = [
 ];
 
 export default function RolesPage() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const isVisit = localStorage.getItem("isRole");
+
+    if (isVisit === "true") {
+      router.push("/");
+    } else {
+      setLoading(false);
+      localStorage.setItem("isRole", "true");
+    }
+  }, [router]);
+
+  if (loading) return null;
 
   return (
     <>

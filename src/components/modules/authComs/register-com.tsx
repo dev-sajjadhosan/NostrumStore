@@ -51,7 +51,7 @@ export function RegisterForm({ ...props }: React.ComponentProps<typeof Card>) {
       onSubmit: formSchema,
     },
     onSubmit: async ({ value }) => {
-      const toastID = toast.loading("Creating User...");
+      const toastID = toast.loading("Creating & Checking User for Register...");
       try {
         const { data, error } = await authClient.signUp.email(value);
         console.log({ data, error });
@@ -62,7 +62,7 @@ export function RegisterForm({ ...props }: React.ComponentProps<typeof Card>) {
         if (!data?.user.emailVerified) {
           router.push("/register/verify");
         }
-        toast.success("User Created!", { id: toastID });
+        toast.success("Registration Success. Register!", { id: toastID });
       } catch (err) {
         toast.error("On Create Moment Something Went Wrong!", { id: toastID });
       }

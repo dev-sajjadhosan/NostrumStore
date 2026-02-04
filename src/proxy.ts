@@ -3,14 +3,17 @@ import { userService } from "@/services/user.service";
 import { NextRequest, NextResponse } from "next/server";
 
 const ADMIN_ROOT = "/admin";
-const SELLER_ROOT = "/seller/dashboard";
+const SELLER_ROOT = "/seller";
 const AUTH_PAGES = ["/login", "/register", "/quick-up"];
+
 const PROTECTED_ROUTES = [
   ADMIN_ROOT,
   SELLER_ROOT,
   "/dashboard",
   "/cart",
   "/profile",
+  "/orders",
+  "/checkout",
 ];
 
 export async function proxy(request: NextRequest) {
@@ -22,9 +25,10 @@ export async function proxy(request: NextRequest) {
     const isProtected = PROTECTED_ROUTES.some((route) =>
       pathname.startsWith(route),
     );
-
     if (isProtected) {
-      return NextResponse.redirect(new URL("/login", request.url));
+      const loginUrl = new URL("/login", request.url);
+      loginUrl.searchParams.set("callbackUrl", pathname);
+      return NextResponse.redirect(loginUrl);
     }
     return NextResponse.next();
   }
@@ -34,18 +38,25 @@ export async function proxy(request: NextRequest) {
       user.role === Roles.ADMIN
         ? ADMIN_ROOT
         : user.role === Roles.SELLER
-          ? SELLER_ROOT
+          ? `${SELLER_ROOT}/dashboard`
           : "/";
     return NextResponse.redirect(new URL(redirectUrl, request.url));
   }
 
   const userRole = user.role as Roles;
 
-  if (pathname.startsWith(ADMIN_ROOT) && userRole !== Roles.ADMIN) {
+  if (
+    (pathname.startsWith(ADMIN_ROOT) || pathname.startsWith(SELLER_ROOT)) &&
+    userRole === Roles.CUSTOMER
+  ) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
-  if (pathname.startsWith(SELLER_ROOT) && userRole !== Roles.SELLER) {
+  if (
+    pathname.startsWith(ADMIN_ROOT) &&
+    userRole !== Roles.ADMIN &&
+    userRole !== Roles.SELLER
+  ) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
@@ -58,12 +69,12 @@ export const config = {
     "/shop/:path*",
     "/checkout",
     "/checkout/:path*",
+    "/orders",
     "/orders/:path*",
     "/profile/:path*",
     "/seller/:path*",
     "/admin/:path*",
     "/login",
-    // "/quick-up/:path*",
     "/register",
   ],
 };

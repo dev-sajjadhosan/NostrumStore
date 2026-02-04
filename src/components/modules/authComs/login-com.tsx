@@ -44,7 +44,7 @@ export function LoginForm({ ...props }: React.ComponentProps<typeof Card>) {
       onSubmit: formSchema,
     },
     onSubmit: async ({ value }) => {
-      const toastID = toast.loading("Login...");
+      const toastID = toast.loading("Checking User for Login...");
       try {
         const { data, error } = await authClient.signIn.email(value);
         console.log({ data, error });
@@ -53,7 +53,7 @@ export function LoginForm({ ...props }: React.ComponentProps<typeof Card>) {
           return;
         }
         router.push('/')
-        toast.success("Login", { id: toastID });
+        toast.success("Checking Success. Login", { id: toastID });
       } catch (err) {
         toast.error("Something Went Wrong!", { id: toastID });
       }
