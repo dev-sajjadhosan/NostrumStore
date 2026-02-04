@@ -71,7 +71,6 @@ export default function PersonalInformationView({ data }: { data: any }) {
           },
         };
         const res = await updateProfile(data);
-        console.log(res);
         toast.success("Profile Updated!", { id: toastID });
         setIsUpdate(false);
       } catch (err: any) {

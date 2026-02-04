@@ -60,9 +60,9 @@ export default function ProfileDefault({
             </Avatar>
             <Badge
               variant={"default"}
-              className={`absolute bottom-0 right-0 px-3 py-1 shadow-accent ${roleConfig.color}`}
+              className={`absolute bottom-0 right-0 px-3 py-1 shadow-accent ${roleConfig?.color}`}
             >
-              {roleConfig.badge}
+              {roleConfig?.badge}
             </Badge>
           </div>
 
