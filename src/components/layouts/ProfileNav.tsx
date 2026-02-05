@@ -63,7 +63,7 @@ export function ProfileView({ user }: { user: any }) {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Avatar className="w-11 h-11 ml-3 cursor-pointer">
+        <Avatar className="w-11 h-11 lg:ml-3 cursor-pointer">
           <AvatarImage
             src={user?.image || "https://github.com/shadcn.png"}
             alt="@shadcn"
@@ -74,25 +74,23 @@ export function ProfileView({ user }: { user: any }) {
         </Avatar>
       </PopoverTrigger>
       <PopoverContent
-        className="w-lg p-8 mt-6 bg-accent/60 backdrop-blur-2xl rounded-xl space-y-5"
+        className="w-113 md:w-lg p-13 mt-6 bg-neutral-900 border-0 rounded-xl space-y-5"
         side="bottom"
         align="end"
       >
-        <div className="flex items-center gap-5">
-          <Avatar className="w-20 h-20 ml-3 ring-2 ring-primary/20">
+        <div className="flex flex-col items-center gap-5">
+          <Avatar className="w-40 h-40 ml-3">
             <AvatarImage
               src={user?.image || "https://github.com/shadcn.png"}
               alt={user?.name}
               className="object-cover"
-
-              // className="grayscale"
             />
             <AvatarFallback>{genFallBackName(user?.name)}</AvatarFallback>
             <AvatarBadge>
               <Plus />
             </AvatarBadge>
           </Avatar>
-          <div className="flex flex-col text-left gap-1">
+          <div className="flex flex-col items-center gap-1">
             <h1 className="text-xl font-semibold mt-2">{user?.name}</h1>
             <Badge className="px-5 py-1 text-md font-semibold">
               {user?.role}

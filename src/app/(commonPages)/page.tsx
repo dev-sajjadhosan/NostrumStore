@@ -31,11 +31,11 @@ export default async function Home() {
             Customer Reviews
           </h1>
           <div className="">
-            <Card className="w-full h-150">
-              <CardContent className="h-full flex items-center justify-around text-3xl">
+            <Card className="w-full lg:h-150">
+              <CardContent className="h-full flex flex-col lg:flex-row items-center justify-around text-3xl">
                 <Image src={review} alt="Review" width={300} height={300} />
-                <Separator orientation="vertical" />
-                <div className="flex flex-col items-center w-2xl">
+                {/* <Separator orientation="vertical" /> */}
+                <div className="flex flex-col items-center lg:w-2xl">
                   <div className="flex flex-col gap-3 items-center">
                     <Avatar className="w-18 h-18">
                       <AvatarFallback>US</AvatarFallback>
@@ -62,9 +62,9 @@ export default async function Home() {
           </div>
         </section>
         <section className="flex flex-col gap-5">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col md:flex-row gap-5 items-center justify-between">
             <h1 className="text-3xl font-medium">Our Blogs & News</h1>
-            <div className="flex items-center gap-3 border h-16 py-3 px-3 rounded-full">
+            <div className="flex items-center gap-3 border h-16 py-3 px-1 rounded-full">
               <Button size={"lg"}>
                 News <Newspaper />
               </Button>
@@ -74,9 +74,9 @@ export default async function Home() {
               </Button>
             </div>
           </div>
-          <div className="flex items-center gap-7 w-full overflow-scroll scroll-auto p-7">
+          <div className="flex items-center gap-7 w-full overflow-scroll scroll-auto py-5">
             {Array.from({ length: 7 }).map((_, idx) => (
-              <Card key={idx} className="w-xl h-150 shrink-0">
+              <Card key={idx} className="w-md md:w-xl h-150 shrink-0">
                 <CardContent className="h-full flex flex-col items-center justify-center text-4xl">
                   {idx}
                 </CardContent>

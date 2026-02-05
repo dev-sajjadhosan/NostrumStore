@@ -64,45 +64,48 @@ export default async function Navbar() {
     >
       <div className="flex items-center gap-3">
         <Image src={"vercel.svg"} alt="Nostrum Store" width={30} height={30} />
-        <h1 className="text-xl font-extrabold">Nostrum</h1>
+        <h1 className="text-xl font-extrabold hidden md:flex">Nostrum</h1>
       </div>
-      <NavigationMenu>
-        <NavigationMenuList>
-          {menuLinks.map((item: MenuProps) => (
-            <NavigationMenuItem key={item.name}>
-              <NavigationMenuLink asChild>
-                <Link href={item.link} className="capitalize">
-                  {item.icon && <item.icon />} {item.name}
-                </Link>
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-          ))}
-        </NavigationMenuList>
-      </NavigationMenu>
+      <div className="">
+        <NavigationMenu>
+          <NavigationMenuList>
+            {menuLinks.map((item: MenuProps) => (
+              <NavigationMenuItem key={item.name}>
+                <NavigationMenuLink asChild>
+                  <Link href={item.link} className="capitalize">
+                    {item.icon && <item.icon className="hidden md:flex" />}{" "}
+                    {item.name}
+                  </Link>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+            ))}
+          </NavigationMenuList>
+        </NavigationMenu>
+      </div>
       <div className="flex items-center gap-2">
         {user ? (
           <div className="flex items-center gap-2">
             {/* <TooltipButton icon={MapPinned} title="Location" /> */}
             {user?.role === "CUSTOMER" && (
-              <>
+              <div className="hidden md:flex">
                 <Link href={"/cart"}>
                   <TooltipButton icon={ShoppingCart} title="Cart" />
                 </Link>
                 <Link href={"/orders"}>
                   <TooltipButton icon={PackageOpen} title="Orders" />
                 </Link>
-              </>
+              </div>
             )}
             <ProfileView user={user} />
           </div>
         ) : (
-          <Link href={"/register"}>
+          <Link href={"/login"}>
             <Button
-              className="rounded-full text-xl font-semibold p-7 [&_svg]:size-8! text-muted-foreground"
+              className="rounded-full text-xl font-semibold md:p-7 [&_svg]:size-6! md:[&_svg]:size-8! text-muted-foreground"
               size={"lg"}
               variant={"secondary"}
             >
-              Register Up
+              <span className="hidden md:flex">Log Up</span>
               <CircleArrowOutUpRight />
             </Button>
           </Link>

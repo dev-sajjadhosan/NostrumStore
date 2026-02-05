@@ -38,18 +38,10 @@ export default function Footer() {
         { text: "Advertise", url: "#" },
       ],
     },
-    {
-      title: "Social",
-      links: [
-        { text: "Twitter", url: "#" },
-        { text: "Instagram", url: "#" },
-        { text: "LinkedIn", url: "#" },
-      ],
-    },
   ];
   return (
     <div className="flex flex-col items-center gap-7 w-11/12 mx-auto mt-48">
-      <footer className="flex items-center justify-between mt-28 w-full">
+      <footer className="flex flex-col lg:flex-row gap-5 items-center justify-between mt-28 w-full">
         <aside className="flex flex-col gap-3">
           <Image src={"vercel.svg"} alt="nostrum" width={50} height={50} />
           <h1 className="text-2xl">Nostrum Store</h1>
@@ -80,7 +72,7 @@ export default function Footer() {
           ))}
         </aside>
       </footer>
-      <h1 className="text-[13rem] mx-auto -mb-24">Nostrum Store</h1>
+      <h1 className="text-[7rem] md:text-[10rem] lg:text-[13rem] mx-auto lg:-mb-24">Nostrum Store</h1>
       <Separator />
       <p className="text-md tracking-wide mb-5">
         © 2024 Shadcnblocks.com. All rights reserved.

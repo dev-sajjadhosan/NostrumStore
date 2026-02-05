@@ -60,7 +60,7 @@ export default function ShopSearch() {
             Search our curated collection of verified pharmaceuticals and
             wellness essentials. Your health, managed with digital expertise.
           </p>
-          <div className="mt-14 border w-2xl h-16 rounded-full px-3 py-2 flex gap-3 items-center">
+          <div className="mt-14 border w-full md:w-2xl h-16 rounded-full px-3 py-2 flex gap-3 items-center bg-accent">
             <Badge variant={'secondary'} className="w-10 h-10 rounded-full [&_svg]:size-6!">
               <Search />
             </Badge>
@@ -71,12 +71,12 @@ export default function ShopSearch() {
               onKeyDown={handleKeyDown}
               placeholder="Search for medicines, vitamins, or brands..."
               type="text"
-              className="bg-transparent! border-0"
+              className="border-0"
             />
           </div>
         </CardContent>
       </Card>
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col lg:flex-row gap-5 items-center justify-between">
         <div className="border rounded-full px-5 py-3 flex items-center gap-3">
           <Button variant={"default"}>All</Button>
           <Button variant={"secondary"}>Popular</Button>

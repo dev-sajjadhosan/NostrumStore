@@ -40,7 +40,7 @@ export default async function Shop({
             <EmptyCard />
           ) : (
             <>
-              <div className="my-16 grid grid-cols-3 gap-3">
+              <div className="my-16 grid lg:grid-cols-3 gap-3">
                 {medicine?.map((med: any, idx: number) => (
                   <ProductCard key={idx} data={med} />
                 ))}

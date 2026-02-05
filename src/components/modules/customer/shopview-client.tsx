@@ -48,7 +48,7 @@ export default function ShopViewClient({
   return (
     <>
       <div className="w-11/12 mx-auto flex flex-col gap-24">
-        <section className="flex items-start gap-10 justify-between w-full h-full">
+        <section className="flex flex-col lg:flex-row items-start gap-10 justify-between w-full h-full">
           <Card>
             <CardContent className="p-9">
               <Image src={data?.image} alt="Picture" width={400} height={400} />
@@ -66,7 +66,7 @@ export default function ShopViewClient({
               ))}
             </CardFooter> */}
           </Card>
-          <div className="w-3/5 h-full! flex flex-col justify-between items-start p-9">
+          <div className="w-full lg:w-3/5 h-full! flex flex-col justify-between items-start p-9">
             <div className="flex flex-col w-full">
               <div className="flex items-center justify-between w-full">
                 <div className="flex items-center justify-between gap-2">
